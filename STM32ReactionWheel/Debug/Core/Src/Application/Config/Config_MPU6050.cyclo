@@ -1,0 +1,4 @@
+Config_MPU6050.c:54:22:Config_MPU6050	1
+Config_MPU6050.c:69:13:MPU6050_Init	2
+Config_MPU6050.c:102:37:MPU6050_GetSens	9
+Config_MPU6050.c:146:32:MPU6050_CalibrateOffsets	2
