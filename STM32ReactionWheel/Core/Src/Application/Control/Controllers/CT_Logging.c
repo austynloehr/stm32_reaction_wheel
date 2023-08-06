@@ -16,7 +16,7 @@ typedef struct StringPacket{
 /* End Struct definitions */
 
 /*Start global variable definitions */
-uint8_t msg[70];  // Need to have this global or else memory location will get overwritten after function call
+uint8_t msg[90];  // Need to have this global or else memory location will get overwritten after function call
 uint16_t msgLen = sizeof(msg) / sizeof(uint8_t);
 /*End global variable definitions */
 
@@ -42,9 +42,11 @@ CT_Log_Bus_t CT_Logging(IP_MPU6050_Bus_t IP_MPU6050_Bus){
 static StringPacket_t MakeLogString(uint8_t *msg, uint16_t msgLen, IP_MPU6050_Bus_t IP_MPU6050_Bus){
 	StringPacket_t StringPacket;
 
-	memset(msg, '\0', msgLen);  // Set unused indexes to null char
+	uint32_t tick = HAL_GetTick();
 
-	sprintf((char*) msg, "AX:%.3f,AY:%.3f,AZ:%.3f,WX:%.3f,WY:%.3f,WZ:%.3f\n\r",
+	memset(msg, '\0', msgLen);  // Set unused indexes to null char
+	sprintf((char*) msg, "TK:%lu,AX:%.3f,AY:%.3f,AZ:%.3f,WX:%.3f,WY:%.3f,WZ:%.3f\n\r",
+			tick,
 			IP_MPU6050_Bus.accel.XOUT_ms2, IP_MPU6050_Bus.accel.YOUT_ms2, IP_MPU6050_Bus.accel.ZOUT_ms2,
 			IP_MPU6050_Bus.gyro.XOUT_dps, IP_MPU6050_Bus.gyro.YOUT_dps, IP_MPU6050_Bus.gyro.ZOUT_dps);
 

@@ -17,6 +17,7 @@ HI_Bus_t IO_HardwareInputs(Config_Bus_t Config_Bus){
 
 void IO_HardwareOutputs(Config_Bus_t Config_Bus, OP_Bus_t OP_Bus){
 	HO_HCO5(Config_Bus.Config_HAL_Bus.huart2, OP_Bus.OP_HC05_Bus.pData, OP_Bus.OP_HC05_Bus.Size);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET); // Move this later
 }
 /* End global function definitions */
 

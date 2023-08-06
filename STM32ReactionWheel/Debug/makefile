@@ -13,6 +13,7 @@ RM := rm -rf
 -include Core/Startup/subdir.mk
 -include Core/Src/Application/Processing/subdir.mk
 -include Core/Src/Application/IO/subdir.mk
+-include Core/Src/Application/Control/VirtualSensors/subdir.mk
 -include Core/Src/Application/Control/Controllers/subdir.mk
 -include Core/Src/Application/Control/subdir.mk
 -include Core/Src/Application/Config/subdir.mk

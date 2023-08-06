@@ -20,7 +20,7 @@
 /* Register Data */
 #define CLKSEL 				0x00
 #define SMPLRT_DIV 			0x07 // Sample Rate [kHz] = 8 / (1 + SMPLRT_DIV)
-#define DLPF_CFG 			0x04
+#define DLPF_CFG 			0x00
 /* End Defines */
 
 /* Start local enum definitions */

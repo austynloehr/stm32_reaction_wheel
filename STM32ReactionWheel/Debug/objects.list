@@ -2,6 +2,7 @@
 "./Core/Src/Application/Config/Config_MPU6050.o"
 "./Core/Src/Application/Control/Control.o"
 "./Core/Src/Application/Control/Controllers/CT_Logging.o"
+"./Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.o"
 "./Core/Src/Application/IO/IO.o"
 "./Core/Src/Application/IO/IO_HC05.o"
 "./Core/Src/Application/IO/IO_MPU6050.o"
