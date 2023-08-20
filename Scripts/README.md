@@ -23,6 +23,8 @@ mkvirtualenv ReactionWheelTools
 workon ReactionWheelTools
 pip install -r Scripts/requirements.txt
 ```
+#### Connecting to HC05
+Follow steps [here](https://alberand.com/hc-05-linux.html) to connect and pair to HC05 BLE module. Take note of device MAC address. 
 
 #### Install Minicom
 
