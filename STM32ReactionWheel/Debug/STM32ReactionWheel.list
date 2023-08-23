@@ -1612,7 +1612,7 @@ static void MPU6050_Init(I2C_HandleTypeDef hi2c1){
 	/*Configure low pass filter*/
 	regData = DLPF_CFG;
  8001214:	4b0c      	ldr	r3, [pc, #48]	; (8001248 <MPU6050_Init+0xf8>)
- 8001216:	2200      	movs	r2, #0
+ 8001216:	2204      	movs	r2, #4
  8001218:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
  800121a:	4b0c      	ldr	r3, [pc, #48]	; (800124c <MPU6050_Init+0xfc>)
@@ -2988,7 +2988,7 @@ static IP_MPU6050_Bus_t MPU6050_IMUDataClamp(IP_MPU6050_Bus_t MPU6050_Bus){
 	float clampVal = 0;
  8001d3a:	f04f 0300 	mov.w	r3, #0
  8001d3e:	62fb      	str	r3, [r7, #44]	; 0x2c
-	float clampThreshold = .02;
+	float clampThreshold = .05;
  8001d40:	4b3d      	ldr	r3, [pc, #244]	; (8001e38 <MPU6050_IMUDataClamp+0x110>)
  8001d42:	62bb      	str	r3, [r7, #40]	; 0x28
 	uint8_t clampMode = 0;
@@ -3072,7 +3072,7 @@ static IP_MPU6050_Bus_t MPU6050_IMUDataClamp(IP_MPU6050_Bus_t MPU6050_Bus){
  8001e30:	e8bd 40b0 	ldmia.w	sp!, {r4, r5, r7, lr}
  8001e34:	b004      	add	sp, #16
  8001e36:	4770      	bx	lr
- 8001e38:	3ca3d70a 	.word	0x3ca3d70a
+ 8001e38:	3d4ccccd 	.word	0x3d4ccccd
 
 08001e3c <PR_InputProcessing>:
  */
