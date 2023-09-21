@@ -15,6 +15,8 @@ Config_Bus_t App_Config(Config_HAL_Bus_t Config_HAL_Bus){
 	Config_Bus.Config_HAL_Bus = Config_HAL_Bus;
 	Config_Bus.Config_MPU6050_Bus = Config_MPU6050(Config_HAL_Bus.hi2c1);
 
+	Config_DSP();
+
 	return Config_Bus;
 }
 
@@ -30,6 +32,6 @@ void App_Main(Config_Bus_t Config_Bus){
 	OP_Bus = PR_OutputProcessing(CT_Bus);
 	IO_HardwareOutputs(Config_Bus, OP_Bus);
 
-	HAL_Delay(5);
+	HAL_Delay(3);
 }
 /* End global function definition */

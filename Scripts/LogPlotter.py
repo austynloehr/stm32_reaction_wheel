@@ -24,40 +24,45 @@ def main():
     df = parse(path)
 
     # Plot signals
-    fig1, axs = plt.subplots(3, 1, sharex=True)
+    plt.plot(df['TK'], df['aRoll'], marker = '.')
+    plt.plot(df['TK'], df['aRollFilt'], marker = '.', color='m')
+    plt.plot(df['TK'], df['gRoll'], marker = '.', color='g')
+    plt.plot(df['TK'], df['compRoll'], marker = '.', color='r')
+    plt.grid(True)
 
-    axs[0].plot(df.index, df["AX"], marker = '.')
-    axs[0].set_ylabel('Ax (m/s^2)')
-    axs[0].grid(True)
+    # fig1, axs = plt.subplots(3, 1, sharex=True)
 
-    axs[1].plot(df.index, df["AY"], marker = '.')
-    axs[1].set_ylabel('Ay (m/s^2)')
-    axs[1].grid(True)
+    # axs[0].plot(df.index, df["AX"], marker = '.')
+    # axs[0].set_ylabel('Ax (m/s^2)')
+    # axs[0].grid(True)
 
-    axs[2].plot(df.index, df["AZ"], marker = '.')
-    axs[2].set_ylabel('Az (m/s^2)')
-    axs[2].grid(True)
+    # axs[1].plot(df.index, df["AY"], marker = '.')
+    # axs[1].set_ylabel('Ay (m/s^2)')
+    # axs[1].grid(True)
 
-    fig1.suptitle('Acceleration Data', fontsize=16)
-    fig1.supxlabel('Samples',fontsize=16)
+    # axs[2].plot(df.index, df["AZ"], marker = '.')
+    # axs[2].set_ylabel('Az (m/s^2)')
+    # axs[2].grid(True)
 
-    fig2, axs = plt.subplots(3, 1, sharex=True)
-    axs[0].plot(df.index, df["WX"], marker = '.')
-    axs[0].set_ylabel('Wx (deg/s)')
-    axs[0].grid(True)
+    # fig1.suptitle('Acceleration Data', fontsize=16)
+    # fig1.supxlabel('Samples',fontsize=16)
 
-    axs[1].plot(df.index, df["WY"], marker = '.')
-    axs[1].set_ylabel('Wy (deg/s)')
-    axs[1].grid(True)
+    # fig2, axs = plt.subplots(3, 1, sharex=True)
+    # axs[0].plot(df.index, df["WX"], marker = '.')
+    # axs[0].set_ylabel('Wx (deg/s)')
+    # axs[0].grid(True)
 
-    axs[2].plot(df.index, df["WZ"], marker = '.')
-    axs[2].set_ylabel('Wz (deg/s)')
-    axs[2].grid(True)
+    # axs[1].plot(df.index, df["WY"], marker = '.')
+    # axs[1].set_ylabel('Wy (deg/s)')
+    # axs[1].grid(True)
 
-    fig2.suptitle('Gyro Data', fontsize=16)
-    fig2.supxlabel('Samples', fontsize=16)
+    # axs[2].plot(df.index, df["WZ"], marker = '.')
+    # axs[2].set_ylabel('Wz (deg/s)')
+    # axs[2].grid(True)
+
+    # fig2.suptitle('Gyro Data', fontsize=16)
+    # fig2.supxlabel('Samples', fontsize=16)
     
-
     plt.show()
 
 

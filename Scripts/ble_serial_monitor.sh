@@ -5,7 +5,7 @@
 macAddr='00:14:03:05:01:70'
 
 # HC-05 UART baud rate
-baudRate=38400
+baudRate=921600
 
 # Bind rfcomm0 if does not exist already
 sudo rfcomm bind 0 $macAddr

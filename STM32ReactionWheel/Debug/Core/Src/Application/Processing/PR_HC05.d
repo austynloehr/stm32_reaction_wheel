@@ -32,7 +32,9 @@ Core/Src/Application/Processing/PR_HC05.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Middlewares/ST/ARM/DSP/Inc/arm_math.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Processing/PR_HC05.h:
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Control/Controllers/CT_Logging.h:
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Processing/PR_MPU6050.h:
@@ -66,4 +68,6 @@ Core/Src/Application/Processing/PR_HC05.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h:
+/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h:
