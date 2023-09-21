@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "PR_MPU6050.h"
+#include "VS_OrientationEstimation.h"
 
 /* Start Global Struct definitions */
 typedef struct CT_Log_Bus {
@@ -19,7 +20,7 @@ typedef struct CT_Log_Bus {
 /* End Global Struct definitions */
 
 /* Start Global Function Prototypes */
-CT_Log_Bus_t CT_Logging(IP_MPU6050_Bus_t IP_MPU6050_Bus);
+CT_Log_Bus_t CT_Logging(IP_MPU6050_Bus_t IP_MPU6050_Bus, VS_Orientation_Bus_t VS_Orientation_Bus);
 /* End Global Function Prototypes */
 
 #endif /* INC_CONTROL_CONTROLLERS_CT_LOGGING_H_ */

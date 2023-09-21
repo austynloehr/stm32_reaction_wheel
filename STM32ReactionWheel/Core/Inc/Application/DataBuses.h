@@ -13,6 +13,7 @@
 /* Component libraries */
 /* Config */
 #include "Config_MPU6050.h"
+#include "Config_DSP.h"
 
 /* IO */
 #include "IO_MPU6050.h"
@@ -23,6 +24,7 @@
 #include "PR_HC05.h"
 
 /* Control */
+#include "VS_OrientationEstimation.h"
 #include "CT_Logging.h"
 
 /* Start global typedefs */
@@ -39,7 +41,12 @@ typedef struct IP_Bus{
 	IP_MPU6050_Bus_t IP_MPU6050_Bus;
 } IP_Bus_t;
 
+typedef struct VS_Bus{
+	VS_Orientation_Bus_t VS_Orientation_Bus;
+}VS_Bus_t;
+
 typedef struct CT_Bus{
+	VS_Bus_t VS_Bus;
 	CT_Log_Bus_t CT_Log_Bus;
 } CT_Bus_t;
 

@@ -1,7 +1,7 @@
 Core/Src/Application/Config/Config_MPU6050.o: \
  ../Core/Src/Application/Config/Config_MPU6050.c \
- ../Core/Inc/Application/Config/Config_MPU6050.h ../Core/Inc/main.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h \
+ ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
@@ -29,9 +29,10 @@ Core/Src/Application/Config/Config_MPU6050.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/Application/IO/IO_MPU6050.h \
- ../Core/Inc/Application/Processing/PR_MPU6050.h
-../Core/Inc/Application/Config/Config_MPU6050.h:
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Middlewares/ST/ARM/DSP/Inc/arm_math.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/IO/IO_MPU6050.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Processing/PR_MPU6050.h
+/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -61,5 +62,6 @@ Core/Src/Application/Config/Config_MPU6050.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
-../Core/Inc/Application/IO/IO_MPU6050.h:
-../Core/Inc/Application/Processing/PR_MPU6050.h:
+/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Middlewares/ST/ARM/DSP/Inc/arm_math.h:
+/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/IO/IO_MPU6050.h:
+/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Processing/PR_MPU6050.h:

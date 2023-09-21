@@ -11,7 +11,7 @@ This script connects the HC-05 BLE module, prints/logs serial data using minicom
 ### Setup
 #### Virtual Environment Setup
 
-This script was developed using the [VirtualEnvWraper](https://virtualenvwrapper.readthedocs.io/en/latest/). Any python scripts will try to run using a Virtual Environment located in $HOME/.virtualenvs. For initial setup, please refer to the documenation linked above.<br>
+This script was developed using the [VirtualEnvWraper](https://virtualenvwrapper.readthedocs.io/en/latest/). Any python scripts will try to run using a Virtual Environment located in $HOME/.virtualenvs. For initial setup, please refer to the documenation linked above. This [link](https://opensource.com/article/21/2/python-virtualenvwrapper) is also helpful for Ubuntu setup.<br>
 
 *Note: If using an alternative virtual environment is desired, change the highlighted code section within [ble_serial_monitor.sh](ble_serial_monitor.sh)*<br>
 
@@ -23,6 +23,8 @@ mkvirtualenv ReactionWheelTools
 workon ReactionWheelTools
 pip install -r Scripts/requirements.txt
 ```
+#### Connecting to HC05
+Follow steps [here](https://alberand.com/hc-05-linux.html) to connect and pair to HC05 BLE module. Take note of device MAC address. 
 
 #### Install Minicom
 

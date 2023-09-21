@@ -90,7 +90,7 @@ static IP_MPU6050_Bus_t MPU6050_IMUDataClamp(IP_MPU6050_Bus_t MPU6050_Bus){
 	IP_MPU6050_Bus_t Result_Bus;
 
 	float clampVal = 0;
-	float clampThreshold = .02;
+	float clampThreshold = .05;
 	uint8_t clampMode = 0;
 
 	Result_Bus.accel.XOUT_ms2 = clamp(MPU6050_Bus.accel.XOUT_ms2, clampVal, clampThreshold, clampMode);

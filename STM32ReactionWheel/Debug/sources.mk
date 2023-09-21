@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (11.3.rel1)
 ################################################################################
 
 ELF_SRCS := 
@@ -26,6 +26,7 @@ Core/Src/Application \
 Core/Src/Application/Config \
 Core/Src/Application/Control \
 Core/Src/Application/Control/Controllers \
+Core/Src/Application/Control/VirtualSensors \
 Core/Src/Application/IO \
 Core/Src/Application/Processing \
 Core/Src \

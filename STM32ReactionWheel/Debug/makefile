@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (11.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -13,6 +13,7 @@ RM := rm -rf
 -include Core/Startup/subdir.mk
 -include Core/Src/Application/Processing/subdir.mk
 -include Core/Src/Application/IO/subdir.mk
+-include Core/Src/Application/Control/VirtualSensors/subdir.mk
 -include Core/Src/Application/Control/Controllers/subdir.mk
 -include Core/Src/Application/Control/subdir.mk
 -include Core/Src/Application/Config/subdir.mk
@@ -67,7 +68,7 @@ main-build: STM32ReactionWheel.elf secondary-outputs
 
 # Tool invocations
 STM32ReactionWheel.elf STM32ReactionWheel.map: $(OBJS) $(USER_OBJS) /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32ReactionWheel.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32ReactionWheel.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "STM32ReactionWheel.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32ReactionWheel.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
