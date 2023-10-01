@@ -39,9 +39,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  000194ae  00000000  00000000  00035434  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00014b05  00000000  00000000  0004e8e2  2**0
+ 18 .debug_line   00014b06  00000000  00000000  0004e8e2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    0008b883  00000000  00000000  000633e7  2**0
+ 19 .debug_str    0008b883  00000000  00000000  000633e8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  20 .debug_frame  000042e0  00000000  00000000  000eec6c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -1278,532 +1278,533 @@ Config_Bus_t App_Config(Config_HAL_Bus_t Config_HAL_Bus){
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);  // Move this later
  8000f66:	2201      	movs	r2, #1
  8000f68:	f44f 5100 	mov.w	r1, #8192	; 0x2000
- 8000f6c:	4819      	ldr	r0, [pc, #100]	; (8000fd4 <App_Config+0x80>)
+ 8000f6c:	481a      	ldr	r0, [pc, #104]	; (8000fd8 <App_Config+0x84>)
  8000f6e:	f002 f985 	bl	800327c <HAL_GPIO_WritePin>
+	HAL_Delay(200);
+ 8000f72:	20c8      	movs	r0, #200	; 0xc8
+ 8000f74:	f001 fef4 	bl	8002d60 <HAL_Delay>
 
 	Config_Bus.Config_HAL_Bus = Config_HAL_Bus;
- 8000f72:	f107 0334 	add.w	r3, r7, #52	; 0x34
- 8000f76:	f507 7182 	add.w	r1, r7, #260	; 0x104
- 8000f7a:	2298      	movs	r2, #152	; 0x98
- 8000f7c:	4618      	mov	r0, r3
- 8000f7e:	f005 f9a1 	bl	80062c4 <memcpy>
+ 8000f78:	f107 0334 	add.w	r3, r7, #52	; 0x34
+ 8000f7c:	f507 7182 	add.w	r1, r7, #260	; 0x104
+ 8000f80:	2298      	movs	r2, #152	; 0x98
+ 8000f82:	4618      	mov	r0, r3
+ 8000f84:	f005 f99e 	bl	80062c4 <memcpy>
 	Config_Bus.Config_MPU6050_Bus = Config_MPU6050(Config_HAL_Bus.hi2c1);
- 8000f82:	463c      	mov	r4, r7
- 8000f84:	4668      	mov	r0, sp
- 8000f86:	f507 7388 	add.w	r3, r7, #272	; 0x110
- 8000f8a:	2248      	movs	r2, #72	; 0x48
- 8000f8c:	4619      	mov	r1, r3
- 8000f8e:	f005 f999 	bl	80062c4 <memcpy>
- 8000f92:	f507 7382 	add.w	r3, r7, #260	; 0x104
- 8000f96:	cb0e      	ldmia	r3, {r1, r2, r3}
- 8000f98:	4620      	mov	r0, r4
- 8000f9a:	f000 f8a1 	bl	80010e0 <Config_MPU6050>
- 8000f9e:	f107 04cc 	add.w	r4, r7, #204	; 0xcc
- 8000fa2:	463d      	mov	r5, r7
- 8000fa4:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
- 8000fa6:	c40f      	stmia	r4!, {r0, r1, r2, r3}
- 8000fa8:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
- 8000faa:	c40f      	stmia	r4!, {r0, r1, r2, r3}
- 8000fac:	682b      	ldr	r3, [r5, #0]
- 8000fae:	6023      	str	r3, [r4, #0]
+ 8000f88:	463c      	mov	r4, r7
+ 8000f8a:	4668      	mov	r0, sp
+ 8000f8c:	f507 7388 	add.w	r3, r7, #272	; 0x110
+ 8000f90:	2248      	movs	r2, #72	; 0x48
+ 8000f92:	4619      	mov	r1, r3
+ 8000f94:	f005 f996 	bl	80062c4 <memcpy>
+ 8000f98:	f507 7382 	add.w	r3, r7, #260	; 0x104
+ 8000f9c:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8000f9e:	4620      	mov	r0, r4
+ 8000fa0:	f000 f8a0 	bl	80010e4 <Config_MPU6050>
+ 8000fa4:	f107 04cc 	add.w	r4, r7, #204	; 0xcc
+ 8000fa8:	463d      	mov	r5, r7
+ 8000faa:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
+ 8000fac:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 8000fae:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
+ 8000fb0:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 8000fb2:	682b      	ldr	r3, [r5, #0]
+ 8000fb4:	6023      	str	r3, [r4, #0]
 
 	Config_DSP();
- 8000fb0:	f000 f87c 	bl	80010ac <Config_DSP>
+ 8000fb6:	f000 f87b 	bl	80010b0 <Config_DSP>
 
 	return Config_Bus;
- 8000fb4:	6afb      	ldr	r3, [r7, #44]	; 0x2c
- 8000fb6:	4618      	mov	r0, r3
- 8000fb8:	f107 0334 	add.w	r3, r7, #52	; 0x34
- 8000fbc:	22bc      	movs	r2, #188	; 0xbc
- 8000fbe:	4619      	mov	r1, r3
- 8000fc0:	f005 f980 	bl	80062c4 <memcpy>
+ 8000fba:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000fbc:	4618      	mov	r0, r3
+ 8000fbe:	f107 0334 	add.w	r3, r7, #52	; 0x34
+ 8000fc2:	22bc      	movs	r2, #188	; 0xbc
+ 8000fc4:	4619      	mov	r1, r3
+ 8000fc6:	f005 f97d 	bl	80062c4 <memcpy>
 }
- 8000fc4:	6af8      	ldr	r0, [r7, #44]	; 0x2c
- 8000fc6:	37f0      	adds	r7, #240	; 0xf0
- 8000fc8:	46bd      	mov	sp, r7
- 8000fca:	e8bd 40b0 	ldmia.w	sp!, {r4, r5, r7, lr}
- 8000fce:	b004      	add	sp, #16
- 8000fd0:	4770      	bx	lr
- 8000fd2:	bf00      	nop
- 8000fd4:	40020800 	.word	0x40020800
+ 8000fca:	6af8      	ldr	r0, [r7, #44]	; 0x2c
+ 8000fcc:	37f0      	adds	r7, #240	; 0xf0
+ 8000fce:	46bd      	mov	sp, r7
+ 8000fd0:	e8bd 40b0 	ldmia.w	sp!, {r4, r5, r7, lr}
+ 8000fd4:	b004      	add	sp, #16
+ 8000fd6:	4770      	bx	lr
+ 8000fd8:	40020800 	.word	0x40020800
 
-08000fd8 <App_Main>:
+08000fdc <App_Main>:
 
 void App_Main(Config_Bus_t Config_Bus){
- 8000fd8:	b084      	sub	sp, #16
- 8000fda:	b5f0      	push	{r4, r5, r6, r7, lr}
- 8000fdc:	b0cb      	sub	sp, #300	; 0x12c
- 8000fde:	af30      	add	r7, sp, #192	; 0xc0
- 8000fe0:	f107 0480 	add.w	r4, r7, #128	; 0x80
- 8000fe4:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+ 8000fdc:	b084      	sub	sp, #16
+ 8000fde:	b5f0      	push	{r4, r5, r6, r7, lr}
+ 8000fe0:	b0cb      	sub	sp, #300	; 0x12c
+ 8000fe2:	af30      	add	r7, sp, #192	; 0xc0
+ 8000fe4:	f107 0480 	add.w	r4, r7, #128	; 0x80
+ 8000fe8:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
 	HI_Bus_t HI_Bus;
 	IP_Bus_t IP_Bus;
 	CT_Bus_t CT_Bus;
 	OP_Bus_t OP_Bus;
 
 	HI_Bus = IO_HardwareInputs(Config_Bus);
- 8000fe8:	f107 045c 	add.w	r4, r7, #92	; 0x5c
- 8000fec:	4668      	mov	r0, sp
- 8000fee:	f107 038c 	add.w	r3, r7, #140	; 0x8c
- 8000ff2:	22b0      	movs	r2, #176	; 0xb0
- 8000ff4:	4619      	mov	r1, r3
- 8000ff6:	f005 f965 	bl	80062c4 <memcpy>
- 8000ffa:	f107 0380 	add.w	r3, r7, #128	; 0x80
- 8000ffe:	cb0e      	ldmia	r3, {r1, r2, r3}
- 8001000:	4620      	mov	r0, r4
- 8001002:	f000 feeb 	bl	8001ddc <IO_HardwareInputs>
+ 8000fec:	f107 045c 	add.w	r4, r7, #92	; 0x5c
+ 8000ff0:	4668      	mov	r0, sp
+ 8000ff2:	f107 038c 	add.w	r3, r7, #140	; 0x8c
+ 8000ff6:	22b0      	movs	r2, #176	; 0xb0
+ 8000ff8:	4619      	mov	r1, r3
+ 8000ffa:	f005 f963 	bl	80062c4 <memcpy>
+ 8000ffe:	f107 0380 	add.w	r3, r7, #128	; 0x80
+ 8001002:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8001004:	4620      	mov	r0, r4
+ 8001006:	f000 fee9 	bl	8001ddc <IO_HardwareInputs>
 	IP_Bus = PR_InputProcessing(Config_Bus, HI_Bus);
- 8001006:	f107 0544 	add.w	r5, r7, #68	; 0x44
- 800100a:	ac2c      	add	r4, sp, #176	; 0xb0
- 800100c:	f107 035c 	add.w	r3, r7, #92	; 0x5c
- 8001010:	e893 0007 	ldmia.w	r3, {r0, r1, r2}
- 8001014:	e884 0007 	stmia.w	r4, {r0, r1, r2}
- 8001018:	4668      	mov	r0, sp
- 800101a:	f107 038c 	add.w	r3, r7, #140	; 0x8c
- 800101e:	22b0      	movs	r2, #176	; 0xb0
- 8001020:	4619      	mov	r1, r3
- 8001022:	f005 f94f 	bl	80062c4 <memcpy>
- 8001026:	f107 0380 	add.w	r3, r7, #128	; 0x80
- 800102a:	cb0e      	ldmia	r3, {r1, r2, r3}
- 800102c:	4628      	mov	r0, r5
- 800102e:	f001 fa7d 	bl	800252c <PR_InputProcessing>
+ 800100a:	f107 0544 	add.w	r5, r7, #68	; 0x44
+ 800100e:	ac2c      	add	r4, sp, #176	; 0xb0
+ 8001010:	f107 035c 	add.w	r3, r7, #92	; 0x5c
+ 8001014:	e893 0007 	ldmia.w	r3, {r0, r1, r2}
+ 8001018:	e884 0007 	stmia.w	r4, {r0, r1, r2}
+ 800101c:	4668      	mov	r0, sp
+ 800101e:	f107 038c 	add.w	r3, r7, #140	; 0x8c
+ 8001022:	22b0      	movs	r2, #176	; 0xb0
+ 8001024:	4619      	mov	r1, r3
+ 8001026:	f005 f94d 	bl	80062c4 <memcpy>
+ 800102a:	f107 0380 	add.w	r3, r7, #128	; 0x80
+ 800102e:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8001030:	4628      	mov	r0, r5
+ 8001032:	f001 fa7b 	bl	800252c <PR_InputProcessing>
 	CT_Bus = CT_Control(IP_Bus);
- 8001032:	f107 050c 	add.w	r5, r7, #12
- 8001036:	466c      	mov	r4, sp
- 8001038:	f107 0350 	add.w	r3, r7, #80	; 0x50
- 800103c:	e893 0007 	ldmia.w	r3, {r0, r1, r2}
- 8001040:	e884 0007 	stmia.w	r4, {r0, r1, r2}
- 8001044:	f107 0344 	add.w	r3, r7, #68	; 0x44
- 8001048:	cb0e      	ldmia	r3, {r1, r2, r3}
- 800104a:	4628      	mov	r0, r5
- 800104c:	f000 fa8e 	bl	800156c <CT_Control>
+ 8001036:	f107 050c 	add.w	r5, r7, #12
+ 800103a:	466c      	mov	r4, sp
+ 800103c:	f107 0350 	add.w	r3, r7, #80	; 0x50
+ 8001040:	e893 0007 	ldmia.w	r3, {r0, r1, r2}
+ 8001044:	e884 0007 	stmia.w	r4, {r0, r1, r2}
+ 8001048:	f107 0344 	add.w	r3, r7, #68	; 0x44
+ 800104c:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 800104e:	4628      	mov	r0, r5
+ 8001050:	f000 fa8c 	bl	800156c <CT_Control>
 	OP_Bus = PR_OutputProcessing(CT_Bus);
- 8001050:	1d3e      	adds	r6, r7, #4
- 8001052:	466d      	mov	r5, sp
- 8001054:	f107 0418 	add.w	r4, r7, #24
- 8001058:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
- 800105a:	c50f      	stmia	r5!, {r0, r1, r2, r3}
+ 8001054:	1d3e      	adds	r6, r7, #4
+ 8001056:	466d      	mov	r5, sp
+ 8001058:	f107 0418 	add.w	r4, r7, #24
  800105c:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
  800105e:	c50f      	stmia	r5!, {r0, r1, r2, r3}
- 8001060:	e894 0007 	ldmia.w	r4, {r0, r1, r2}
- 8001064:	e885 0007 	stmia.w	r5, {r0, r1, r2}
- 8001068:	f107 030c 	add.w	r3, r7, #12
- 800106c:	cb0e      	ldmia	r3, {r1, r2, r3}
- 800106e:	4630      	mov	r0, r6
- 8001070:	f001 fa8f 	bl	8002592 <PR_OutputProcessing>
+ 8001060:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
+ 8001062:	c50f      	stmia	r5!, {r0, r1, r2, r3}
+ 8001064:	e894 0007 	ldmia.w	r4, {r0, r1, r2}
+ 8001068:	e885 0007 	stmia.w	r5, {r0, r1, r2}
+ 800106c:	f107 030c 	add.w	r3, r7, #12
+ 8001070:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8001072:	4630      	mov	r0, r6
+ 8001074:	f001 fa8d 	bl	8002592 <PR_OutputProcessing>
 	IO_HardwareOutputs(Config_Bus, OP_Bus);
- 8001074:	aa2b      	add	r2, sp, #172	; 0xac
- 8001076:	1d3b      	adds	r3, r7, #4
- 8001078:	e893 0003 	ldmia.w	r3, {r0, r1}
- 800107c:	e882 0003 	stmia.w	r2, {r0, r1}
- 8001080:	4668      	mov	r0, sp
- 8001082:	f107 0390 	add.w	r3, r7, #144	; 0x90
- 8001086:	22ac      	movs	r2, #172	; 0xac
- 8001088:	4619      	mov	r1, r3
- 800108a:	f005 f91b 	bl	80062c4 <memcpy>
- 800108e:	f107 0380 	add.w	r3, r7, #128	; 0x80
- 8001092:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 8001094:	f000 fed0 	bl	8001e38 <IO_HardwareOutputs>
+ 8001078:	aa2b      	add	r2, sp, #172	; 0xac
+ 800107a:	1d3b      	adds	r3, r7, #4
+ 800107c:	e893 0003 	ldmia.w	r3, {r0, r1}
+ 8001080:	e882 0003 	stmia.w	r2, {r0, r1}
+ 8001084:	4668      	mov	r0, sp
+ 8001086:	f107 0390 	add.w	r3, r7, #144	; 0x90
+ 800108a:	22ac      	movs	r2, #172	; 0xac
+ 800108c:	4619      	mov	r1, r3
+ 800108e:	f005 f919 	bl	80062c4 <memcpy>
+ 8001092:	f107 0380 	add.w	r3, r7, #128	; 0x80
+ 8001096:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8001098:	f000 fece 	bl	8001e38 <IO_HardwareOutputs>
 
 	HAL_Delay(3);
- 8001098:	2003      	movs	r0, #3
- 800109a:	f001 fe61 	bl	8002d60 <HAL_Delay>
+ 800109c:	2003      	movs	r0, #3
+ 800109e:	f001 fe5f 	bl	8002d60 <HAL_Delay>
 }
- 800109e:	bf00      	nop
- 80010a0:	376c      	adds	r7, #108	; 0x6c
- 80010a2:	46bd      	mov	sp, r7
- 80010a4:	e8bd 40f0 	ldmia.w	sp!, {r4, r5, r6, r7, lr}
- 80010a8:	b004      	add	sp, #16
- 80010aa:	4770      	bx	lr
+ 80010a2:	bf00      	nop
+ 80010a4:	376c      	adds	r7, #108	; 0x6c
+ 80010a6:	46bd      	mov	sp, r7
+ 80010a8:	e8bd 40f0 	ldmia.w	sp!, {r4, r5, r6, r7, lr}
+ 80010ac:	b004      	add	sp, #16
+ 80010ae:	4770      	bx	lr
 
-080010ac <Config_DSP>:
+080010b0 <Config_DSP>:
 
 static const float iirAccelCoeffs[IIR_NUM_COEFF] = {0.010432413371093418, 0.020864826742186836, 0.010432413371093418, 1.6909963768874425, -0.7327260303718163};
 /*End global variable definitions */
 
 
 void Config_DSP(void){
- 80010ac:	b580      	push	{r7, lr}
- 80010ae:	af00      	add	r7, sp, #0
+ 80010b0:	b580      	push	{r7, lr}
+ 80010b2:	af00      	add	r7, sp, #0
 	arm_biquad_cascade_df1_init_f32(&S_AccelRoll, IIR_NUM_STAGES, (float32_t *) &iirAccelCoeffs[0], (float32_t *) &FiltAccelRollState[0]);
- 80010b0:	4b06      	ldr	r3, [pc, #24]	; (80010cc <Config_DSP+0x20>)
- 80010b2:	4a07      	ldr	r2, [pc, #28]	; (80010d0 <Config_DSP+0x24>)
- 80010b4:	2101      	movs	r1, #1
- 80010b6:	4807      	ldr	r0, [pc, #28]	; (80010d4 <Config_DSP+0x28>)
- 80010b8:	f004 fa02 	bl	80054c0 <arm_biquad_cascade_df1_init_f32>
+ 80010b4:	4b06      	ldr	r3, [pc, #24]	; (80010d0 <Config_DSP+0x20>)
+ 80010b6:	4a07      	ldr	r2, [pc, #28]	; (80010d4 <Config_DSP+0x24>)
+ 80010b8:	2101      	movs	r1, #1
+ 80010ba:	4807      	ldr	r0, [pc, #28]	; (80010d8 <Config_DSP+0x28>)
+ 80010bc:	f004 fa00 	bl	80054c0 <arm_biquad_cascade_df1_init_f32>
 	arm_biquad_cascade_df1_init_f32(&S_AccelPitch, IIR_NUM_STAGES, (float32_t *) &iirAccelCoeffs[0], (float32_t *) &FiltAccelPitchState[0]);
- 80010bc:	4b06      	ldr	r3, [pc, #24]	; (80010d8 <Config_DSP+0x2c>)
- 80010be:	4a04      	ldr	r2, [pc, #16]	; (80010d0 <Config_DSP+0x24>)
- 80010c0:	2101      	movs	r1, #1
- 80010c2:	4806      	ldr	r0, [pc, #24]	; (80010dc <Config_DSP+0x30>)
- 80010c4:	f004 f9fc 	bl	80054c0 <arm_biquad_cascade_df1_init_f32>
+ 80010c0:	4b06      	ldr	r3, [pc, #24]	; (80010dc <Config_DSP+0x2c>)
+ 80010c2:	4a04      	ldr	r2, [pc, #16]	; (80010d4 <Config_DSP+0x24>)
+ 80010c4:	2101      	movs	r1, #1
+ 80010c6:	4806      	ldr	r0, [pc, #24]	; (80010e0 <Config_DSP+0x30>)
+ 80010c8:	f004 f9fa 	bl	80054c0 <arm_biquad_cascade_df1_init_f32>
 }
- 80010c8:	bf00      	nop
- 80010ca:	bd80      	pop	{r7, pc}
- 80010cc:	20000214 	.word	0x20000214
- 80010d0:	08008eb4 	.word	0x08008eb4
- 80010d4:	200001fc 	.word	0x200001fc
- 80010d8:	20000224 	.word	0x20000224
- 80010dc:	20000208 	.word	0x20000208
+ 80010cc:	bf00      	nop
+ 80010ce:	bd80      	pop	{r7, pc}
+ 80010d0:	20000214 	.word	0x20000214
+ 80010d4:	08008eb4 	.word	0x08008eb4
+ 80010d8:	200001fc 	.word	0x200001fc
+ 80010dc:	20000224 	.word	0x20000224
+ 80010e0:	20000208 	.word	0x20000208
 
-080010e0 <Config_MPU6050>:
+080010e4 <Config_MPU6050>:
 static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRange, const FS_SEL_enum_t gyroRange);
 static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef hi2c1, Config_MPU6050_Bus_t Config_MPU6050_Bus);
 /* Start static function prototypes */
 
 /* Start global function definitions */
 Config_MPU6050_Bus_t Config_MPU6050(I2C_HandleTypeDef hi2c1){
- 80010e0:	b084      	sub	sp, #16
- 80010e2:	b5f0      	push	{r4, r5, r6, r7, lr}
- 80010e4:	b0b7      	sub	sp, #220	; 0xdc
- 80010e6:	af1c      	add	r7, sp, #112	; 0x70
- 80010e8:	6278      	str	r0, [r7, #36]	; 0x24
- 80010ea:	f107 0084 	add.w	r0, r7, #132	; 0x84
- 80010ee:	e880 000e 	stmia.w	r0, {r1, r2, r3}
+ 80010e4:	b084      	sub	sp, #16
+ 80010e6:	b5f0      	push	{r4, r5, r6, r7, lr}
+ 80010e8:	b0b7      	sub	sp, #220	; 0xdc
+ 80010ea:	af1c      	add	r7, sp, #112	; 0x70
+ 80010ec:	6278      	str	r0, [r7, #36]	; 0x24
+ 80010ee:	f107 0084 	add.w	r0, r7, #132	; 0x84
+ 80010f2:	e880 000e 	stmia.w	r0, {r1, r2, r3}
 	Config_MPU6050_Bus_t Config_MPU6050_Bus;
 
 	MPU6050_Init(hi2c1);
- 80010f2:	4668      	mov	r0, sp
- 80010f4:	f107 0394 	add.w	r3, r7, #148	; 0x94
- 80010f8:	2244      	movs	r2, #68	; 0x44
- 80010fa:	4619      	mov	r1, r3
- 80010fc:	f005 f8e2 	bl	80062c4 <memcpy>
- 8001100:	f107 0384 	add.w	r3, r7, #132	; 0x84
- 8001104:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 8001106:	f000 f849 	bl	800119c <MPU6050_Init>
+ 80010f6:	4668      	mov	r0, sp
+ 80010f8:	f107 0394 	add.w	r3, r7, #148	; 0x94
+ 80010fc:	2244      	movs	r2, #68	; 0x44
+ 80010fe:	4619      	mov	r1, r3
+ 8001100:	f005 f8e0 	bl	80062c4 <memcpy>
+ 8001104:	f107 0384 	add.w	r3, r7, #132	; 0x84
+ 8001108:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 800110a:	f000 f849 	bl	80011a0 <MPU6050_Init>
 
 	Config_MPU6050_Bus.Sensitivity = MPU6050_GetSens(accelRange, gyroRange);
- 800110a:	2301      	movs	r3, #1
- 800110c:	2201      	movs	r2, #1
- 800110e:	4611      	mov	r1, r2
- 8001110:	4618      	mov	r0, r3
- 8001112:	f000 f8c3 	bl	800129c <MPU6050_GetSens>
- 8001116:	eeb0 7a40 	vmov.f32	s14, s0
- 800111a:	eef0 7a60 	vmov.f32	s15, s1
- 800111e:	ed87 7a11 	vstr	s14, [r7, #68]	; 0x44
- 8001122:	edc7 7a12 	vstr	s15, [r7, #72]	; 0x48
+ 800110e:	2301      	movs	r3, #1
+ 8001110:	2201      	movs	r2, #1
+ 8001112:	4611      	mov	r1, r2
+ 8001114:	4618      	mov	r0, r3
+ 8001116:	f000 f8c3 	bl	80012a0 <MPU6050_GetSens>
+ 800111a:	eeb0 7a40 	vmov.f32	s14, s0
+ 800111e:	eef0 7a60 	vmov.f32	s15, s1
+ 8001122:	ed87 7a11 	vstr	s14, [r7, #68]	; 0x44
+ 8001126:	edc7 7a12 	vstr	s15, [r7, #72]	; 0x48
 
 	Config_MPU6050_Bus.Offsets = (MPU6050_IMUOffsetData_t) {0, 0, 0, 0, 0, 0, 0};
- 8001126:	f107 034c 	add.w	r3, r7, #76	; 0x4c
- 800112a:	2200      	movs	r2, #0
- 800112c:	601a      	str	r2, [r3, #0]
- 800112e:	605a      	str	r2, [r3, #4]
- 8001130:	609a      	str	r2, [r3, #8]
- 8001132:	60da      	str	r2, [r3, #12]
- 8001134:	611a      	str	r2, [r3, #16]
- 8001136:	615a      	str	r2, [r3, #20]
- 8001138:	619a      	str	r2, [r3, #24]
+ 800112a:	f107 034c 	add.w	r3, r7, #76	; 0x4c
+ 800112e:	2200      	movs	r2, #0
+ 8001130:	601a      	str	r2, [r3, #0]
+ 8001132:	605a      	str	r2, [r3, #4]
+ 8001134:	609a      	str	r2, [r3, #8]
+ 8001136:	60da      	str	r2, [r3, #12]
+ 8001138:	611a      	str	r2, [r3, #16]
+ 800113a:	615a      	str	r2, [r3, #20]
+ 800113c:	619a      	str	r2, [r3, #24]
 	Config_MPU6050_Bus.Offsets = MPU6050_CalibrateOffsets(hi2c1, Config_MPU6050_Bus);
- 800113a:	463e      	mov	r6, r7
- 800113c:	ad12      	add	r5, sp, #72	; 0x48
- 800113e:	f107 0444 	add.w	r4, r7, #68	; 0x44
- 8001142:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
- 8001144:	c50f      	stmia	r5!, {r0, r1, r2, r3}
+ 800113e:	463e      	mov	r6, r7
+ 8001140:	ad12      	add	r5, sp, #72	; 0x48
+ 8001142:	f107 0444 	add.w	r4, r7, #68	; 0x44
  8001146:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
  8001148:	c50f      	stmia	r5!, {r0, r1, r2, r3}
- 800114a:	6823      	ldr	r3, [r4, #0]
- 800114c:	602b      	str	r3, [r5, #0]
- 800114e:	4668      	mov	r0, sp
- 8001150:	f107 0390 	add.w	r3, r7, #144	; 0x90
- 8001154:	2248      	movs	r2, #72	; 0x48
- 8001156:	4619      	mov	r1, r3
- 8001158:	f005 f8b4 	bl	80062c4 <memcpy>
- 800115c:	f107 0384 	add.w	r3, r7, #132	; 0x84
- 8001160:	cb0e      	ldmia	r3, {r1, r2, r3}
- 8001162:	4630      	mov	r0, r6
- 8001164:	f000 f904 	bl	8001370 <MPU6050_CalibrateOffsets>
- 8001168:	f107 044c 	add.w	r4, r7, #76	; 0x4c
- 800116c:	463d      	mov	r5, r7
- 800116e:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
- 8001170:	c40f      	stmia	r4!, {r0, r1, r2, r3}
- 8001172:	e895 0007 	ldmia.w	r5, {r0, r1, r2}
- 8001176:	e884 0007 	stmia.w	r4, {r0, r1, r2}
+ 800114a:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
+ 800114c:	c50f      	stmia	r5!, {r0, r1, r2, r3}
+ 800114e:	6823      	ldr	r3, [r4, #0]
+ 8001150:	602b      	str	r3, [r5, #0]
+ 8001152:	4668      	mov	r0, sp
+ 8001154:	f107 0390 	add.w	r3, r7, #144	; 0x90
+ 8001158:	2248      	movs	r2, #72	; 0x48
+ 800115a:	4619      	mov	r1, r3
+ 800115c:	f005 f8b2 	bl	80062c4 <memcpy>
+ 8001160:	f107 0384 	add.w	r3, r7, #132	; 0x84
+ 8001164:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8001166:	4630      	mov	r0, r6
+ 8001168:	f000 f902 	bl	8001370 <MPU6050_CalibrateOffsets>
+ 800116c:	f107 044c 	add.w	r4, r7, #76	; 0x4c
+ 8001170:	463d      	mov	r5, r7
+ 8001172:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
+ 8001174:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 8001176:	e895 0007 	ldmia.w	r5, {r0, r1, r2}
+ 800117a:	e884 0007 	stmia.w	r4, {r0, r1, r2}
 
 	return Config_MPU6050_Bus;
- 800117a:	6a7b      	ldr	r3, [r7, #36]	; 0x24
- 800117c:	461d      	mov	r5, r3
- 800117e:	f107 0444 	add.w	r4, r7, #68	; 0x44
- 8001182:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
- 8001184:	c50f      	stmia	r5!, {r0, r1, r2, r3}
+ 800117e:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8001180:	461d      	mov	r5, r3
+ 8001182:	f107 0444 	add.w	r4, r7, #68	; 0x44
  8001186:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
  8001188:	c50f      	stmia	r5!, {r0, r1, r2, r3}
- 800118a:	6823      	ldr	r3, [r4, #0]
- 800118c:	602b      	str	r3, [r5, #0]
+ 800118a:	cc0f      	ldmia	r4!, {r0, r1, r2, r3}
+ 800118c:	c50f      	stmia	r5!, {r0, r1, r2, r3}
+ 800118e:	6823      	ldr	r3, [r4, #0]
+ 8001190:	602b      	str	r3, [r5, #0]
 }
- 800118e:	6a78      	ldr	r0, [r7, #36]	; 0x24
- 8001190:	376c      	adds	r7, #108	; 0x6c
- 8001192:	46bd      	mov	sp, r7
- 8001194:	e8bd 40f0 	ldmia.w	sp!, {r4, r5, r6, r7, lr}
- 8001198:	b004      	add	sp, #16
- 800119a:	4770      	bx	lr
+ 8001192:	6a78      	ldr	r0, [r7, #36]	; 0x24
+ 8001194:	376c      	adds	r7, #108	; 0x6c
+ 8001196:	46bd      	mov	sp, r7
+ 8001198:	e8bd 40f0 	ldmia.w	sp!, {r4, r5, r6, r7, lr}
+ 800119c:	b004      	add	sp, #16
+ 800119e:	4770      	bx	lr
 
-0800119c <MPU6050_Init>:
+080011a0 <MPU6050_Init>:
 /* End global function definitions */
 
 /* Start static function definitions */
 static void MPU6050_Init(I2C_HandleTypeDef hi2c1){
- 800119c:	b084      	sub	sp, #16
- 800119e:	b580      	push	{r7, lr}
- 80011a0:	b086      	sub	sp, #24
- 80011a2:	af04      	add	r7, sp, #16
- 80011a4:	f107 0c10 	add.w	ip, r7, #16
- 80011a8:	e88c 000f 	stmia.w	ip, {r0, r1, r2, r3}
+ 80011a0:	b084      	sub	sp, #16
+ 80011a2:	b580      	push	{r7, lr}
+ 80011a4:	b086      	sub	sp, #24
+ 80011a6:	af04      	add	r7, sp, #16
+ 80011a8:	f107 0c10 	add.w	ip, r7, #16
+ 80011ac:	e88c 000f 	stmia.w	ip, {r0, r1, r2, r3}
 	static uint8_t regData;
 	static uint8_t numReg = 1;
 
 	/* I2C device check */
 	// Raise error later
 	HAL_StatusTypeDef deviceCheck = HAL_I2C_IsDeviceReady(&hi2c1, MPU6050_ADDR, 1, I2C_TIMEOUT);
- 80011ac:	2332      	movs	r3, #50	; 0x32
- 80011ae:	2201      	movs	r2, #1
- 80011b0:	21d0      	movs	r1, #208	; 0xd0
- 80011b2:	f107 0010 	add.w	r0, r7, #16
- 80011b6:	f002 fcdf 	bl	8003b78 <HAL_I2C_IsDeviceReady>
- 80011ba:	4603      	mov	r3, r0
- 80011bc:	71fb      	strb	r3, [r7, #7]
+ 80011b0:	2332      	movs	r3, #50	; 0x32
+ 80011b2:	2201      	movs	r2, #1
+ 80011b4:	21d0      	movs	r1, #208	; 0xd0
+ 80011b6:	f107 0010 	add.w	r0, r7, #16
+ 80011ba:	f002 fcdd 	bl	8003b78 <HAL_I2C_IsDeviceReady>
+ 80011be:	4603      	mov	r3, r0
+ 80011c0:	71fb      	strb	r3, [r7, #7]
 
 	if (deviceCheck != HAL_OK){
- 80011be:	79fb      	ldrb	r3, [r7, #7]
- 80011c0:	2b00      	cmp	r3, #0
- 80011c2:	d001      	beq.n	80011c8 <MPU6050_Init+0x2c>
+ 80011c2:	79fb      	ldrb	r3, [r7, #7]
+ 80011c4:	2b00      	cmp	r3, #0
+ 80011c6:	d001      	beq.n	80011cc <MPU6050_Init+0x2c>
 		Error_Handler();
- 80011c4:	f001 fb70 	bl	80028a8 <Error_Handler>
+ 80011c8:	f001 fb6e 	bl	80028a8 <Error_Handler>
 	}
 
 	/* Wake IMU */
 	regData = CLKSEL;
- 80011c8:	4b32      	ldr	r3, [pc, #200]	; (8001294 <MPU6050_Init+0xf8>)
- 80011ca:	2200      	movs	r2, #0
- 80011cc:	701a      	strb	r2, [r3, #0]
+ 80011cc:	4b32      	ldr	r3, [pc, #200]	; (8001298 <MPU6050_Init+0xf8>)
+ 80011ce:	2200      	movs	r2, #0
+ 80011d0:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT1_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
- 80011ce:	4b32      	ldr	r3, [pc, #200]	; (8001298 <MPU6050_Init+0xfc>)
- 80011d0:	781b      	ldrb	r3, [r3, #0]
- 80011d2:	b29b      	uxth	r3, r3
- 80011d4:	2232      	movs	r2, #50	; 0x32
- 80011d6:	9202      	str	r2, [sp, #8]
- 80011d8:	9301      	str	r3, [sp, #4]
- 80011da:	4b2e      	ldr	r3, [pc, #184]	; (8001294 <MPU6050_Init+0xf8>)
- 80011dc:	9300      	str	r3, [sp, #0]
- 80011de:	2301      	movs	r3, #1
- 80011e0:	226b      	movs	r2, #107	; 0x6b
- 80011e2:	21d0      	movs	r1, #208	; 0xd0
- 80011e4:	f107 0010 	add.w	r0, r7, #16
- 80011e8:	f002 f9a6 	bl	8003538 <HAL_I2C_Mem_Write>
+ 80011d2:	4b32      	ldr	r3, [pc, #200]	; (800129c <MPU6050_Init+0xfc>)
+ 80011d4:	781b      	ldrb	r3, [r3, #0]
+ 80011d6:	b29b      	uxth	r3, r3
+ 80011d8:	2232      	movs	r2, #50	; 0x32
+ 80011da:	9202      	str	r2, [sp, #8]
+ 80011dc:	9301      	str	r3, [sp, #4]
+ 80011de:	4b2e      	ldr	r3, [pc, #184]	; (8001298 <MPU6050_Init+0xf8>)
+ 80011e0:	9300      	str	r3, [sp, #0]
+ 80011e2:	2301      	movs	r3, #1
+ 80011e4:	226b      	movs	r2, #107	; 0x6b
+ 80011e6:	21d0      	movs	r1, #208	; 0xd0
+ 80011e8:	f107 0010 	add.w	r0, r7, #16
+ 80011ec:	f002 f9a4 	bl	8003538 <HAL_I2C_Mem_Write>
 
 	/* Calculate SMPLRT_DIV from desired sample rate */
 	regData = SMPLRT_DIV;
- 80011ec:	4b29      	ldr	r3, [pc, #164]	; (8001294 <MPU6050_Init+0xf8>)
- 80011ee:	2207      	movs	r2, #7
- 80011f0:	701a      	strb	r2, [r3, #0]
+ 80011f0:	4b29      	ldr	r3, [pc, #164]	; (8001298 <MPU6050_Init+0xf8>)
+ 80011f2:	2207      	movs	r2, #7
+ 80011f4:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SMPRT_DIV_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
- 80011f2:	4b29      	ldr	r3, [pc, #164]	; (8001298 <MPU6050_Init+0xfc>)
- 80011f4:	781b      	ldrb	r3, [r3, #0]
- 80011f6:	b29b      	uxth	r3, r3
- 80011f8:	2232      	movs	r2, #50	; 0x32
- 80011fa:	9202      	str	r2, [sp, #8]
- 80011fc:	9301      	str	r3, [sp, #4]
- 80011fe:	4b25      	ldr	r3, [pc, #148]	; (8001294 <MPU6050_Init+0xf8>)
- 8001200:	9300      	str	r3, [sp, #0]
- 8001202:	2301      	movs	r3, #1
- 8001204:	2219      	movs	r2, #25
- 8001206:	21d0      	movs	r1, #208	; 0xd0
- 8001208:	f107 0010 	add.w	r0, r7, #16
- 800120c:	f002 f994 	bl	8003538 <HAL_I2C_Mem_Write>
+ 80011f6:	4b29      	ldr	r3, [pc, #164]	; (800129c <MPU6050_Init+0xfc>)
+ 80011f8:	781b      	ldrb	r3, [r3, #0]
+ 80011fa:	b29b      	uxth	r3, r3
+ 80011fc:	2232      	movs	r2, #50	; 0x32
+ 80011fe:	9202      	str	r2, [sp, #8]
+ 8001200:	9301      	str	r3, [sp, #4]
+ 8001202:	4b25      	ldr	r3, [pc, #148]	; (8001298 <MPU6050_Init+0xf8>)
+ 8001204:	9300      	str	r3, [sp, #0]
+ 8001206:	2301      	movs	r3, #1
+ 8001208:	2219      	movs	r2, #25
+ 800120a:	21d0      	movs	r1, #208	; 0xd0
+ 800120c:	f107 0010 	add.w	r0, r7, #16
+ 8001210:	f002 f992 	bl	8003538 <HAL_I2C_Mem_Write>
 
 	/* Set gyro config */
 	regData = (uint8_t) (gyroRange << 3);
- 8001210:	2301      	movs	r3, #1
- 8001212:	00db      	lsls	r3, r3, #3
- 8001214:	b2da      	uxtb	r2, r3
- 8001216:	4b1f      	ldr	r3, [pc, #124]	; (8001294 <MPU6050_Init+0xf8>)
- 8001218:	701a      	strb	r2, [r3, #0]
+ 8001214:	2301      	movs	r3, #1
+ 8001216:	00db      	lsls	r3, r3, #3
+ 8001218:	b2da      	uxtb	r2, r3
+ 800121a:	4b1f      	ldr	r3, [pc, #124]	; (8001298 <MPU6050_Init+0xf8>)
+ 800121c:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
- 800121a:	4b1f      	ldr	r3, [pc, #124]	; (8001298 <MPU6050_Init+0xfc>)
- 800121c:	781b      	ldrb	r3, [r3, #0]
- 800121e:	b29b      	uxth	r3, r3
- 8001220:	2232      	movs	r2, #50	; 0x32
- 8001222:	9202      	str	r2, [sp, #8]
- 8001224:	9301      	str	r3, [sp, #4]
- 8001226:	4b1b      	ldr	r3, [pc, #108]	; (8001294 <MPU6050_Init+0xf8>)
- 8001228:	9300      	str	r3, [sp, #0]
- 800122a:	2301      	movs	r3, #1
- 800122c:	221b      	movs	r2, #27
- 800122e:	21d0      	movs	r1, #208	; 0xd0
- 8001230:	f107 0010 	add.w	r0, r7, #16
- 8001234:	f002 f980 	bl	8003538 <HAL_I2C_Mem_Write>
+ 800121e:	4b1f      	ldr	r3, [pc, #124]	; (800129c <MPU6050_Init+0xfc>)
+ 8001220:	781b      	ldrb	r3, [r3, #0]
+ 8001222:	b29b      	uxth	r3, r3
+ 8001224:	2232      	movs	r2, #50	; 0x32
+ 8001226:	9202      	str	r2, [sp, #8]
+ 8001228:	9301      	str	r3, [sp, #4]
+ 800122a:	4b1b      	ldr	r3, [pc, #108]	; (8001298 <MPU6050_Init+0xf8>)
+ 800122c:	9300      	str	r3, [sp, #0]
+ 800122e:	2301      	movs	r3, #1
+ 8001230:	221b      	movs	r2, #27
+ 8001232:	21d0      	movs	r1, #208	; 0xd0
+ 8001234:	f107 0010 	add.w	r0, r7, #16
+ 8001238:	f002 f97e 	bl	8003538 <HAL_I2C_Mem_Write>
 
 	/* Set accel config */
 	regData = (uint8_t) (accelRange << 3);
- 8001238:	2301      	movs	r3, #1
- 800123a:	00db      	lsls	r3, r3, #3
- 800123c:	b2da      	uxtb	r2, r3
- 800123e:	4b15      	ldr	r3, [pc, #84]	; (8001294 <MPU6050_Init+0xf8>)
- 8001240:	701a      	strb	r2, [r3, #0]
+ 800123c:	2301      	movs	r3, #1
+ 800123e:	00db      	lsls	r3, r3, #3
+ 8001240:	b2da      	uxtb	r2, r3
+ 8001242:	4b15      	ldr	r3, [pc, #84]	; (8001298 <MPU6050_Init+0xf8>)
+ 8001244:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
- 8001242:	4b15      	ldr	r3, [pc, #84]	; (8001298 <MPU6050_Init+0xfc>)
- 8001244:	781b      	ldrb	r3, [r3, #0]
- 8001246:	b29b      	uxth	r3, r3
- 8001248:	2232      	movs	r2, #50	; 0x32
- 800124a:	9202      	str	r2, [sp, #8]
- 800124c:	9301      	str	r3, [sp, #4]
- 800124e:	4b11      	ldr	r3, [pc, #68]	; (8001294 <MPU6050_Init+0xf8>)
- 8001250:	9300      	str	r3, [sp, #0]
- 8001252:	2301      	movs	r3, #1
- 8001254:	221c      	movs	r2, #28
- 8001256:	21d0      	movs	r1, #208	; 0xd0
- 8001258:	f107 0010 	add.w	r0, r7, #16
- 800125c:	f002 f96c 	bl	8003538 <HAL_I2C_Mem_Write>
+ 8001246:	4b15      	ldr	r3, [pc, #84]	; (800129c <MPU6050_Init+0xfc>)
+ 8001248:	781b      	ldrb	r3, [r3, #0]
+ 800124a:	b29b      	uxth	r3, r3
+ 800124c:	2232      	movs	r2, #50	; 0x32
+ 800124e:	9202      	str	r2, [sp, #8]
+ 8001250:	9301      	str	r3, [sp, #4]
+ 8001252:	4b11      	ldr	r3, [pc, #68]	; (8001298 <MPU6050_Init+0xf8>)
+ 8001254:	9300      	str	r3, [sp, #0]
+ 8001256:	2301      	movs	r3, #1
+ 8001258:	221c      	movs	r2, #28
+ 800125a:	21d0      	movs	r1, #208	; 0xd0
+ 800125c:	f107 0010 	add.w	r0, r7, #16
+ 8001260:	f002 f96a 	bl	8003538 <HAL_I2C_Mem_Write>
 
 	/*Configure low pass filter*/
 	regData = DLPF_CFG;
- 8001260:	4b0c      	ldr	r3, [pc, #48]	; (8001294 <MPU6050_Init+0xf8>)
- 8001262:	2200      	movs	r2, #0
- 8001264:	701a      	strb	r2, [r3, #0]
+ 8001264:	4b0c      	ldr	r3, [pc, #48]	; (8001298 <MPU6050_Init+0xf8>)
+ 8001266:	2200      	movs	r2, #0
+ 8001268:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
- 8001266:	4b0c      	ldr	r3, [pc, #48]	; (8001298 <MPU6050_Init+0xfc>)
- 8001268:	781b      	ldrb	r3, [r3, #0]
- 800126a:	b29b      	uxth	r3, r3
- 800126c:	2232      	movs	r2, #50	; 0x32
- 800126e:	9202      	str	r2, [sp, #8]
- 8001270:	9301      	str	r3, [sp, #4]
- 8001272:	4b08      	ldr	r3, [pc, #32]	; (8001294 <MPU6050_Init+0xf8>)
- 8001274:	9300      	str	r3, [sp, #0]
- 8001276:	2301      	movs	r3, #1
- 8001278:	221a      	movs	r2, #26
- 800127a:	21d0      	movs	r1, #208	; 0xd0
- 800127c:	f107 0010 	add.w	r0, r7, #16
- 8001280:	f002 f95a 	bl	8003538 <HAL_I2C_Mem_Write>
+ 800126a:	4b0c      	ldr	r3, [pc, #48]	; (800129c <MPU6050_Init+0xfc>)
+ 800126c:	781b      	ldrb	r3, [r3, #0]
+ 800126e:	b29b      	uxth	r3, r3
+ 8001270:	2232      	movs	r2, #50	; 0x32
+ 8001272:	9202      	str	r2, [sp, #8]
+ 8001274:	9301      	str	r3, [sp, #4]
+ 8001276:	4b08      	ldr	r3, [pc, #32]	; (8001298 <MPU6050_Init+0xf8>)
+ 8001278:	9300      	str	r3, [sp, #0]
+ 800127a:	2301      	movs	r3, #1
+ 800127c:	221a      	movs	r2, #26
+ 800127e:	21d0      	movs	r1, #208	; 0xd0
+ 8001280:	f107 0010 	add.w	r0, r7, #16
+ 8001284:	f002 f958 	bl	8003538 <HAL_I2C_Mem_Write>
 }
- 8001284:	bf00      	nop
- 8001286:	3708      	adds	r7, #8
- 8001288:	46bd      	mov	sp, r7
- 800128a:	e8bd 4080 	ldmia.w	sp!, {r7, lr}
- 800128e:	b004      	add	sp, #16
- 8001290:	4770      	bx	lr
- 8001292:	bf00      	nop
- 8001294:	20000234 	.word	0x20000234
- 8001298:	20000004 	.word	0x20000004
+ 8001288:	bf00      	nop
+ 800128a:	3708      	adds	r7, #8
+ 800128c:	46bd      	mov	sp, r7
+ 800128e:	e8bd 4080 	ldmia.w	sp!, {r7, lr}
+ 8001292:	b004      	add	sp, #16
+ 8001294:	4770      	bx	lr
+ 8001296:	bf00      	nop
+ 8001298:	20000234 	.word	0x20000234
+ 800129c:	20000004 	.word	0x20000004
 
-0800129c <MPU6050_GetSens>:
+080012a0 <MPU6050_GetSens>:
 
 static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRange, const FS_SEL_enum_t gyroRange){
- 800129c:	b580      	push	{r7, lr}
- 800129e:	b088      	sub	sp, #32
- 80012a0:	af00      	add	r7, sp, #0
- 80012a2:	4603      	mov	r3, r0
- 80012a4:	460a      	mov	r2, r1
- 80012a6:	73fb      	strb	r3, [r7, #15]
- 80012a8:	4613      	mov	r3, r2
- 80012aa:	73bb      	strb	r3, [r7, #14]
+ 80012a0:	b580      	push	{r7, lr}
+ 80012a2:	b088      	sub	sp, #32
+ 80012a4:	af00      	add	r7, sp, #0
+ 80012a6:	4603      	mov	r3, r0
+ 80012a8:	460a      	mov	r2, r1
+ 80012aa:	73fb      	strb	r3, [r7, #15]
+ 80012ac:	4613      	mov	r3, r2
+ 80012ae:	73bb      	strb	r3, [r7, #14]
 	MPU6050_IMUSensitivityData_t IMUSensitivity;
 
 	/* Determine sensor sensitivity based on sensor range */
 	switch (accelRange){
- 80012ac:	7bfb      	ldrb	r3, [r7, #15]
- 80012ae:	2b03      	cmp	r3, #3
- 80012b0:	d81a      	bhi.n	80012e8 <MPU6050_GetSens+0x4c>
- 80012b2:	a201      	add	r2, pc, #4	; (adr r2, 80012b8 <MPU6050_GetSens+0x1c>)
- 80012b4:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
- 80012b8:	080012c9 	.word	0x080012c9
- 80012bc:	080012d1 	.word	0x080012d1
- 80012c0:	080012d9 	.word	0x080012d9
- 80012c4:	080012e1 	.word	0x080012e1
+ 80012b0:	7bfb      	ldrb	r3, [r7, #15]
+ 80012b2:	2b03      	cmp	r3, #3
+ 80012b4:	d81a      	bhi.n	80012ec <MPU6050_GetSens+0x4c>
+ 80012b6:	a201      	add	r2, pc, #4	; (adr r2, 80012bc <MPU6050_GetSens+0x1c>)
+ 80012b8:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80012bc:	080012cd 	.word	0x080012cd
+ 80012c0:	080012d5 	.word	0x080012d5
+ 80012c4:	080012dd 	.word	0x080012dd
+ 80012c8:	080012e5 	.word	0x080012e5
 	case g2:
 		IMUSensitivity.AccelSens = 16384.0;
- 80012c8:	f04f 438d 	mov.w	r3, #1182793728	; 0x46800000
- 80012cc:	613b      	str	r3, [r7, #16]
+ 80012cc:	f04f 438d 	mov.w	r3, #1182793728	; 0x46800000
+ 80012d0:	613b      	str	r3, [r7, #16]
 		break;
- 80012ce:	e010      	b.n	80012f2 <MPU6050_GetSens+0x56>
+ 80012d2:	e010      	b.n	80012f6 <MPU6050_GetSens+0x56>
 	case g4:
 		IMUSensitivity.AccelSens = 8192.0;
- 80012d0:	f04f 438c 	mov.w	r3, #1174405120	; 0x46000000
- 80012d4:	613b      	str	r3, [r7, #16]
+ 80012d4:	f04f 438c 	mov.w	r3, #1174405120	; 0x46000000
+ 80012d8:	613b      	str	r3, [r7, #16]
 		break;
- 80012d6:	e00c      	b.n	80012f2 <MPU6050_GetSens+0x56>
+ 80012da:	e00c      	b.n	80012f6 <MPU6050_GetSens+0x56>
 	case g8:
 		IMUSensitivity.AccelSens = 4096.0;
- 80012d8:	f04f 438b 	mov.w	r3, #1166016512	; 0x45800000
- 80012dc:	613b      	str	r3, [r7, #16]
+ 80012dc:	f04f 438b 	mov.w	r3, #1166016512	; 0x45800000
+ 80012e0:	613b      	str	r3, [r7, #16]
 		break;
- 80012de:	e008      	b.n	80012f2 <MPU6050_GetSens+0x56>
+ 80012e2:	e008      	b.n	80012f6 <MPU6050_GetSens+0x56>
 	case g16:
 		IMUSensitivity.AccelSens = 2048.0;
- 80012e0:	f04f 438a 	mov.w	r3, #1157627904	; 0x45000000
- 80012e4:	613b      	str	r3, [r7, #16]
+ 80012e4:	f04f 438a 	mov.w	r3, #1157627904	; 0x45000000
+ 80012e8:	613b      	str	r3, [r7, #16]
 		break;
- 80012e6:	e004      	b.n	80012f2 <MPU6050_GetSens+0x56>
+ 80012ea:	e004      	b.n	80012f6 <MPU6050_GetSens+0x56>
 	default:
 		IMUSensitivity.AccelSens = 0;
- 80012e8:	f04f 0300 	mov.w	r3, #0
- 80012ec:	613b      	str	r3, [r7, #16]
+ 80012ec:	f04f 0300 	mov.w	r3, #0
+ 80012f0:	613b      	str	r3, [r7, #16]
 		Error_Handler();
- 80012ee:	f001 fadb 	bl	80028a8 <Error_Handler>
+ 80012f2:	f001 fad9 	bl	80028a8 <Error_Handler>
 	}
 
 	/* Determine sensor sensitivity based on sensor range */
 	switch (gyroRange){
- 80012f2:	7bbb      	ldrb	r3, [r7, #14]
- 80012f4:	2b03      	cmp	r3, #3
- 80012f6:	d817      	bhi.n	8001328 <MPU6050_GetSens+0x8c>
- 80012f8:	a201      	add	r2, pc, #4	; (adr r2, 8001300 <MPU6050_GetSens+0x64>)
- 80012fa:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
- 80012fe:	bf00      	nop
- 8001300:	08001311 	.word	0x08001311
- 8001304:	08001317 	.word	0x08001317
- 8001308:	0800131d 	.word	0x0800131d
- 800130c:	08001323 	.word	0x08001323
+ 80012f6:	7bbb      	ldrb	r3, [r7, #14]
+ 80012f8:	2b03      	cmp	r3, #3
+ 80012fa:	d817      	bhi.n	800132c <MPU6050_GetSens+0x8c>
+ 80012fc:	a201      	add	r2, pc, #4	; (adr r2, 8001304 <MPU6050_GetSens+0x64>)
+ 80012fe:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8001302:	bf00      	nop
+ 8001304:	08001315 	.word	0x08001315
+ 8001308:	0800131b 	.word	0x0800131b
+ 800130c:	08001321 	.word	0x08001321
+ 8001310:	08001327 	.word	0x08001327
 	case w250:
 		IMUSensitivity.GyroSens = 131.0;
- 8001310:	4b12      	ldr	r3, [pc, #72]	; (800135c <MPU6050_GetSens+0xc0>)
- 8001312:	617b      	str	r3, [r7, #20]
+ 8001314:	4b12      	ldr	r3, [pc, #72]	; (8001360 <MPU6050_GetSens+0xc0>)
+ 8001316:	617b      	str	r3, [r7, #20]
 		break;
- 8001314:	e00d      	b.n	8001332 <MPU6050_GetSens+0x96>
+ 8001318:	e00d      	b.n	8001336 <MPU6050_GetSens+0x96>
 	case w500:
 		IMUSensitivity.GyroSens = 65.5;
- 8001316:	4b12      	ldr	r3, [pc, #72]	; (8001360 <MPU6050_GetSens+0xc4>)
- 8001318:	617b      	str	r3, [r7, #20]
+ 800131a:	4b12      	ldr	r3, [pc, #72]	; (8001364 <MPU6050_GetSens+0xc4>)
+ 800131c:	617b      	str	r3, [r7, #20]
 		break;
- 800131a:	e00a      	b.n	8001332 <MPU6050_GetSens+0x96>
+ 800131e:	e00a      	b.n	8001336 <MPU6050_GetSens+0x96>
 	case w1000:
 		IMUSensitivity.GyroSens = 32.8;
- 800131c:	4b11      	ldr	r3, [pc, #68]	; (8001364 <MPU6050_GetSens+0xc8>)
- 800131e:	617b      	str	r3, [r7, #20]
+ 8001320:	4b11      	ldr	r3, [pc, #68]	; (8001368 <MPU6050_GetSens+0xc8>)
+ 8001322:	617b      	str	r3, [r7, #20]
 		break;
- 8001320:	e007      	b.n	8001332 <MPU6050_GetSens+0x96>
+ 8001324:	e007      	b.n	8001336 <MPU6050_GetSens+0x96>
 	case w2000:
 		IMUSensitivity.GyroSens = 16.4;
- 8001322:	4b11      	ldr	r3, [pc, #68]	; (8001368 <MPU6050_GetSens+0xcc>)
- 8001324:	617b      	str	r3, [r7, #20]
+ 8001326:	4b11      	ldr	r3, [pc, #68]	; (800136c <MPU6050_GetSens+0xcc>)
+ 8001328:	617b      	str	r3, [r7, #20]
 		break;
- 8001326:	e004      	b.n	8001332 <MPU6050_GetSens+0x96>
+ 800132a:	e004      	b.n	8001336 <MPU6050_GetSens+0x96>
 	default:
 		IMUSensitivity.GyroSens = 0;
- 8001328:	f04f 0300 	mov.w	r3, #0
- 800132c:	617b      	str	r3, [r7, #20]
+ 800132c:	f04f 0300 	mov.w	r3, #0
+ 8001330:	617b      	str	r3, [r7, #20]
 		Error_Handler();
- 800132e:	f001 fabb 	bl	80028a8 <Error_Handler>
+ 8001332:	f001 fab9 	bl	80028a8 <Error_Handler>
 	}
 
 	return IMUSensitivity;
- 8001332:	f107 0318 	add.w	r3, r7, #24
- 8001336:	f107 0210 	add.w	r2, r7, #16
- 800133a:	e892 0003 	ldmia.w	r2, {r0, r1}
- 800133e:	e883 0003 	stmia.w	r3, {r0, r1}
- 8001342:	69ba      	ldr	r2, [r7, #24]
- 8001344:	69fb      	ldr	r3, [r7, #28]
- 8001346:	ee07 2a10 	vmov	s14, r2
- 800134a:	ee07 3a90 	vmov	s15, r3
+ 8001336:	f107 0318 	add.w	r3, r7, #24
+ 800133a:	f107 0210 	add.w	r2, r7, #16
+ 800133e:	e892 0003 	ldmia.w	r2, {r0, r1}
+ 8001342:	e883 0003 	stmia.w	r3, {r0, r1}
+ 8001346:	69ba      	ldr	r2, [r7, #24]
+ 8001348:	69fb      	ldr	r3, [r7, #28]
+ 800134a:	ee07 2a10 	vmov	s14, r2
+ 800134e:	ee07 3a90 	vmov	s15, r3
 }
- 800134e:	eeb0 0a47 	vmov.f32	s0, s14
- 8001352:	eef0 0a67 	vmov.f32	s1, s15
- 8001356:	3720      	adds	r7, #32
- 8001358:	46bd      	mov	sp, r7
- 800135a:	bd80      	pop	{r7, pc}
- 800135c:	43030000 	.word	0x43030000
- 8001360:	42830000 	.word	0x42830000
- 8001364:	42033333 	.word	0x42033333
- 8001368:	41833333 	.word	0x41833333
- 800136c:	00000000 	.word	0x00000000
+ 8001352:	eeb0 0a47 	vmov.f32	s0, s14
+ 8001356:	eef0 0a67 	vmov.f32	s1, s15
+ 800135a:	3720      	adds	r7, #32
+ 800135c:	46bd      	mov	sp, r7
+ 800135e:	bd80      	pop	{r7, pc}
+ 8001360:	43030000 	.word	0x43030000
+ 8001364:	42830000 	.word	0x42830000
+ 8001368:	42033333 	.word	0x42033333
+ 800136c:	41833333 	.word	0x41833333
 
 08001370 <MPU6050_CalibrateOffsets>:
 
@@ -3974,7 +3975,7 @@ int main(void)
  800264e:	4619      	mov	r1, r3
  8002650:	f003 fe38 	bl	80062c4 <memcpy>
  8002654:	e894 000f 	ldmia.w	r4, {r0, r1, r2, r3}
- 8002658:	f7fe fcbe 	bl	8000fd8 <App_Main>
+ 8002658:	f7fe fcc0 	bl	8000fdc <App_Main>
  800265c:	e7ef      	b.n	800263e <main+0x5e>
  800265e:	bf00      	nop
  8002660:	200002a8 	.word	0x200002a8

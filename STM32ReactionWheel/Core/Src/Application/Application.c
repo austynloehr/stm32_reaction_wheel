@@ -11,6 +11,7 @@
 Config_Bus_t App_Config(Config_HAL_Bus_t Config_HAL_Bus){
 	Config_Bus_t Config_Bus;
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);  // Move this later
+	HAL_Delay(200);
 
 	Config_Bus.Config_HAL_Bus = Config_HAL_Bus;
 	Config_Bus.Config_MPU6050_Bus = Config_MPU6050(Config_HAL_Bus.hi2c1);
