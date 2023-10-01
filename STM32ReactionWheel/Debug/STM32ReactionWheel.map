@@ -4928,22 +4928,21 @@ LOAD /opt/st/stm32cubeide_1.13.1/plugins/com.st.stm32cube.ide.mcu.externaltools.
                 0x0000000008000f50                __aeabi_idiv0
  *(.text*)
  .text.App_Config
-                0x0000000008000f54       0x84 ./Core/Src/Application/Application.o
+                0x0000000008000f54       0x88 ./Core/Src/Application/Application.o
                 0x0000000008000f54                App_Config
  .text.App_Main
-                0x0000000008000fd8       0xd4 ./Core/Src/Application/Application.o
-                0x0000000008000fd8                App_Main
+                0x0000000008000fdc       0xd4 ./Core/Src/Application/Application.o
+                0x0000000008000fdc                App_Main
  .text.Config_DSP
-                0x00000000080010ac       0x34 ./Core/Src/Application/Config/Config_DSP.o
-                0x00000000080010ac                Config_DSP
+                0x00000000080010b0       0x34 ./Core/Src/Application/Config/Config_DSP.o
+                0x00000000080010b0                Config_DSP
  .text.Config_MPU6050
-                0x00000000080010e0       0xbc ./Core/Src/Application/Config/Config_MPU6050.o
-                0x00000000080010e0                Config_MPU6050
+                0x00000000080010e4       0xbc ./Core/Src/Application/Config/Config_MPU6050.o
+                0x00000000080010e4                Config_MPU6050
  .text.MPU6050_Init
-                0x000000000800119c      0x100 ./Core/Src/Application/Config/Config_MPU6050.o
+                0x00000000080011a0      0x100 ./Core/Src/Application/Config/Config_MPU6050.o
  .text.MPU6050_GetSens
-                0x000000000800129c       0xd0 ./Core/Src/Application/Config/Config_MPU6050.o
- *fill*         0x000000000800136c        0x4 
+                0x00000000080012a0       0xd0 ./Core/Src/Application/Config/Config_MPU6050.o
  .text.MPU6050_CalibrateOffsets
                 0x0000000008001370      0x1fc ./Core/Src/Application/Config/Config_MPU6050.o
  .text.CT_Control
@@ -6281,34 +6280,34 @@ LOAD /opt/st/stm32cubeide_1.13.1/plugins/com.st.stm32cube.ide.mcu.externaltools.
  .debug_macro   0x00000000000190e3      0x1f7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
  .debug_macro   0x00000000000192da      0x1d4 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
-.debug_line     0x0000000000000000    0x14b05
- .debug_line    0x0000000000000000      0xbc6 ./Core/Src/Application/Application.o
- .debug_line    0x0000000000000bc6      0x8bd ./Core/Src/Application/Config/Config_DSP.o
- .debug_line    0x0000000000001483      0xb17 ./Core/Src/Application/Config/Config_MPU6050.o
- .debug_line    0x0000000000001f9a      0xbb1 ./Core/Src/Application/Control/Control.o
- .debug_line    0x0000000000002b4b      0xb03 ./Core/Src/Application/Control/Controllers/CT_Logging.o
- .debug_line    0x000000000000364e      0xbcd ./Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.o
- .debug_line    0x000000000000421b      0xb2c ./Core/Src/Application/IO/IO.o
- .debug_line    0x0000000000004d47      0x8ae ./Core/Src/Application/IO/IO_HC05.o
- .debug_line    0x00000000000055f5      0x9df ./Core/Src/Application/IO/IO_MPU6050.o
- .debug_line    0x0000000000005fd4      0xa9f ./Core/Src/Application/Processing/PR_HC05.o
- .debug_line    0x0000000000006a73      0xab6 ./Core/Src/Application/Processing/PR_MPU6050.o
- .debug_line    0x0000000000007529      0xb42 ./Core/Src/Application/Processing/Processing.o
- .debug_line    0x000000000000806b      0xcab ./Core/Src/main.o
- .debug_line    0x0000000000008d16      0x8e6 ./Core/Src/stm32f4xx_hal_msp.o
- .debug_line    0x00000000000095fc      0x90d ./Core/Src/stm32f4xx_it.o
- .debug_line    0x0000000000009f09      0x7dd ./Core/Src/syscalls.o
- .debug_line    0x000000000000a6e6      0x4ae ./Core/Src/sysmem.o
- .debug_line    0x000000000000ab94      0x70d ./Core/Src/system_stm32f4xx.o
- .debug_line    0x000000000000b2a1       0x7a ./Core/Startup/startup_stm32f411ceux.o
- .debug_line    0x000000000000b31b      0x973 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_line    0x000000000000bc8e      0xc22 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_line    0x000000000000c8b0      0xaab ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_line    0x000000000000d35b     0x3935 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
- .debug_line    0x0000000000010c90      0xcea ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_line    0x000000000001197a     0x2a15 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
- .debug_line    0x000000000001438f      0x288 ../Middlewares/ST/ARM/DSP/Lib/libarm_cortexM4lf_math.a(arm_biquad_cascade_df1_init_f32.o)
- .debug_line    0x0000000000014617      0x4ee ../Middlewares/ST/ARM/DSP/Lib/libarm_cortexM4lf_math.a(arm_biquad_cascade_df1_f32.o)
+.debug_line     0x0000000000000000    0x14b06
+ .debug_line    0x0000000000000000      0xbc7 ./Core/Src/Application/Application.o
+ .debug_line    0x0000000000000bc7      0x8bd ./Core/Src/Application/Config/Config_DSP.o
+ .debug_line    0x0000000000001484      0xb17 ./Core/Src/Application/Config/Config_MPU6050.o
+ .debug_line    0x0000000000001f9b      0xbb1 ./Core/Src/Application/Control/Control.o
+ .debug_line    0x0000000000002b4c      0xb03 ./Core/Src/Application/Control/Controllers/CT_Logging.o
+ .debug_line    0x000000000000364f      0xbcd ./Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.o
+ .debug_line    0x000000000000421c      0xb2c ./Core/Src/Application/IO/IO.o
+ .debug_line    0x0000000000004d48      0x8ae ./Core/Src/Application/IO/IO_HC05.o
+ .debug_line    0x00000000000055f6      0x9df ./Core/Src/Application/IO/IO_MPU6050.o
+ .debug_line    0x0000000000005fd5      0xa9f ./Core/Src/Application/Processing/PR_HC05.o
+ .debug_line    0x0000000000006a74      0xab6 ./Core/Src/Application/Processing/PR_MPU6050.o
+ .debug_line    0x000000000000752a      0xb42 ./Core/Src/Application/Processing/Processing.o
+ .debug_line    0x000000000000806c      0xcab ./Core/Src/main.o
+ .debug_line    0x0000000000008d17      0x8e6 ./Core/Src/stm32f4xx_hal_msp.o
+ .debug_line    0x00000000000095fd      0x90d ./Core/Src/stm32f4xx_it.o
+ .debug_line    0x0000000000009f0a      0x7dd ./Core/Src/syscalls.o
+ .debug_line    0x000000000000a6e7      0x4ae ./Core/Src/sysmem.o
+ .debug_line    0x000000000000ab95      0x70d ./Core/Src/system_stm32f4xx.o
+ .debug_line    0x000000000000b2a2       0x7a ./Core/Startup/startup_stm32f411ceux.o
+ .debug_line    0x000000000000b31c      0x973 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_line    0x000000000000bc8f      0xc22 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_line    0x000000000000c8b1      0xaab ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_line    0x000000000000d35c     0x3935 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
+ .debug_line    0x0000000000010c91      0xcea ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_line    0x000000000001197b     0x2a15 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_line    0x0000000000014390      0x288 ../Middlewares/ST/ARM/DSP/Lib/libarm_cortexM4lf_math.a(arm_biquad_cascade_df1_init_f32.o)
+ .debug_line    0x0000000000014618      0x4ee ../Middlewares/ST/ARM/DSP/Lib/libarm_cortexM4lf_math.a(arm_biquad_cascade_df1_f32.o)
 
 .debug_str      0x0000000000000000    0x8b883
  .debug_str     0x0000000000000000    0x85cf2 ./Core/Src/Application/Application.o
