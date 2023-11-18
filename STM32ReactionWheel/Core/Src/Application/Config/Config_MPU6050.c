@@ -8,6 +8,7 @@
 #include "Config_MPU6050.h"
 #include "IO_MPU6050.h"
 #include "PR_MPU6050.h"
+#include <math.h>
 
 /* Start Defines */
 /* Memory Addresses */
@@ -148,7 +149,7 @@ static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef hi2c1,
 	HI_MPU6050_Bus_t HI_MPU6050_Bus;
 	IP_MPU6050_Bus_t IP_MPU6050_Bus;
 
-	uint32_t numSamples = 4000;
+	uint32_t numSamples = 2000;
 
 	float sumAx = 0;
 	float sumAy = 0;
@@ -173,8 +174,8 @@ static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef hi2c1,
 	}
 
 	IMUOffsets.AxOffset = 0 - (sumAx / numSamples);
-	IMUOffsets.AyOffset = 0 - (sumAy / numSamples);
-	IMUOffsets.AzOffset = 9.80665 - (sumAz / numSamples);
+	IMUOffsets.AyOffset = (9.80665 * sin(0 * PI / 180)) - (sumAy / numSamples);
+	IMUOffsets.AzOffset = (9.80665 * cos(0 * PI / 180)) - (sumAz / numSamples);
 
 	IMUOffsets.WxOffset = 0 - (sumWx / numSamples);
 	IMUOffsets.WyOffset = 0 - (sumWy / numSamples);

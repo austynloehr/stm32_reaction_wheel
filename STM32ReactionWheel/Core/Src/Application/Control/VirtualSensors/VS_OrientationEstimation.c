@@ -10,18 +10,19 @@
 #include <math.h>
 
 /* Start Global Variables */
-static uint8_t resetGyroRoll_bool = 1;
-static uint8_t resetGyroPitch_bool = 1;
-static uint32_t zeroAccelRollCount = 0;
-static uint32_t zeroAccelPitchCount = 0;
+static uint8_t resetGyroRoll_bool = 0;
+static uint8_t resetGyroPitch_bool = 0;
+static uint32_t resetAccelRollCount = 0;
+static uint32_t resetAccelPitchCount = 0;
 static uint32_t lastTick = 0;
 static float lastRollAng_deg = 0;
 static float lastPitchAng_deg = 0;
 /* Start Global Variables */
 
 /* Start Static Function Prototypes */
+static int8_t signf(float x);
 static void ResetGyroIntegrators(float accelRoll_deg, float accelPitch_deg);
-static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData);
+static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData, VS_OrientationData_t FiltAccelOrientation);
 static VS_OrientationData_t CalcAccelAngle(MPU6050_AccelData_t MPU6050_AccelData);
 static VS_OrientationData_t AccelLowPassFilt(VS_OrientationData_t AccelOrientation);
 static VS_OrientationData_t ComplimentaryFilter(VS_OrientationData_t GyroOrientation, VS_OrientationData_t FiltAccelOrientation);
@@ -32,11 +33,13 @@ VS_Orientation_Bus_t EstimateOrientation(IP_MPU6050_Bus_t IP_MPU6050_Bus){
 	VS_Orientation_Bus_t VS_Orientation_Bus;
 
 	VS_Orientation_Bus.AccelOrientation = CalcAccelAngle(IP_MPU6050_Bus.accel);
-	VS_Orientation_Bus.GyroOrientation = CalcGyroAngle(IP_MPU6050_Bus.gyro);
 
 	ResetGyroIntegrators(VS_Orientation_Bus.AccelOrientation.roll_deg, VS_Orientation_Bus.AccelOrientation.pitch_deg);
 
 	VS_Orientation_Bus.FiltAccelOrientation = AccelLowPassFilt(VS_Orientation_Bus.AccelOrientation);
+
+	VS_Orientation_Bus.GyroOrientation = CalcGyroAngle(IP_MPU6050_Bus.gyro, VS_Orientation_Bus.FiltAccelOrientation);
+
 	VS_Orientation_Bus.CompFiltOrientation = ComplimentaryFilter(VS_Orientation_Bus.GyroOrientation, VS_Orientation_Bus.FiltAccelOrientation);
 
 	return VS_Orientation_Bus;
@@ -57,13 +60,14 @@ static VS_OrientationData_t CalcAccelAngle(MPU6050_AccelData_t MPU6050_AccelData
 	return AccelOrientation;
 }
 
-static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData){
+static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData, VS_OrientationData_t FiltAccelOrientation){
 	VS_OrientationData_t GyroOrientation;
 	uint32_t currentTick = HAL_GetTick();
 	float dt = ((float) currentTick - (float) lastTick) / 1000;
 
+	// Integrator reset logic
 	if(resetGyroRoll_bool){
-		lastRollAng_deg = 0;
+		lastRollAng_deg = FiltAccelOrientation.roll_deg;
 		resetGyroRoll_bool = 0;
 	}
 
@@ -72,10 +76,12 @@ static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData){
 		resetGyroPitch_bool = 0;
 	}
 
+	// Integrate angular velocities
 	GyroOrientation.roll_deg = lastRollAng_deg + MPU6050_GyroData.XOUT_dps * dt;
 	GyroOrientation.pitch_deg = lastPitchAng_deg + MPU6050_GyroData.YOUT_dps * dt;
 	GyroOrientation.yaw_deg = 0;  // No accurate way to calculate this
 
+	// Store previous values
 	lastTick = currentTick;
 	lastRollAng_deg = GyroOrientation.roll_deg;
 	lastPitchAng_deg = GyroOrientation.pitch_deg;
@@ -84,35 +90,41 @@ static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData){
 }
 
 static void ResetGyroIntegrators(float accelRoll_deg, float accelPitch_deg){
-	// Reset gyro integrators if accel values are near zero for X consecutive cycles
+	// Reset gyro integrators if accel values are near 45 for X consecutive cycles
 
-	float zeroAccelTolerance_deg = 0.01;
-	float zeroAccelAngle_deg = 0;  // Angle of system when integrator can be reset
-	uint8_t zeroAccelCntThreshold = 5;
+	float resetAccelTolerance_deg = 1.0;
+	float resetAccelRollAngle_deg = 0;
+	float resetAccelPitchAngle_deg = 0;// Angle of system when integrator can be reset
+	uint8_t resetAccelCntThreshold = 20;
 
-	float zeroAccelThreshold = zeroAccelAngle_deg + zeroAccelTolerance_deg;
-	if (accelRoll_deg < zeroAccelThreshold && accelRoll_deg > -1 * zeroAccelThreshold){
-		zeroAccelRollCount++;
+	float zeroAccelRollUpperThreshold = resetAccelRollAngle_deg + resetAccelTolerance_deg;
+	float zeroAccelRollLowerThreshold = resetAccelRollAngle_deg - resetAccelTolerance_deg;
+
+	float zeroAccelPitchUpperThreshold = resetAccelPitchAngle_deg + resetAccelTolerance_deg;
+	float zeroAccelPitchLowerThreshold = resetAccelPitchAngle_deg - resetAccelTolerance_deg;
+
+	if (fabsf(accelRoll_deg) < zeroAccelRollUpperThreshold && fabsf(accelRoll_deg) > zeroAccelRollLowerThreshold){
+		resetAccelRollCount++;
 	}else{
-		zeroAccelRollCount = 0;
+		resetAccelRollCount = 0;
 	}
 
-	if (accelPitch_deg < zeroAccelThreshold && accelPitch_deg > -1 * zeroAccelThreshold){
-		zeroAccelPitchCount++;
+	if (fabsf(accelPitch_deg) < zeroAccelPitchUpperThreshold && fabsf(accelPitch_deg) > zeroAccelPitchLowerThreshold){
+		resetAccelPitchCount++;
 	}else{
-		zeroAccelPitchCount = 0;
+		resetAccelPitchCount = 0;
 	}
 
-	if (zeroAccelRollCount == zeroAccelCntThreshold){
+	if (resetAccelRollCount == resetAccelCntThreshold){
 		resetGyroRoll_bool = 1;
-		zeroAccelRollCount = 0;
+		resetAccelRollCount = 0;
 	}else{
 		resetGyroRoll_bool = 0;
 	}
 
-	if (zeroAccelPitchCount == zeroAccelCntThreshold){
+	if (resetAccelPitchCount == resetAccelCntThreshold){
 		resetGyroPitch_bool = 1;
-		zeroAccelPitchCount = 0;
+		resetAccelPitchCount = 0;
 	}else{
 		resetGyroPitch_bool = 0;
 	}
@@ -139,5 +151,21 @@ static VS_OrientationData_t ComplimentaryFilter(VS_OrientationData_t GyroOrienta
 	CompFiltOrientation.yaw_deg = 0;
 
 	return CompFiltOrientation;
+}
+
+static int8_t signf(float x){
+	int8_t sign;
+
+	if (x > 0){
+		sign = 1;
+	}
+	else if (x < 0) {
+		sign = -1;
+	}
+	else {
+		sign = 0;
+	}
+
+	return sign;
 }
 /* End Static Function Definitions */
