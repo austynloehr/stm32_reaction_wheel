@@ -1,0 +1,4 @@
+../Core/Src/Application/Config/Config_MPU6050.c:55:22:Config_MPU6050	240	static
+../Core/Src/Application/Config/Config_MPU6050.c:70:13:MPU6050_Init	32	static
+../Core/Src/Application/Config/Config_MPU6050.c:103:37:MPU6050_GetSens	40	static
+../Core/Src/Application/Config/Config_MPU6050.c:147:32:MPU6050_CalibrateOffsets	200	static

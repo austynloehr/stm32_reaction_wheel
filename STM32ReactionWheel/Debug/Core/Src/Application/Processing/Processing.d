@@ -30,7 +30,7 @@ Core/Src/Application/Processing/Processing.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Middlewares/ST/ARM/DSP/Inc/arm_math.h \
+ ../Middlewares/ST/ARM/DSP/Inc/arm_math.h \
  /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h \
  /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_DSP.h \
  /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/IO/IO_MPU6050.h \
@@ -70,7 +70,7 @@ Core/Src/Application/Processing/Processing.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
-/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Middlewares/ST/ARM/DSP/Inc/arm_math.h:
+../Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_MPU6050.h:
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/Config/Config_DSP.h:
 /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/Core/Inc/Application/IO/IO_MPU6050.h:

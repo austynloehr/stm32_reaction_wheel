@@ -2,7 +2,7 @@
 # After the HC05 module is paired, this script binds the device to rfcomm0 and opens a serial connection 
 
 # HC-05 Mac Address
-macAddr='38:AB:41:3C:D1:31'
+macAddr='98:D3:02:96:C1:16'
 
 # HC-05 UART baud rate
 baudRate=921600

@@ -41,34 +41,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := STM32ReactionWheel
+BUILD_ARTIFACT_NAME := STM32ReactionWheel - STM32F411
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-STM32ReactionWheel.elf \
+STM32ReactionWheel\ -\ STM32F411.elf \
 
 MAP_FILES += \
-STM32ReactionWheel.map \
+STM32ReactionWheel\ -\ STM32F411.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-STM32ReactionWheel.list \
+STM32ReactionWheel\ -\ STM32F411.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: STM32ReactionWheel.elf secondary-outputs
+main-build: STM32ReactionWheel\ -\ STM32F411.elf secondary-outputs
 
 # Tool invocations
-STM32ReactionWheel.elf STM32ReactionWheel.map: $(OBJS) $(USER_OBJS) /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32ReactionWheel.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32ReactionWheel.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+STM32ReactionWheel\ -\ STM32F411.elf STM32ReactionWheel\ -\ STM32F411.map: $(OBJS) $(USER_OBJS) /home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32ReactionWheel - STM32F411.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/STM32ReactionWheel/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32ReactionWheel - STM32F411.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -77,14 +77,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-STM32ReactionWheel.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "STM32ReactionWheel.list"
+STM32ReactionWheel\ -\ STM32F411.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "STM32ReactionWheel - STM32F411.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) STM32ReactionWheel.elf STM32ReactionWheel.list STM32ReactionWheel.map default.size.stdout
+	-$(RM) STM32ReactionWheel\ -\ STM32F411.elf STM32ReactionWheel\ -\ STM32F411.list STM32ReactionWheel\ -\ STM32F411.map STM32ReactionWheel\\ -\\ STM32F411.elf default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
