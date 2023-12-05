@@ -1,0 +1,3 @@
+../Core/Src/Application/Control/Control.c:16:10:CT_Control	200	static
+../Core/Src/Application/Control/Control.c:28:17:CT_VirtualSensors	136	static
+../Core/Src/Application/Control/Control.c:36:17:CT_Controllers	160	static

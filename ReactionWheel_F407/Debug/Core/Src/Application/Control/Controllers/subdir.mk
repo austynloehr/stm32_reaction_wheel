@@ -5,12 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/Src/Application/Control/Controllers/CT_BalanceController.c \
 ../Core/Src/Application/Control/Controllers/CT_Logging.c 
 
 OBJS += \
+./Core/Src/Application/Control/Controllers/CT_BalanceController.o \
 ./Core/Src/Application/Control/Controllers/CT_Logging.o 
 
 C_DEPS += \
+./Core/Src/Application/Control/Controllers/CT_BalanceController.d \
 ./Core/Src/Application/Control/Controllers/CT_Logging.d 
 
 
@@ -21,7 +24,7 @@ Core/Src/Application/Control/Controllers/%.o Core/Src/Application/Control/Contro
 clean: clean-Core-2f-Src-2f-Application-2f-Control-2f-Controllers
 
 clean-Core-2f-Src-2f-Application-2f-Control-2f-Controllers:
-	-$(RM) ./Core/Src/Application/Control/Controllers/CT_Logging.cyclo ./Core/Src/Application/Control/Controllers/CT_Logging.d ./Core/Src/Application/Control/Controllers/CT_Logging.o ./Core/Src/Application/Control/Controllers/CT_Logging.su
+	-$(RM) ./Core/Src/Application/Control/Controllers/CT_BalanceController.cyclo ./Core/Src/Application/Control/Controllers/CT_BalanceController.d ./Core/Src/Application/Control/Controllers/CT_BalanceController.o ./Core/Src/Application/Control/Controllers/CT_BalanceController.su ./Core/Src/Application/Control/Controllers/CT_Logging.cyclo ./Core/Src/Application/Control/Controllers/CT_Logging.d ./Core/Src/Application/Control/Controllers/CT_Logging.o ./Core/Src/Application/Control/Controllers/CT_Logging.su
 
 .PHONY: clean-Core-2f-Src-2f-Application-2f-Control-2f-Controllers
 

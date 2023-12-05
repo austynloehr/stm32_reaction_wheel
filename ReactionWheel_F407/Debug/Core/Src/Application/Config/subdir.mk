@@ -6,15 +6,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Core/Src/Application/Config/Config_DSP.c \
-../Core/Src/Application/Config/Config_MPU6050.c 
+../Core/Src/Application/Config/Config_MPU6050.c \
+../Core/Src/Application/Config/Config_VESC.c 
 
 OBJS += \
 ./Core/Src/Application/Config/Config_DSP.o \
-./Core/Src/Application/Config/Config_MPU6050.o 
+./Core/Src/Application/Config/Config_MPU6050.o \
+./Core/Src/Application/Config/Config_VESC.o 
 
 C_DEPS += \
 ./Core/Src/Application/Config/Config_DSP.d \
-./Core/Src/Application/Config/Config_MPU6050.d 
+./Core/Src/Application/Config/Config_MPU6050.d \
+./Core/Src/Application/Config/Config_VESC.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -24,7 +27,7 @@ Core/Src/Application/Config/%.o Core/Src/Application/Config/%.su Core/Src/Applic
 clean: clean-Core-2f-Src-2f-Application-2f-Config
 
 clean-Core-2f-Src-2f-Application-2f-Config:
-	-$(RM) ./Core/Src/Application/Config/Config_DSP.cyclo ./Core/Src/Application/Config/Config_DSP.d ./Core/Src/Application/Config/Config_DSP.o ./Core/Src/Application/Config/Config_DSP.su ./Core/Src/Application/Config/Config_MPU6050.cyclo ./Core/Src/Application/Config/Config_MPU6050.d ./Core/Src/Application/Config/Config_MPU6050.o ./Core/Src/Application/Config/Config_MPU6050.su
+	-$(RM) ./Core/Src/Application/Config/Config_DSP.cyclo ./Core/Src/Application/Config/Config_DSP.d ./Core/Src/Application/Config/Config_DSP.o ./Core/Src/Application/Config/Config_DSP.su ./Core/Src/Application/Config/Config_MPU6050.cyclo ./Core/Src/Application/Config/Config_MPU6050.d ./Core/Src/Application/Config/Config_MPU6050.o ./Core/Src/Application/Config/Config_MPU6050.su ./Core/Src/Application/Config/Config_VESC.cyclo ./Core/Src/Application/Config/Config_VESC.d ./Core/Src/Application/Config/Config_VESC.o ./Core/Src/Application/Config/Config_VESC.su
 
 .PHONY: clean-Core-2f-Src-2f-Application-2f-Config
 

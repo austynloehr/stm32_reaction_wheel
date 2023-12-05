@@ -41,7 +41,7 @@ typedef struct Config_MPU6050_Bus{
 /* End Global Typedefs */
 
 /* Start Global Function Prototypes */
-Config_MPU6050_Bus_t Config_MPU6050(I2C_HandleTypeDef hi2c1);
+Config_MPU6050_Bus_t Config_MPU6050(I2C_HandleTypeDef *hi2c);
 /* End Global Function Prototypes */
 
 #endif /* INC_APPLICATION_CONFIG_CONFIG_MPU6050_H_ */

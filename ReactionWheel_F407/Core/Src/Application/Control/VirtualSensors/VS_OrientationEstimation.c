@@ -20,7 +20,7 @@ static float lastPitchAng_deg = 0;
 /* Start Global Variables */
 
 /* Start Static Function Prototypes */
-static int8_t signf(float x);
+//static int8_t signf(float x);
 static void ResetGyroIntegrators(float accelRoll_deg, float accelPitch_deg);
 static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData, VS_OrientationData_t FiltAccelOrientation);
 static VS_OrientationData_t CalcAccelAngle(MPU6050_AccelData_t MPU6050_AccelData);
@@ -153,19 +153,19 @@ static VS_OrientationData_t ComplimentaryFilter(VS_OrientationData_t GyroOrienta
 	return CompFiltOrientation;
 }
 
-static int8_t signf(float x){
-	int8_t sign;
-
-	if (x > 0){
-		sign = 1;
-	}
-	else if (x < 0) {
-		sign = -1;
-	}
-	else {
-		sign = 0;
-	}
-
-	return sign;
-}
+//static int8_t signf(float x){
+//	int8_t sign;
+//
+//	if (x > 0){
+//		sign = 1;
+//	}
+//	else if (x < 0) {
+//		sign = -1;
+//	}
+//	else {
+//		sign = 0;
+//	}
+//
+//	return sign;
+//}
 /* End Static Function Definitions */

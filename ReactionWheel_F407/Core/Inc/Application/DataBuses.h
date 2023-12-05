@@ -14,18 +14,22 @@
 /* Config */
 #include "Config_MPU6050.h"
 #include "Config_DSP.h"
+#include "Config_VESC.h"
 
 /* IO */
 #include "IO_MPU6050.h"
 #include "IO_HC05.h"
+#include "IO_VESC.h"
 
 /* Processing */
 #include "PR_MPU6050.h"
 #include "PR_HC05.h"
+#include "PR_VESC.h"
 
 /* Control */
 #include "VS_OrientationEstimation.h"
 #include "CT_Logging.h"
+#include "CT_BalanceController.h"
 
 /* Start global typedefs */
 typedef struct Config_Bus{
@@ -48,10 +52,12 @@ typedef struct VS_Bus{
 typedef struct CT_Bus{
 	VS_Bus_t VS_Bus;
 	CT_Log_Bus_t CT_Log_Bus;
+	CT_Balance_Bus_t CT_Balance_Bus;
 } CT_Bus_t;
 
 typedef struct OP_Bus{
 	OP_HC05_Bus_t OP_HC05_Bus;
+	OP_VESC_Bus_t OP_VESC_Bus;
 }OP_Bus_t;
 /* End global typedefs */
 

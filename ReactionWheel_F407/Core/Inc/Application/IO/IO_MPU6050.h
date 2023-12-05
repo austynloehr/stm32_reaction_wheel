@@ -25,7 +25,7 @@ typedef struct HI_MPU6050_Bus {
 /* End Struct definitions */
 
 /* End Function Prototypes */
-HI_MPU6050_Bus_t HI_MPU6050(I2C_HandleTypeDef hi2c1);
+HI_MPU6050_Bus_t HI_MPU6050(I2C_HandleTypeDef *hi2c);
 /* End Function Prototypes */
 
 #endif /* INC_IO_IO_MPU6050_H_ */

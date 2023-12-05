@@ -46,34 +46,34 @@ const FS_SEL_enum_t gyroRange = w500;
 /* End global variable definitions */
 
 /* Start static function prototypes */
-static void MPU6050_Init(I2C_HandleTypeDef hi2c1);
+static void MPU6050_Init(I2C_HandleTypeDef *hi2c);
 static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRange, const FS_SEL_enum_t gyroRange);
-static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef hi2c1, Config_MPU6050_Bus_t Config_MPU6050_Bus);
+static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef *hi2c, Config_MPU6050_Bus_t Config_MPU6050_Bus);
 /* Start static function prototypes */
 
 /* Start global function definitions */
-Config_MPU6050_Bus_t Config_MPU6050(I2C_HandleTypeDef hi2c1){
+Config_MPU6050_Bus_t Config_MPU6050(I2C_HandleTypeDef *hi2c){
 	Config_MPU6050_Bus_t Config_MPU6050_Bus;
 
-	MPU6050_Init(hi2c1);
+	MPU6050_Init(hi2c);
 
 	Config_MPU6050_Bus.Sensitivity = MPU6050_GetSens(accelRange, gyroRange);
 
 	Config_MPU6050_Bus.Offsets = (MPU6050_IMUOffsetData_t) {0, 0, 0, 0, 0, 0, 0};
-	Config_MPU6050_Bus.Offsets = MPU6050_CalibrateOffsets(hi2c1, Config_MPU6050_Bus);
+	Config_MPU6050_Bus.Offsets = MPU6050_CalibrateOffsets(hi2c, Config_MPU6050_Bus);
 
 	return Config_MPU6050_Bus;
 }
 /* End global function definitions */
 
 /* Start static function definitions */
-static void MPU6050_Init(I2C_HandleTypeDef hi2c1){
+static void MPU6050_Init(I2C_HandleTypeDef *hi2c){
 	static uint8_t regData;
 	static uint8_t numReg = 1;
 
 	/* I2C device check */
 	// Raise error later
-	HAL_StatusTypeDef deviceCheck = HAL_I2C_IsDeviceReady(&hi2c1, MPU6050_ADDR, 1, I2C_TIMEOUT);
+	HAL_StatusTypeDef deviceCheck = HAL_I2C_IsDeviceReady(hi2c, MPU6050_ADDR, 1, I2C_TIMEOUT);
 
 	if (deviceCheck != HAL_OK){
 		Error_Handler();
@@ -81,23 +81,23 @@ static void MPU6050_Init(I2C_HandleTypeDef hi2c1){
 
 	/* Wake IMU */
 	regData = CLKSEL;
-	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT1_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
+	HAL_I2C_Mem_Write(hi2c, MPU6050_ADDR, PWR_MGMT1_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
 
 	/* Calculate SMPLRT_DIV from desired sample rate */
 	regData = SMPLRT_DIV;
-	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SMPRT_DIV_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
+	HAL_I2C_Mem_Write(hi2c, MPU6050_ADDR, SMPRT_DIV_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
 
 	/* Set gyro config */
 	regData = (uint8_t) (gyroRange << 3);
-	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
+	HAL_I2C_Mem_Write(hi2c, MPU6050_ADDR, GYRO_CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
 
 	/* Set accel config */
 	regData = (uint8_t) (accelRange << 3);
-	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
+	HAL_I2C_Mem_Write(hi2c, MPU6050_ADDR, ACCEL_CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
 
 	/*Configure low pass filter*/
 	regData = DLPF_CFG;
-	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
+	HAL_I2C_Mem_Write(hi2c, MPU6050_ADDR, CONFIG_REG, REG_LEN, &regData, numReg, I2C_TIMEOUT);
 }
 
 static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRange, const FS_SEL_enum_t gyroRange){
@@ -144,7 +144,7 @@ static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRa
 	return IMUSensitivity;
 }
 
-static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef hi2c1, Config_MPU6050_Bus_t Config_MPU6050_Bus){
+static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef *hi2c, Config_MPU6050_Bus_t Config_MPU6050_Bus){
 	MPU6050_IMUOffsetData_t IMUOffsets;
 	HI_MPU6050_Bus_t HI_MPU6050_Bus;
 	IP_MPU6050_Bus_t IP_MPU6050_Bus;
@@ -159,7 +159,7 @@ static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef hi2c1,
 	float sumWz = 0;
 
 	for(uint32_t i = 0; i < numSamples; i++){
-		HI_MPU6050_Bus = HI_MPU6050(hi2c1);
+		HI_MPU6050_Bus = HI_MPU6050(hi2c);
 		IP_MPU6050_Bus = IP_MPU6050(HI_MPU6050_Bus, Config_MPU6050_Bus);
 
 		sumAx += IP_MPU6050_Bus.accel.XOUT_ms2;

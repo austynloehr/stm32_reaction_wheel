@@ -7,16 +7,19 @@
 C_SRCS += \
 ../Core/Src/Application/Processing/PR_HC05.c \
 ../Core/Src/Application/Processing/PR_MPU6050.c \
+../Core/Src/Application/Processing/PR_VESC.c \
 ../Core/Src/Application/Processing/Processing.c 
 
 OBJS += \
 ./Core/Src/Application/Processing/PR_HC05.o \
 ./Core/Src/Application/Processing/PR_MPU6050.o \
+./Core/Src/Application/Processing/PR_VESC.o \
 ./Core/Src/Application/Processing/Processing.o 
 
 C_DEPS += \
 ./Core/Src/Application/Processing/PR_HC05.d \
 ./Core/Src/Application/Processing/PR_MPU6050.d \
+./Core/Src/Application/Processing/PR_VESC.d \
 ./Core/Src/Application/Processing/Processing.d 
 
 
@@ -27,7 +30,7 @@ Core/Src/Application/Processing/%.o Core/Src/Application/Processing/%.su Core/Sr
 clean: clean-Core-2f-Src-2f-Application-2f-Processing
 
 clean-Core-2f-Src-2f-Application-2f-Processing:
-	-$(RM) ./Core/Src/Application/Processing/PR_HC05.cyclo ./Core/Src/Application/Processing/PR_HC05.d ./Core/Src/Application/Processing/PR_HC05.o ./Core/Src/Application/Processing/PR_HC05.su ./Core/Src/Application/Processing/PR_MPU6050.cyclo ./Core/Src/Application/Processing/PR_MPU6050.d ./Core/Src/Application/Processing/PR_MPU6050.o ./Core/Src/Application/Processing/PR_MPU6050.su ./Core/Src/Application/Processing/Processing.cyclo ./Core/Src/Application/Processing/Processing.d ./Core/Src/Application/Processing/Processing.o ./Core/Src/Application/Processing/Processing.su
+	-$(RM) ./Core/Src/Application/Processing/PR_HC05.cyclo ./Core/Src/Application/Processing/PR_HC05.d ./Core/Src/Application/Processing/PR_HC05.o ./Core/Src/Application/Processing/PR_HC05.su ./Core/Src/Application/Processing/PR_MPU6050.cyclo ./Core/Src/Application/Processing/PR_MPU6050.d ./Core/Src/Application/Processing/PR_MPU6050.o ./Core/Src/Application/Processing/PR_MPU6050.su ./Core/Src/Application/Processing/PR_VESC.cyclo ./Core/Src/Application/Processing/PR_VESC.d ./Core/Src/Application/Processing/PR_VESC.o ./Core/Src/Application/Processing/PR_VESC.su ./Core/Src/Application/Processing/Processing.cyclo ./Core/Src/Application/Processing/Processing.d ./Core/Src/Application/Processing/Processing.o ./Core/Src/Application/Processing/Processing.su
 
 .PHONY: clean-Core-2f-Src-2f-Application-2f-Processing
 

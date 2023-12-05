@@ -38,6 +38,7 @@ static CT_Bus_t CT_Controllers(IP_Bus_t IP_Bus, VS_Bus_t VS_Bus){
 
 	CT_Bus.VS_Bus = VS_Bus;
 	CT_Bus.CT_Log_Bus = CT_Logging(IP_Bus.IP_MPU6050_Bus, VS_Bus.VS_Orientation_Bus);
+	CT_Bus.CT_Balance_Bus = CT_BalanceController(0, VS_Bus.VS_Orientation_Bus.CompFiltOrientation.roll_deg);
 
 	return CT_Bus;
 }

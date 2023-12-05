@@ -33,12 +33,16 @@ Core/Src/Application/IO/IO.o: ../Core/Src/Application/IO/IO.c \
  ../Middlewares/ST/ARM/DSP/Inc/arm_math.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_MPU6050.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_DSP.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_VESC.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_MPU6050.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_HC05.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_VESC.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_VESC.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_MPU6050.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_HC05.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/Controllers/CT_Logging.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/Controllers/CT_BalanceController.h
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/DataBuses.h:
 ../Core/Inc/main.h:
@@ -74,9 +78,13 @@ Core/Src/Application/IO/IO.o: ../Core/Src/Application/IO/IO.c \
 ../Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_MPU6050.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_DSP.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_VESC.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_MPU6050.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_HC05.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_VESC.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_VESC.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_MPU6050.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_HC05.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/Controllers/CT_Logging.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/Controllers/CT_BalanceController.h:

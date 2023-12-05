@@ -7,17 +7,20 @@
 C_SRCS += \
 ../Core/Src/Application/IO/IO.c \
 ../Core/Src/Application/IO/IO_HC05.c \
-../Core/Src/Application/IO/IO_MPU6050.c 
+../Core/Src/Application/IO/IO_MPU6050.c \
+../Core/Src/Application/IO/IO_VESC.c 
 
 OBJS += \
 ./Core/Src/Application/IO/IO.o \
 ./Core/Src/Application/IO/IO_HC05.o \
-./Core/Src/Application/IO/IO_MPU6050.o 
+./Core/Src/Application/IO/IO_MPU6050.o \
+./Core/Src/Application/IO/IO_VESC.o 
 
 C_DEPS += \
 ./Core/Src/Application/IO/IO.d \
 ./Core/Src/Application/IO/IO_HC05.d \
-./Core/Src/Application/IO/IO_MPU6050.d 
+./Core/Src/Application/IO/IO_MPU6050.d \
+./Core/Src/Application/IO/IO_VESC.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -27,7 +30,7 @@ Core/Src/Application/IO/%.o Core/Src/Application/IO/%.su Core/Src/Application/IO
 clean: clean-Core-2f-Src-2f-Application-2f-IO
 
 clean-Core-2f-Src-2f-Application-2f-IO:
-	-$(RM) ./Core/Src/Application/IO/IO.cyclo ./Core/Src/Application/IO/IO.d ./Core/Src/Application/IO/IO.o ./Core/Src/Application/IO/IO.su ./Core/Src/Application/IO/IO_HC05.cyclo ./Core/Src/Application/IO/IO_HC05.d ./Core/Src/Application/IO/IO_HC05.o ./Core/Src/Application/IO/IO_HC05.su ./Core/Src/Application/IO/IO_MPU6050.cyclo ./Core/Src/Application/IO/IO_MPU6050.d ./Core/Src/Application/IO/IO_MPU6050.o ./Core/Src/Application/IO/IO_MPU6050.su
+	-$(RM) ./Core/Src/Application/IO/IO.cyclo ./Core/Src/Application/IO/IO.d ./Core/Src/Application/IO/IO.o ./Core/Src/Application/IO/IO.su ./Core/Src/Application/IO/IO_HC05.cyclo ./Core/Src/Application/IO/IO_HC05.d ./Core/Src/Application/IO/IO_HC05.o ./Core/Src/Application/IO/IO_HC05.su ./Core/Src/Application/IO/IO_MPU6050.cyclo ./Core/Src/Application/IO/IO_MPU6050.d ./Core/Src/Application/IO/IO_MPU6050.o ./Core/Src/Application/IO/IO_MPU6050.su ./Core/Src/Application/IO/IO_VESC.cyclo ./Core/Src/Application/IO/IO_VESC.d ./Core/Src/Application/IO/IO_VESC.o ./Core/Src/Application/IO/IO_VESC.su
 
 .PHONY: clean-Core-2f-Src-2f-Application-2f-IO
 

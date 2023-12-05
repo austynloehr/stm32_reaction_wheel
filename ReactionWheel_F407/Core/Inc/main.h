@@ -37,8 +37,9 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 typedef struct Config_HAL_Bus{
-	I2C_HandleTypeDef hi2c1;
+	I2C_HandleTypeDef *hi2c;
 	UART_HandleTypeDef huart2;
+	CAN_HandleTypeDef *hcan;
 }Config_HAL_Bus_t;
 
 /* USER CODE END ET */

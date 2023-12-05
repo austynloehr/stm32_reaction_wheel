@@ -4,4 +4,3 @@
 ../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:92:13:ResetGyroIntegrators	7
 ../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:133:29:AccelLowPassFilt	1
 ../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:144:29:ComplimentaryFilter	1
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:156:15:signf	3
