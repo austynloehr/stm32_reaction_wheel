@@ -3,9 +3,10 @@
 This repo is used to store all development information for STM32 reaction wheel project.
 
 ## Components
-- **MCU:** STM32F411CEU6 (Black Pill)
-- **Motor:**  12V Pololu 37D, 10:1 gear ratio  
-- **Motor Controller:** Roboclaw 2x7A
+- **MCU:** STM32F407VG (STM32F407G-DISC1), will change with final PCB
+- **Motor:**  REV Neo 550 (Brushless)
+- **Motor Controller:** VESC EDU
+- **CAN Transceiver:** NXP TJA1051/T3
 - **IMU:** MPU-6050
 - **BLE:** HC-05
 

@@ -1,6 +1,0 @@
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:31:22:EstimateOrientation	1
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:47:29:CalcAccelAngle	1
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:60:29:CalcGyroAngle	3
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:86:13:ResetGyroIntegrators	7
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:121:29:AccelLowPassFilt	1
-../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c:132:29:ComplimentaryFilter	1
