@@ -81,13 +81,14 @@ local.properties
 *-backups
 *.kicad_prl
 *.sch-bak
-*~
+Design/PCB/*~*
 *_autosave-*
 *.tmp
 *-save.pro
 *-save.kicad_pcb
 *fp-info-cache*
 Design/PCB/PCB-backups
+
 
 # Netlist files (exported from Eeschema)
 *.net
