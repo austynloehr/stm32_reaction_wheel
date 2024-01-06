@@ -1,0 +1,9 @@
+Manufacturer=Molex
+PartNumber=2159151002
+PartCategory=Connector
+PackageCategory=Other
+PinCount=2
+Version=2.4
+Released=2023-02-27 03:22:14
+Downloaded=2024-01-03 20:29:43
+3D=Y
