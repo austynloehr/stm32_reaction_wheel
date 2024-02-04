@@ -25,15 +25,6 @@
     (stroke (width 0) (type solid)) (fill solid) (layer "F.Cu") (tstamp 32cbf1b5-3413-4f3f-b743-5ab76e0fedb4))
   (fp_poly
     (pts
-      (xy 1.292 2.227)
-      (xy 0.708 2.227)
-      (xy 0.708 0.273)
-      (xy 1.292 0.273)
-    )
-
-    (stroke (width 0) (type solid)) (fill solid) (layer "F.Cu") (tstamp e6d6c468-aa01-4889-b668-233c532635e9))
-  (fp_poly
-    (pts
       (xy -1.292 0.273)
       (xy -0.708 0.273)
       (xy -0.708 2.227)

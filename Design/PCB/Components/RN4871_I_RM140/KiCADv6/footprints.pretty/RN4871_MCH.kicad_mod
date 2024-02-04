@@ -30,29 +30,16 @@
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp c2a43908-4425-4cda-b9d6-2b02a971e856)
   )
-  (fp_line (start -4.6228 -5.8801) (end -4.6228 -1.638341)
-    (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp 573283aa-025e-43ee-bf5e-4e0b8a144462))
   (fp_line (start -4.6228 4.533859) (end -4.6228 5.8801)
     (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp 9bd839b4-9707-480c-a140-98be2b7342ed))
   (fp_line (start -4.6228 5.8801) (end -3.68554 5.8801)
     (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp c19aea7a-ad33-4cba-90f4-04bf34bf46b6))
   (fp_line (start 3.68554 5.8801) (end 4.6228 5.8801)
     (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp e4721d4b-95d9-4cc6-8758-457c8d3db032))
-  (fp_line (start 4.6228 -5.8801) (end -4.6228 -5.8801)
-    (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp 22e316d3-3411-4238-bd43-9c4036e66280))
-  (fp_line (start 4.6228 -1.638341) (end 4.6228 -5.8801)
-    (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp 7c41e5f2-f52f-4599-88fe-83abc24e929e))
   (fp_line (start 4.6228 5.8801) (end 4.6228 4.533859)
     (stroke (width 0.1524) (type solid)) (layer "F.SilkS") (tstamp 2085c161-dec5-443b-8e58-7706b45495ee))
-  (fp_poly
-    (pts
-      (xy 5.50799 -1.140501)
-      (xy 5.50799 -0.759501)
-      (xy 5.25399 -0.759501)
-      (xy 5.25399 -1.140501)
-    )
-
-    (stroke (width 0) (type solid)) (fill solid) (layer "F.SilkS") (tstamp 7c9003b0-386d-4ab3-9fd2-74d96f5b0584))
+  (fp_line (start -4.4958 -1.74752) (end 4.4958 -1.74752)
+    (stroke (width 0.0254) (type solid)) (layer "Eco2.User") (tstamp 0f7375d0-0edb-4162-bcef-6aa5e45560ac))
   (fp_poly
     (pts
       (xy -3.50139 1.14808)
@@ -71,8 +58,6 @@
     )
 
     (stroke (width 0) (type solid)) (fill solid) (layer "Eco2.User") (tstamp 7be94475-d7f0-46e9-8d91-32c496a0621f))
-  (fp_line (start -4.4958 -1.74752) (end 4.4958 -1.74752)
-    (stroke (width 0.0254) (type solid)) (layer "Edge.Cuts") (tstamp 0f7375d0-0edb-4162-bcef-6aa5e45560ac))
   (fp_line (start -5.25399 -1.559601) (end -5.25399 4.455119)
     (stroke (width 0.1524) (type solid)) (layer "F.CrtYd") (tstamp 92ca7edd-24ff-48bb-a637-5078c0b62521))
   (fp_line (start -5.25399 4.455119) (end -4.7498 4.455119)

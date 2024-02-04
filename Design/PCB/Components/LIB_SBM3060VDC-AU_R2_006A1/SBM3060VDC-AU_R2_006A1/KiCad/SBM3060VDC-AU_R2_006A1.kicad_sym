@@ -59,12 +59,12 @@
       )
     )
     (symbol "SBM3060VDC-AU_R2_006A1_1_1"
-      (pin passive line (at 0 0 0) (length 2.54)
-        (name "K" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
       (pin passive line (at 7.62 0 180) (length 2.54)
         (name "A" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line (at 0 0 0) (length 2.54)
+        (name "K" (effects (font (size 1.27 1.27))))
         (number "2" (effects (font (size 1.27 1.27))))
       )
       (pin passive line (at 7.62 0 180) (length 2.54) hide
