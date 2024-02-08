@@ -69,7 +69,42 @@ local.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse
 
+# For PCBs designed using KiCad: https://www.kicad.org/
+# Format documentation: https://kicad.org/help/file-formats/
+
+# Temporary files
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-backups
+*.kicad_prl
+*.sch-bak
+Design/PCB/*~*
+*_autosave-*
+*.tmp
+*-save.pro
+*-save.kicad_pcb
+*fp-info-cache*
+Design/PCB/PCB-backups
+
+
+# Netlist files (exported from Eeschema)
+*.net
+
+# Autorouter files (exported from Pcbnew)
+*.dsn
+*.ses
+
+# Exported BOM files
+Design/PCB/*.xml
+Design/PCB/*.csv
+
 # Log files
 *.log
 .vscode/
 tempCodeRunnerFile*
+Design/TestChassis/**/*.txt
+*.zip
+Design/PCB/**/*.ini

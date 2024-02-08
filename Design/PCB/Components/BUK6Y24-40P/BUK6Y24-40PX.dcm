@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP BUK6Y24-40PX
+D NEXPERIA - BUK6Y24-40PX - Power MOSFET, P Channel, 40 V, 39 A, 0.019 ohm, LFPAK56, Surface Mount
+K
+F https://assets.nexperia.com/documents/data-sheet/BUK6Y24-40P.pdf
+$ENDCMP
+#
+#End Doc Library

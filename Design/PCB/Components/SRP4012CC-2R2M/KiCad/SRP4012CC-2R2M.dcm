@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP SRP4012CC-2R2M
+D Ind,4.45x4.06x1.0mm,2.2uH+/-20%,2.8A,shd
+K
+F https://www.bourns.com/docs/Product-Datasheets/SRP4012CC.pdf
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,9 @@
+Manufacturer=PANJIT International Inc
+PartNumber=SBM3060VDC-AU_R2_006A1
+PartCategory=Schottky Diode
+PackageCategory=Other
+PinCount=3
+Version=1.3
+Released=2023-05-23 03:50:11
+Downloaded=2024-01-04 23:39:21
+3D=Y
