@@ -106,3 +106,5 @@ Design/PCB/*.csv
 .vscode/
 tempCodeRunnerFile*
 Design/TestChassis/**/*.txt
+*.zip
+Design/PCB/**/*.ini
