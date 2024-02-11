@@ -1,9 +1,0 @@
-Manufacturer=Molex
-PartNumber=10-84-4030
-PartCategory=Connector
-PackageCategory=Header, Shrouded - Straight PTH Box
-PinCount=3
-Version=1.1
-Released=2021-04-23 10:59:34
-Downloaded=2024-01-04 02:58:49
-3D=Y

@@ -81,13 +81,13 @@ local.properties
 *-backups
 *.kicad_prl
 *.sch-bak
-Design/PCB/*~*
+Hardware/**/*~*
 *_autosave-*
 *.tmp
 *-save.pro
 *-save.kicad_pcb
 *fp-info-cache*
-Design/PCB/PCB-backups
+Hardware/**/PCB-backups
 
 
 # Netlist files (exported from Eeschema)
@@ -98,8 +98,8 @@ Design/PCB/PCB-backups
 *.ses
 
 # Exported BOM files
-Design/PCB/*.xml
-Design/PCB/*.csv
+Hardware/**/*.xml
+Hardware/**/*.csv
 
 # Log files
 *.log
@@ -107,4 +107,4 @@ Design/PCB/*.csv
 tempCodeRunnerFile*
 Design/TestChassis/**/*.txt
 *.zip
-Design/PCB/**/*.ini
+Hardware/**/*.ini

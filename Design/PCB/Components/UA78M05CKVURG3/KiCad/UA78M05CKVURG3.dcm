@@ -1,9 +1,0 @@
-EESchema-DOCLIB  Version 2.0
-#
-$CMP UA78M05CKVURG3
-D 500-mA, 25-V, Linear Voltage Regulators
-K
-F http://www.ti.com/lit/gpn/ua78m
-$ENDCMP
-#
-#End Doc Library
