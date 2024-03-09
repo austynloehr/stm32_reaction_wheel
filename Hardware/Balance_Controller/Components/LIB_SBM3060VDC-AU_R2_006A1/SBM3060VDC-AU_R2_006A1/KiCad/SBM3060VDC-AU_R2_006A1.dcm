@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP SBM3060VDC-AU_R2_006A1
+D Schottky Diodes & Rectifiers Surface Mount Low VF Schottky Barrier Rectifier 60V 30A
+K
+F https://www.panjit.com.tw/upload/datasheet/SBM3060VDC-AU.pdf
+$ENDCMP
+#
+#End Doc Library

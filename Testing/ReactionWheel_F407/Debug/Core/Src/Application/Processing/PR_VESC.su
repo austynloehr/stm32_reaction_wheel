@@ -1,0 +1,3 @@
+../Core/Src/Application/Processing/PR_VESC.c:28:15:OP_VESC	24	static
+../Core/Src/Application/Processing/PR_VESC.c:48:13:CANPackMotorSpeed	16	static
+../Core/Src/Application/Processing/PR_VESC.c:55:15:llsign	24	static

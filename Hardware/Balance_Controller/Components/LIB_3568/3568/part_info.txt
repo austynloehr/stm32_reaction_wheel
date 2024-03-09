@@ -1,0 +1,9 @@
+Manufacturer=Keystone Electronics
+PartNumber=3568
+PartCategory=Undefined or Miscellaneous
+PackageCategory=Other
+PinCount=4
+Version=1.2
+Released=2020-09-25 17:01:53
+Downloaded=2024-01-03 17:57:55
+3D=Y
