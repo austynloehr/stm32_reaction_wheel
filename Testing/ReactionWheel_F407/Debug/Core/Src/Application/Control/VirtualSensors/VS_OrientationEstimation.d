@@ -1,8 +1,8 @@
 Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.o: \
  ../Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.c \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_MPU6050.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_MPU6050.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Processing/PR_MPU6050.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/IO/IO_MPU6050.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -33,11 +33,11 @@ Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_MPU6050.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_DSP.h
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h:
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_MPU6050.h:
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_MPU6050.h:
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Config/Config_MPU6050.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Config/Config_DSP.h
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h:
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Processing/PR_MPU6050.h:
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/IO/IO_MPU6050.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -69,5 +69,5 @@ Core/Src/Application/Control/VirtualSensors/VS_OrientationEstimation.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Middlewares/ST/ARM/DSP/Inc/arm_math.h:
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_MPU6050.h:
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_DSP.h:
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Config/Config_MPU6050.h:
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Config/Config_DSP.h:

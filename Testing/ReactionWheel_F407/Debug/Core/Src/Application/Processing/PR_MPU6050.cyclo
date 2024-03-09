@@ -1,5 +1,5 @@
 ../Core/Src/Application/Processing/PR_MPU6050.c:22:18:IP_MPU6050	2
 ../Core/Src/Application/Processing/PR_MPU6050.c:37:28:MPU6050_CalcAccel	1
 ../Core/Src/Application/Processing/PR_MPU6050.c:49:27:MPU6050_CalcGyro	1
-../Core/Src/Application/Processing/PR_MPU6050.c:61:14:clamp	4
+../Core/Src/Application/Processing/PR_MPU6050.c:61:14:clamp	6
 ../Core/Src/Application/Processing/PR_MPU6050.c:89:25:MPU6050_IMUDataClamp	1

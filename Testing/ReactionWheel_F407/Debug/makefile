@@ -67,8 +67,8 @@ all: main-build
 main-build: ReactionWheel_F407.elf secondary-outputs
 
 # Tool invocations
-ReactionWheel_F407.elf ReactionWheel_F407.map: $(OBJS) $(USER_OBJS) /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ReactionWheel_F407.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ReactionWheel_F407.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+ReactionWheel_F407.elf ReactionWheel_F407.map: $(OBJS) $(USER_OBJS) /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ReactionWheel_F407.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ReactionWheel_F407.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

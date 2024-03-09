@@ -1,5 +1,5 @@
 Core/Src/Application/IO/IO_VESC.o: ../Core/Src/Application/IO/IO_VESC.c \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_VESC.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/IO/IO_VESC.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -30,9 +30,9 @@ Core/Src/Application/IO/IO_VESC.o: ../Core/Src/Application/IO/IO_VESC.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_VESC.h \
- /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_VESC.h
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/IO/IO_VESC.h:
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Config/Config_VESC.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Processing/PR_VESC.h
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/IO/IO_VESC.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -64,5 +64,5 @@ Core/Src/Application/IO/IO_VESC.o: ../Core/Src/Application/IO/IO_VESC.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Middlewares/ST/ARM/DSP/Inc/arm_math.h:
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Config/Config_VESC.h:
-/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F407/Core/Inc/Application/Processing/PR_VESC.h:
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Config/Config_VESC.h:
+/home/aloehr/Repos/stm32_reaction_wheel/Testing/ReactionWheel_F407/Core/Inc/Application/Processing/PR_VESC.h:
