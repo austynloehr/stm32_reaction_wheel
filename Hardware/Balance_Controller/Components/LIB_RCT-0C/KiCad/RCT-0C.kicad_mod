@@ -1,0 +1,136 @@
+(footprint "RCT-0C"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "RCT-0C")
+	(tags "Test Point")
+	(property "Reference" "T**"
+		(at 0.5 -2 0)
+		(layer "F.SilkS")
+		(uuid "b4e771fd-879c-4dad-ad94-1eb2000a8dae")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "RCT-0C"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "838a49c1-6651-4c3f-b699-647183df8481")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d386ecb1-f624-4839-97f2-913fe5ead2cd")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d643c49d-bfb3-4881-bce5-400309e306bb")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "29318d69-c3a0-454a-a71b-7f3a84240bcb")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1 -0.671)
+		(end 1 -0.671)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "6520bfd6-56b2-4f6c-83c3-9211c6a0303f")
+	)
+	(fp_line
+		(start -1 0.625)
+		(end -1 -0.671)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "0b42048d-a1db-4ebb-bb99-48a50c7552b9")
+	)
+	(fp_line
+		(start 1 -0.671)
+		(end 1 0.625)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "ab28eaf9-1063-48e4-813f-de7a4232eee2")
+	)
+	(fp_line
+		(start 1 0.625)
+		(end -1 0.625)
+		(stroke
+			(width 0.254)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "49943a3e-f792-4d06-90fc-055079d28455")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "54ab786c-21d5-4f44-b983-9f64d42327e5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at 0 0 90)
+		(size 1.4 2.3)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "65b380c0-123e-44da-8401-d4948a3a8bf1")
+	)
+	(model "${KIPRJMOD}/Components/LIB_RCT-0C/c-1625854-2-ba-3d.stp"
+		(offset
+			(xyz 0 0.6 0.8)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 90 0 0)
+		)
+	)
+)
