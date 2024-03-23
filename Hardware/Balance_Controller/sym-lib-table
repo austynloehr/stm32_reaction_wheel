@@ -8,4 +8,6 @@
   (lib (name "3568")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_3568/3568/KiCad/3568.kicad_sym")(options "")(descr ""))
   (lib (name "SBM3060VDC-AU_R2_006A1")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_SBM3060VDC-AU_R2_006A1/SBM3060VDC-AU_R2_006A1/KiCad/SBM3060VDC-AU_R2_006A1.kicad_sym")(options "")(descr ""))
   (lib (name "MPM3610GQV-P")(type "KiCad")(uri "${KIPRJMOD}/Components/ul_MPM3610GQV-P/KiCADv6/2024-01-08_02-19-40.kicad_sym")(options "")(descr ""))
+  (lib (name "ESDALC6V1W5")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_ESDALC6V1W5/KiCad/ESDALC6V1W5.kicad_sym")(options "")(descr ""))
+  (lib (name "VESD")(type "KiCad")(uri "${KIPRJMOD}/Components/VESD03A2-03G-G3-08/Library.kicad_sym")(options "")(descr ""))
 )

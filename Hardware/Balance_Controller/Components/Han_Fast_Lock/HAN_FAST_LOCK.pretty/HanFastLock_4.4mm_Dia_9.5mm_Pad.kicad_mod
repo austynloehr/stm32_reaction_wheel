@@ -1,0 +1,109 @@
+(footprint "HanFastLock_4.4mm_Dia_9.5mm_Pad"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "Han Fast-Lock mounting hole 4.4mm")
+	(property "Reference" "REF**"
+		(at 0 -3.5 0)
+		(layer "F.SilkS")
+		(uuid "b0d159af-9618-4829-874d-3430e6f7ebb8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "HanFastLock_4.4mm_Dia_9.5mm_Pad"
+		(at -0.5 6 0)
+		(layer "F.Fab")
+		(uuid "a66d9676-65f1-4cd7-af47-6f84392abd2d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7869fb96-c24a-4e96-9d62-b31df6b71bbf")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e304d16c-d57a-4ab5-8c00-6ee1e3f0eba8")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c0918672-cfd3-4590-b7f7-272d5ec9b5c0")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr exclude_from_pos_files exclude_from_bom)
+	(fp_circle
+		(center 0 0)
+		(end 4.75 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill none)
+		(layer "Cmts.User")
+		(uuid "bb33e335-ca52-4c60-aca3-6ae65462fc05")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 5 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill none)
+		(layer "F.CrtYd")
+		(uuid "36b22271-38ae-4357-9bbb-a42fa4ee93f2")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 -6.5 0)
+		(layer "F.Fab")
+		(uuid "264bc151-b4ed-40d6-9ad0-78333b83ffff")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 9.5 9.5)
+		(drill 4.4)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(thermal_bridge_width 2)
+		(thermal_gap 0.5)
+		(uuid "7f6882d9-8f4f-4bc1-a427-4c7693ee7a68")
+	)
+)
