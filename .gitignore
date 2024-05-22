@@ -108,3 +108,8 @@ tempCodeRunnerFile*
 Design/TestChassis/**/*.txt
 *.zip
 Hardware/**/*.ini
+
+# Simulink files
+PrimaryStateMachine_ert_rtw/
+StateRequest_ert_rtw/
+slprj/
