@@ -26,6 +26,8 @@ Core/Src/Application \
 Core/Src/Application/Config \
 Core/Src/Application/Control \
 Core/Src/Application/Control/Controllers \
+Core/Src/Application/Control/Controllers/PrimaryStateMachine \
+Core/Src/Application/Control/VirtualSensors/StateRequest \
 Core/Src/Application/Control/VirtualSensors \
 Core/Src/Application/IO \
 Core/Src/Application/Processing \

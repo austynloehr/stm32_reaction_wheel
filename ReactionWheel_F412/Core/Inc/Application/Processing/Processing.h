@@ -9,6 +9,7 @@
 #define INC_APPLICATION_PROCESSING_PROCESSING_H_
 
 #include "DataBuses.h"
+#include "main.h"
 
 /* Start global function prototypes */
 IP_Bus_t PR_InputProcessing(Config_Bus_t Config_Bus, HI_Bus_t HI_Bus);

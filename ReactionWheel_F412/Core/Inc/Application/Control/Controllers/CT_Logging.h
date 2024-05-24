@@ -8,7 +8,7 @@
 #ifndef INC_CONTROL_CONTROLLERS_CT_LOGGING_H_
 #define INC_CONTROL_CONTROLLERS_CT_LOGGING_H_
 
-#include <stdint.h>
+#include "main.h"
 #include "PR_MPU6050.h"
 #include "VS_OrientationEstimation.h"
 

@@ -173,9 +173,9 @@ static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef *hi2c,
 		HAL_Delay(5);
 	}
 
-	IMUOffsets.AxOffset = 0 - (sumAx / numSamples);
-	IMUOffsets.AyOffset = 0 - (sumAy / numSamples); // (9.80665 * sin(0 * PI / 180))
-	IMUOffsets.AzOffset = 9.80665 - (sumAz / numSamples);
+	IMUOffsets.AxOffset = (9.80665 * cos(45 * PI / 180))- (sumAx / numSamples);
+	IMUOffsets.AyOffset = (9.80665 * sin(45 * PI / 180)) - (sumAy / numSamples);
+	IMUOffsets.AzOffset = 0 - (sumAz / numSamples);
 
 	IMUOffsets.WxOffset = 0 - (sumWx / numSamples);
 	IMUOffsets.WyOffset = 0 - (sumWy / numSamples);

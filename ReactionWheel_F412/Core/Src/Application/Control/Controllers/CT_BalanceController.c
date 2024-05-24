@@ -15,7 +15,7 @@ static int8_t signf(float x);
 CT_Balance_Bus_t CT_BalanceController(uint8_t BalanceEnable_bool, float RollAng_deg){
 	CT_Balance_Bus_t CT_Balance_Bus;
 
-	uint32_t MaxMotorSpeed_rpm = 11000;
+	uint32_t MaxMotorSpeed_rpm = 5000;
 	uint32_t MaxRollAng_deg = 45;
 
 	// Limit throttle request to -1 / 1

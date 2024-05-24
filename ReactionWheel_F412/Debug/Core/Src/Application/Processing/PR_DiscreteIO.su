@@ -1,0 +1,2 @@
+../Core/Src/Application/Processing/PR_DiscreteIO.c:26:25:OP_DiscreteOutput	24	static
+../Core/Src/Application/Processing/PR_DiscreteIO.c:37:13:LEDStateToCommand	32	static

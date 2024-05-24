@@ -13,7 +13,9 @@ RM := rm -rf
 -include Core/Startup/subdir.mk
 -include Core/Src/Application/Processing/subdir.mk
 -include Core/Src/Application/IO/subdir.mk
+-include Core/Src/Application/Control/VirtualSensors/StateRequest/subdir.mk
 -include Core/Src/Application/Control/VirtualSensors/subdir.mk
+-include Core/Src/Application/Control/Controllers/PrimaryStateMachine/subdir.mk
 -include Core/Src/Application/Control/Controllers/subdir.mk
 -include Core/Src/Application/Control/subdir.mk
 -include Core/Src/Application/Config/subdir.mk
@@ -68,7 +70,7 @@ main-build: ReactionWheel_F412.elf secondary-outputs
 
 # Tool invocations
 ReactionWheel_F412.elf ReactionWheel_F412.map: $(OBJS) $(USER_OBJS) /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/STM32F412CGUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ReactionWheel_F412.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/STM32F412CGUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ReactionWheel_F412.map" -Wl,--gc-sections -static -L"/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Middlewares/ST/ARM/DSP/Lib" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "ReactionWheel_F412.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/STM32F412CGUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ReactionWheel_F412.map" -Wl,--gc-sections -static -L"/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Middlewares/ST/ARM/DSP/Lib" -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

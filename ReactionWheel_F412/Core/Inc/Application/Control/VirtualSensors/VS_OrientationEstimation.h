@@ -9,6 +9,7 @@
 #define INC_APPLICATION_CONTROL_VIRTUALSENSORS_VS_ORIENTATIONESTIMATION_H_
 
 #include "PR_MPU6050.h"
+#include "main.h"
 
 /* Start Global Struct definitions */
 typedef struct VS_OrientationData {

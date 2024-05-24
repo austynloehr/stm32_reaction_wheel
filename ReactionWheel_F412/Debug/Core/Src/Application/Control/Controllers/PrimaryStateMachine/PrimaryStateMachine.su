@@ -1,0 +1,2 @@
+../Core/Src/Application/Control/Controllers/PrimaryStateMachine/PrimaryStateMachine.c:37:6:PrimaryStateMachine_step	40	static
+../Core/Src/Application/Control/Controllers/PrimaryStateMachine/PrimaryStateMachine.c:253:6:PrimaryStateMachine_initialize	24	static

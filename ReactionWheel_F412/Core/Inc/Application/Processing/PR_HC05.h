@@ -8,7 +8,7 @@
 #ifndef INC_PROCESSING_PR_HC05_H_
 #define INC_PROCESSING_PR_HC05_H_
 
-#include <stdint.h>
+#include "main.h"
 #include "CT_Logging.h"
 
 /* Start Struct definitions */

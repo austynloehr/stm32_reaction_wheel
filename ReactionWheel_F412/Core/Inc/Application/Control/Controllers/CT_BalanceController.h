@@ -8,7 +8,7 @@
 #ifndef INC_APPLICATION_CONTROL_CONTROLLERS_CT_BALANCECONTROLLER_H_
 #define INC_APPLICATION_CONTROL_CONTROLLERS_CT_BALANCECONTROLLER_H_
 
-#include <stdint.h>
+#include "main.h"
 
 /* Start Struct definitions */
 typedef struct CT_Balance_Bus{

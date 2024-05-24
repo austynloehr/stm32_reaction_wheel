@@ -9,8 +9,8 @@
 
 /* Start global function definitions */
 void HO_VESC(CAN_HandleTypeDef *hcan, uint8_t *TxData){
-	if (HAL_CAN_AddTxMessage(hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK){
-		Error_Handler();
-	}
+//	if (HAL_CAN_AddTxMessage(hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK){
+//		Error_Handler();
+//	}
 }
 /* End global function definitions */

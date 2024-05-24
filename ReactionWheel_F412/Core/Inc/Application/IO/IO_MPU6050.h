@@ -8,7 +8,6 @@
 #ifndef INC_IO_IO_MPU6050_H_
 #define INC_IO_IO_MPU6050_H_
 
-#include <stdint.h>
 #include "main.h"
 
 /* Start Struct definitions */

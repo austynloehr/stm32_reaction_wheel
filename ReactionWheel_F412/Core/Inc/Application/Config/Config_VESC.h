@@ -8,7 +8,6 @@
 #ifndef INC_APPLICATION_CONFIG_CONFIG_VESC_H_
 #define INC_APPLICATION_CONFIG_CONFIG_VESC_H_
 
-#include <stdint.h>
 #include "main.h"
 
 /* Start Global Defines */

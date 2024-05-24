@@ -10,6 +10,7 @@
 
 #include "IO_MPU6050.h"
 #include "Config_MPU6050.h"
+#include "main.h"
 
 /* Start Global Struct definitions */
 typedef struct MPU6050_GyroData {

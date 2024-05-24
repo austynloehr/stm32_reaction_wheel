@@ -40,11 +40,18 @@ Core/Src/Application/Application.o: ../Core/Src/Application/Application.c \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO_HC05.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO_VESC.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_VESC.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO_DiscreteIO.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_MPU6050.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_HC05.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/Controllers/CT_Logging.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_DiscreteIO.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/SimulinkEnums.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/Controllers/CT_BalanceController.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/VirtualSensors/StateRequest/VS_StateRequest.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/VirtualSensors/VS_ExecutionRate.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/Controllers/PrimaryStateMachine/CT_PrimaryStateMachine.h \
+ /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/SimulinkEnums.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/DataBuses.h \
  /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/Processing.h \
@@ -91,11 +98,18 @@ Core/Src/Application/Application.o: ../Core/Src/Application/Application.c \
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO_HC05.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO_VESC.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_VESC.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO_DiscreteIO.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_MPU6050.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_HC05.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/Controllers/CT_Logging.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/VirtualSensors/VS_OrientationEstimation.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/PR_DiscreteIO.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/SimulinkEnums.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/Controllers/CT_BalanceController.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/VirtualSensors/StateRequest/VS_StateRequest.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/VirtualSensors/VS_ExecutionRate.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Control/Controllers/PrimaryStateMachine/CT_PrimaryStateMachine.h:
+/home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/SimulinkEnums.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/IO/IO.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/DataBuses.h:
 /home/aloehr/Repos/stm32_reaction_wheel/ReactionWheel_F412/Core/Inc/Application/Processing/Processing.h:

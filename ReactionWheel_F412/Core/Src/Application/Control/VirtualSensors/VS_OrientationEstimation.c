@@ -50,11 +50,10 @@ VS_Orientation_Bus_t EstimateOrientation(IP_MPU6050_Bus_t IP_MPU6050_Bus){
 static VS_OrientationData_t CalcAccelAngle(MPU6050_AccelData_t MPU6050_AccelData){
 	VS_OrientationData_t AccelOrientation;
 
-	float roll_rad = atan2f(MPU6050_AccelData.YOUT_ms2, MPU6050_AccelData.ZOUT_ms2);
-	float pitch_rad = atan2f(-1 * MPU6050_AccelData.XOUT_ms2, sqrtf(powf(MPU6050_AccelData.YOUT_ms2, 2) + powf(MPU6050_AccelData.ZOUT_ms2, 2)));
+	float roll_rad = atan2f(MPU6050_AccelData.XOUT_ms2, MPU6050_AccelData.YOUT_ms2);
 
 	AccelOrientation.roll_deg = roll_rad * 180 / M_PI;
-	AccelOrientation.pitch_deg = pitch_rad * 180 / M_PI;
+	AccelOrientation.pitch_deg = 0;
 	AccelOrientation.yaw_deg = 0;  // No accurate way to calculate this
 
 	return AccelOrientation;
@@ -77,7 +76,7 @@ static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData, V
 	}
 
 	// Integrate angular velocities
-	GyroOrientation.roll_deg = lastRollAng_deg + MPU6050_GyroData.XOUT_dps * dt;
+	GyroOrientation.roll_deg = lastRollAng_deg + MPU6050_GyroData.ZOUT_dps * dt;
 	GyroOrientation.pitch_deg = lastPitchAng_deg + MPU6050_GyroData.YOUT_dps * dt;
 	GyroOrientation.yaw_deg = 0;  // No accurate way to calculate this
 
@@ -93,7 +92,7 @@ static void ResetGyroIntegrators(float accelRoll_deg, float accelPitch_deg){
 	// Reset gyro integrators if accel values are near 45 for X consecutive cycles
 
 	float resetAccelTolerance_deg = 1.0;
-	float resetAccelRollAngle_deg = 0;
+	float resetAccelRollAngle_deg = 45;
 	float resetAccelPitchAngle_deg = 0;// Angle of system when integrator can be reset
 	uint8_t resetAccelCntThreshold = 20;
 
