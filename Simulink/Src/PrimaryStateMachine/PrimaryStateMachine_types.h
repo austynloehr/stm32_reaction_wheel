@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'PrimaryStateMachine'.
  *
- * Model version                  : 10.9
+ * Model version                  : 10.16
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Tue May 21 21:37:03 2024
+ * C/C++ source code generated on : Fri May 24 00:55:26 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M

@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'PrimaryStateMachine'.
  *
- * Model version                  : 10.9
+ * Model version                  : 10.16
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Tue May 21 21:37:03 2024
+ * C/C++ source code generated on : Fri May 24 00:55:26 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -121,8 +121,7 @@ int main(int argc, const char *argv[])
 
   /* Initialize model */
   PrimaryStateMachine_initialize(rtM, &rtU_VS_StateRequest_enum,
-    &rtY_CT_CurrentState_enum, &rtY_CT_MotorEnable_bool, &rtY_CT_GLEDState_enum,
-    &rtY_CT_RLEDState_enum);
+    &rtY_CT_CurrentState_enum);
 
   /* Attach rt_OneStep to a timer or interrupt service routine with
    * period 0.005 seconds (base rate of the model) here.

@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'PrimaryStateMachine'.
  *
- * Model version                  : 10.9
+ * Model version                  : 10.16
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Tue May 21 21:37:03 2024
+ * C/C++ source code generated on : Fri May 24 00:55:26 2024
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -28,7 +28,6 @@
 
 #include "PrimaryStateMachine_types.h"
 #include "SimulinkEnums.h"
-#include "CT_PrimaryStateMachine.h"
 #include "rt_defines.h"
 
 /* Macros for accessing real-time model data structure */
@@ -42,7 +41,11 @@
 
 /* Block signals and states (default storage) for system '<Root>' */
 typedef struct {
-  DW_CT_PrimaryStateMachine CT_PrimaryStateMachine_l;/* '<Root>/CT_PrimaryStateMachine' */
+  uint8_t is_active_c3_PrimaryStateMachin;/* '<Root>/PrimaryStateMachine' */
+  uint8_t is_c3_PrimaryStateMachine;   /* '<Root>/PrimaryStateMachine' */
+  uint8_t is_Normal;                   /* '<Root>/PrimaryStateMachine' */
+  uint8_t is_MotorEnabled;             /* '<Root>/PrimaryStateMachine' */
+  bool DelayInput1_DSTATE;             /* '<S3>/Delay Input1' */
 } DW;
 
 /* Real-time Model Data Structure */
@@ -53,9 +56,7 @@ struct tag_RTM {
 
 /* Model entry point functions */
 extern void PrimaryStateMachine_initialize(RT_MODEL *const rtM, StateReq
-  *rtU_VS_StateRequest_enum, PrimaryState *rtY_CT_CurrentState_enum, bool
-  *rtY_CT_MotorEnable_bool, LEDState *rtY_CT_GLEDState_enum, LEDState
-  *rtY_CT_RLEDState_enum);
+  *rtU_VS_StateRequest_enum, PrimaryState *rtY_CT_CurrentState_enum);
 extern void PrimaryStateMachine_step(RT_MODEL *const rtM, StateReq
   rtU_VS_StateRequest_enum, bool rtU_ErrorInterrupt_bool, float
   rtU_RollAngle_deg, float rtU_StartBalanceThreshold_deg, float
@@ -78,11 +79,10 @@ extern void PrimaryStateMachine_step(RT_MODEL *const rtM, StateReq
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'PrimaryStateMachine'
- * '<S1>'   : 'PrimaryStateMachine/CT_PrimaryStateMachine'
- * '<S2>'   : 'PrimaryStateMachine/CT_PrimaryStateMachine/Compare To Constant'
- * '<S3>'   : 'PrimaryStateMachine/CT_PrimaryStateMachine/Compare To Constant1'
- * '<S4>'   : 'PrimaryStateMachine/CT_PrimaryStateMachine/Detect Increase'
- * '<S5>'   : 'PrimaryStateMachine/CT_PrimaryStateMachine/PrimaryStateMachine'
+ * '<S1>'   : 'PrimaryStateMachine/Compare To Constant'
+ * '<S2>'   : 'PrimaryStateMachine/Compare To Constant1'
+ * '<S3>'   : 'PrimaryStateMachine/Detect Increase'
+ * '<S4>'   : 'PrimaryStateMachine/PrimaryStateMachine'
  */
 
 /*-
