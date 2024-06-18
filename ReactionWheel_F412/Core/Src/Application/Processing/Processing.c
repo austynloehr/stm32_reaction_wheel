@@ -8,10 +8,12 @@
 #include "Processing.h"
 
 /* Start global function definitions */
-IP_Bus_t PR_InputProcessing(Config_Bus_t Config_Bus, HI_Bus_t HI_Bus){
+IP_Bus_t PR_InputProcessing(Config_Bus_t Config_Bus, HI_Bus_t HI_Bus, CT_Bus_t Last_CT_Bus){
 	IP_Bus_t IP_Bus;
 
-	IP_Bus.IP_MPU6050_Bus = IP_MPU6050(HI_Bus.HI_MPU6050_Bus, Config_Bus.Config_MPU6050_Bus);
+	IP_Bus.IP_MPU6050_Bus = IP_MPU6050(HI_Bus.HI_MPU6050_Bus,
+			Config_Bus.Config_MPU6050_Bus, Config_Bus.Config_HAL_Bus.hi2c,
+			Last_CT_Bus.CT_PrimaryStateMachine_Bus.CurrentState_enum);
 
 	return IP_Bus;
 }

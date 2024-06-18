@@ -7,20 +7,30 @@
 
 #include "Application.h"
 
+/* Start Global Variables */
+static CT_Bus_t Last_CT_Bus;
+
 bool EnableBtn_bool;
 float RollAngle_deg;
+float dt;
+int32_t SpeedRequest;
+/* End Global Variables */
 
 /* Start global function definition */
 Config_Bus_t App_Config(Config_HAL_Bus_t Config_HAL_Bus){
 	Config_Bus_t Config_Bus;
 
-	HAL_Delay(200);
+	// Startup delay for IMU and VESC
+	HAL_Delay(5000);
 
 	Config_Bus.Config_HAL_Bus = Config_HAL_Bus;
 	Config_Bus.Config_MPU6050_Bus = Config_MPU6050(Config_HAL_Bus.hi2c);
 
 	Config_DSP();
 	Config_VESC(Config_HAL_Bus.hcan);
+
+	// Initialize unit delayed bus states
+	Last_CT_Bus.CT_PrimaryStateMachine_Bus.CurrentState_enum = Standby;
 
 	return Config_Bus;
 }
@@ -32,13 +42,17 @@ void App_Main(Config_Bus_t Config_Bus){
 	OP_Bus_t OP_Bus;
 
 	HI_Bus = IO_HardwareInputs(Config_Bus);
-	IP_Bus = PR_InputProcessing(Config_Bus, HI_Bus);
+	IP_Bus = PR_InputProcessing(Config_Bus, HI_Bus, Last_CT_Bus);
 	CT_Bus = CT_Control(HI_Bus, IP_Bus);
 	OP_Bus = PR_OutputProcessing(CT_Bus);
 	IO_HardwareOutputs(Config_Bus, OP_Bus);
 
+	Last_CT_Bus = CT_Bus;
+
 	EnableBtn_bool = HI_Bus.HI_DiscreteInput_Bus.EnableBtn_bool;
 	RollAngle_deg = CT_Bus.VS_Bus.VS_Orientation_Bus.CompFiltOrientation.roll_deg;
+	dt = CT_Bus.VS_Bus.VS_ExecutionRate_Bus.dt;
+	SpeedRequest = CT_Bus.CT_Balance_Bus.MotorSpeedReq_rpm;
 
 	HAL_Delay(4);
 }

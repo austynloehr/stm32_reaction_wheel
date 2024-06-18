@@ -48,7 +48,6 @@ const FS_SEL_enum_t gyroRange = w500;
 /* Start static function prototypes */
 static void MPU6050_Init(I2C_HandleTypeDef *hi2c);
 static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRange, const FS_SEL_enum_t gyroRange);
-static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef *hi2c, Config_MPU6050_Bus_t Config_MPU6050_Bus);
 /* Start static function prototypes */
 
 /* Start global function definitions */
@@ -58,9 +57,6 @@ Config_MPU6050_Bus_t Config_MPU6050(I2C_HandleTypeDef *hi2c){
 	MPU6050_Init(hi2c);
 
 	Config_MPU6050_Bus.Sensitivity = MPU6050_GetSens(accelRange, gyroRange);
-
-	Config_MPU6050_Bus.Offsets = (MPU6050_IMUOffsetData_t) {0, 0, 0, 0, 0, 0, 0};
-	Config_MPU6050_Bus.Offsets = MPU6050_CalibrateOffsets(hi2c, Config_MPU6050_Bus);
 
 	return Config_MPU6050_Bus;
 }
@@ -142,47 +138,5 @@ static MPU6050_IMUSensitivityData_t MPU6050_GetSens(const AFS_SEL_enum_t accelRa
 	}
 
 	return IMUSensitivity;
-}
-
-static MPU6050_IMUOffsetData_t MPU6050_CalibrateOffsets(I2C_HandleTypeDef *hi2c, Config_MPU6050_Bus_t Config_MPU6050_Bus){
-	MPU6050_IMUOffsetData_t IMUOffsets;
-	HI_MPU6050_Bus_t HI_MPU6050_Bus;
-	IP_MPU6050_Bus_t IP_MPU6050_Bus;
-
-	uint32_t numSamples = 2000;
-
-	float sumAx = 0;
-	float sumAy = 0;
-	float sumAz = 0;
-	float sumWx = 0;
-	float sumWy = 0;
-	float sumWz = 0;
-
-	for(uint32_t i = 0; i < numSamples; i++){
-		HI_MPU6050_Bus = HI_MPU6050(hi2c);
-		IP_MPU6050_Bus = IP_MPU6050(HI_MPU6050_Bus, Config_MPU6050_Bus);
-
-		sumAx += IP_MPU6050_Bus.accel.XOUT_ms2;
-		sumAy += IP_MPU6050_Bus.accel.YOUT_ms2;
-		sumAz += IP_MPU6050_Bus.accel.ZOUT_ms2;
-
-		sumWx += IP_MPU6050_Bus.gyro.XOUT_dps;
-		sumWy += IP_MPU6050_Bus.gyro.YOUT_dps;
-		sumWz += IP_MPU6050_Bus.gyro.ZOUT_dps;
-
-		HAL_Delay(5);
-	}
-
-	IMUOffsets.AxOffset = (9.80665 * cos(45 * PI / 180))- (sumAx / numSamples);
-	IMUOffsets.AyOffset = (9.80665 * sin(45 * PI / 180)) - (sumAy / numSamples);
-	IMUOffsets.AzOffset = 0 - (sumAz / numSamples);
-
-	IMUOffsets.WxOffset = 0 - (sumWx / numSamples);
-	IMUOffsets.WyOffset = 0 - (sumWy / numSamples);
-	IMUOffsets.WzOffset = 0 - (sumWz / numSamples);
-
-	IMUOffsets.SensCalibrated_bool = 1;
-
-	return IMUOffsets;
 }
 /* End static function definitions */

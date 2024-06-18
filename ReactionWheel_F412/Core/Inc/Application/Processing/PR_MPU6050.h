@@ -11,6 +11,7 @@
 #include "IO_MPU6050.h"
 #include "Config_MPU6050.h"
 #include "main.h"
+#include "SimulinkEnums.h"
 
 /* Start Global Struct definitions */
 typedef struct MPU6050_GyroData {
@@ -28,11 +29,12 @@ typedef struct MPU6050_AccelData {
 typedef struct IP_MPU6050_Bus {
 	MPU6050_AccelData_t accel;
 	MPU6050_GyroData_t 	gyro;
+	bool IMUCalComplete;
 } IP_MPU6050_Bus_t;
 /* End Global Struct definitions */
 
 /* Start Function Prototypes */
-IP_MPU6050_Bus_t IP_MPU6050(HI_MPU6050_Bus_t HI_MPU6050_Bus, Config_MPU6050_Bus_t Config_MPU6050_Bus);
+IP_MPU6050_Bus_t IP_MPU6050(HI_MPU6050_Bus_t HI_MPU6050_Bus, Config_MPU6050_Bus_t Config_MPU6050_Bus, I2C_HandleTypeDef *hi2c, PrimaryState CurrentState_enum);
 /* End Function Prototypes */
 
 #endif /* INC_PROCESSING_PR_MPU6050_H_ */

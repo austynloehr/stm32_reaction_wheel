@@ -12,7 +12,8 @@
 
 /* Start Global Function Definitions */
 void HO_HCO5(UART_HandleTypeDef huart, const uint8_t *pData, uint16_t Size){
-	HAL_UART_Transmit(&huart, pData, Size, (uint32_t) UART_TIMEOUT);
+	HAL_UART_Transmit_DMA(&huart, pData, Size);
+//	HAL_UART_Transmit(&huart, pData, Size, (uint32_t) UART_TIMEOUT);
 }
 /* End Global Function Definitions */
 

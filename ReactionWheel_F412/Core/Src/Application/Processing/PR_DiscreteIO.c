@@ -8,7 +8,7 @@
 #include "PR_DiscreteIO.h"
 
 /* Start Defines */
-#define BLINK_PERIOD_TIC 100U
+#define BLINK_PERIOD_TIC 300U
 /* End Defines */
 
 /* Start Global Variable Definition */

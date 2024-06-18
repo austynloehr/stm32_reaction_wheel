@@ -16,7 +16,7 @@ typedef struct StringPacket{
 /* End Struct definitions */
 
 /*Start global variable definitions */
-uint8_t msg[40];  // Need to have this global or else memory location will get overwritten after function call
+uint8_t msg[60];  // Need to have this global or else memory location will get overwritten after function call
 uint16_t msgLen = sizeof(msg) / sizeof(uint8_t);
 /*End global variable definitions */
 
@@ -45,12 +45,11 @@ static StringPacket_t MakeLogString(uint8_t *msg, uint16_t msgLen, IP_MPU6050_Bu
 	uint32_t tick = HAL_GetTick();
 
 	memset(msg, '\0', msgLen);  // Set unused indexes to null char
-//	sprintf((char*) msg, "TK:%lu,AX:%.3f,AY:%.3f,AZ:%.3f,WX:%.3f,WY:%.3f,WZ:%.3f\n\r",
-//			tick,
-//			IP_MPU6050_Bus.accel.XOUT_ms2, IP_MPU6050_Bus.accel.YOUT_ms2, IP_MPU6050_Bus.accel.ZOUT_ms2,
-//			IP_MPU6050_Bus.gyro.XOUT_dps, IP_MPU6050_Bus.gyro.YOUT_dps, IP_MPU6050_Bus.gyro.ZOUT_dps);
+	sprintf((char*) msg, "%lu,%.7f,%.7f,%.7f\n\r",
+			tick,
+			IP_MPU6050_Bus.accel.XOUT_ms2, IP_MPU6050_Bus.accel.YOUT_ms2, IP_MPU6050_Bus.gyro.ZOUT_dps);
 
-	sprintf((char*) msg, "TK:%lu,compRoll:%.5f\n\r", tick, VS_Orientation_Bus.CompFiltOrientation.roll_deg);
+//	sprintf((char*) msg, "TK:%lu,compRoll:%.5f\n\r", tick, VS_Orientation_Bus.CompFiltOrientation.roll_deg);
 
 	StringPacket.pData = msg;
 	StringPacket.Size = msgLen;

@@ -113,3 +113,5 @@ Hardware/**/*.ini
 PrimaryStateMachine_ert_rtw/
 StateRequest_ert_rtw/
 slprj/
+
+ReactionWheel_F412/Debug/
