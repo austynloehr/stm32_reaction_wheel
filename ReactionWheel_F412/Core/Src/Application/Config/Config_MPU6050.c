@@ -41,8 +41,8 @@ typedef enum FS_SEL_enum {
 /* End local enum definitions */
 
 /* Start global variable definitions */
-const AFS_SEL_enum_t accelRange = g4;
-const FS_SEL_enum_t gyroRange = w500;
+const AFS_SEL_enum_t accelRange = g8;
+const FS_SEL_enum_t gyroRange = w2000;
 /* End global variable definitions */
 
 /* Start static function prototypes */

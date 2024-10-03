@@ -25,7 +25,7 @@ shift "$(( OPTIND - 1 ))"
 macAddr='98:D3:02:96:C1:16'
 
 # HC-05 UART baud rate
-baudRate=921600
+baudRate=460800
 
 # Bind rfcomm0 if does not exist already
 sudo rfcomm bind 0 $macAddr

@@ -25,7 +25,10 @@ def convert_log(format, lengths, labels, filepath):
                 data = int(data,16) # Convert to int from hex
                 
                 # Reverse byte order, convert to proper data type
-                data = struct.unpack('<' + format[i], struct.pack('>I', data))[0] 
+                if format[i] == 'B':
+                    data = data
+                else:
+                    data = struct.unpack('<' + format[i], struct.pack('>I', data))[0] 
                 
                 # Append to line array
                 line[i] = data

@@ -115,3 +115,4 @@ StateRequest_ert_rtw/
 slprj/
 
 ReactionWheel_F412/Debug/
+*.pyc

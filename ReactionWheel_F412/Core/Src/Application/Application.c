@@ -54,6 +54,6 @@ void App_Main(Config_Bus_t Config_Bus){
 	dt = CT_Bus.VS_Bus.VS_ExecutionRate_Bus.dt;
 	SpeedRequest = CT_Bus.CT_Balance_Bus.MotorSpeedReq_rpm;
 
-	HAL_Delay(4);
+	HAL_Delay(1);
 }
 /* End global function definition */
