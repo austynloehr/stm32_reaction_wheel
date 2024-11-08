@@ -14,11 +14,13 @@ typedef struct LogPacket{
 	uint16_t Size;
 } LogPacket_t;
 
-typedef struct LogPayload{\
+typedef struct LogPayload{
 	uint32_t tick;
-	float ax_ms2;
-	float ay_ms2;
+	float ax_mps2;
+	float ay_mps2;
 	float wz_dps;
+	float axFilt_mps2;
+	float ayFilt_mps2;
 	int32_t MotorSpeedReq_rpm;
 	uint8_t StateReq_enum;
 	uint8_t CurrentState_enum;
@@ -56,9 +58,11 @@ static LogPacket_t MakeLogPacket(IP_MPU6050_Bus_t IP_MPU6050_Bus, VS_Orientation
 
 	// Pack payload struct
 	payload.tick = HAL_GetTick();
-	payload.ax_ms2 = IP_MPU6050_Bus.accel.XOUT_ms2;
-	payload.ay_ms2 = IP_MPU6050_Bus.accel.YOUT_ms2;
+	payload.ax_mps2 = IP_MPU6050_Bus.accel.XOUT_ms2;
+	payload.ay_mps2 = IP_MPU6050_Bus.accel.YOUT_ms2;
 	payload.wz_dps = IP_MPU6050_Bus.gyro.ZOUT_dps;
+	payload.axFilt_mps2 = IP_MPU6050_Bus.AxFilt_mps2;
+	payload.ayFilt_mps2 = IP_MPU6050_Bus.AyFilt_mps2;
 	payload.StateReq_enum = VS_StateRequest_Bus.StateRequest_enum;
 	payload.CurrentState_enum = CT_PrimaryStateMachine_Bus.CurrentState_enum;
 	payload.MotorEnable_bool = CT_PrimaryStateMachine_Bus.MotorEnable_bool;

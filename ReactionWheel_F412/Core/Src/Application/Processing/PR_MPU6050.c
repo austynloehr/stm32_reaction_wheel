@@ -6,6 +6,7 @@
  */
 #include <math.h>
 #include "PR_MPU6050.h"
+#include "Config_DSP.h"
 
 /* Start local enum definitions */
 typedef struct IMUOffsetData{
@@ -44,9 +45,10 @@ IP_MPU6050_Bus_t IP_MPU6050(HI_MPU6050_Bus_t HI_MPU6050_Bus, Config_MPU6050_Bus_
 
 	IP_MPU6050_Bus.accel = MPU6050_CalcAccel(HI_MPU6050_Bus.RawAccel, Config_MPU6050_Bus.Sensitivity.AccelSens, pIMUOffsets);
 	IP_MPU6050_Bus.gyro = MPU6050_CalcGyro(HI_MPU6050_Bus.RawGyro, Config_MPU6050_Bus.Sensitivity.GyroSens, pIMUOffsets);
-	IP_MPU6050_Bus = MPU6050_IMUDataClamp(IP_MPU6050_Bus);
 
-
+	// Filter accel data
+	arm_biquad_cascade_df1_f32(&S_Ax, &IP_MPU6050_Bus.accel.XOUT_ms2, &IP_MPU6050_Bus.AxFilt_mps2, blockSize);
+	arm_biquad_cascade_df1_f32(&S_Ay, &IP_MPU6050_Bus.accel.YOUT_ms2, &IP_MPU6050_Bus.AyFilt_mps2, blockSize);
 
 	return IP_MPU6050_Bus;
 }
@@ -171,4 +173,5 @@ static IP_MPU6050_Bus_t MPU6050_IMUDataClamp(IP_MPU6050_Bus_t MPU6050_Bus){
 
 	return Result_Bus;
 }
+
 /* End Static Function Definition */

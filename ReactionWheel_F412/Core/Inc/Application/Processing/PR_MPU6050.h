@@ -29,6 +29,8 @@ typedef struct MPU6050_AccelData {
 typedef struct IP_MPU6050_Bus {
 	MPU6050_AccelData_t accel;
 	MPU6050_GyroData_t 	gyro;
+	float AxFilt_mps2;
+	float AyFilt_mps2;
 	bool IMUCalComplete;
 } IP_MPU6050_Bus_t;
 /* End Global Struct definitions */

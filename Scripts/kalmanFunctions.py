@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
+from filterpy.kalman import KalmanFilter
 
 def CalcAccelAngle(AxData, AyData):
     theta = np.empty_like(AxData)

@@ -12,7 +12,7 @@ path = sys.argv[1]
 if not os.path.isfile(path):
     raise FileNotFoundError
 
-write_bool = False
+write_bool = True
 measurement = "DataLogTest"
 bucket = "reaction_wheel"
 org = "dev"
@@ -28,12 +28,15 @@ client = InfluxDBClient(
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 # Struct format
-lengths = [4,4,4,4,4,1,1,1]
-format = 'IfffiBBB'
-labels = ['t','Ax','Ay','Wz','MotorSpeedReq','StateReq','CurrentState','MotorEnable']
+lengths = [4,4,4,4,4,4,4,1,1,1]
+format = 'IfffffiBBB'
+labels = ['t','Ax','Ay','Wz','AxFilt','AyFilt','MotorSpeedReq','StateReq','CurrentState','MotorEnable']
 
 # Convert struct
 df = convert_log(format, lengths, labels, path)
+plt.plot(df.index, df['t'].diff())
+plt.show()
+
 
 # Get current time in ms
 t0 = round(time.time_ns() / int(1e6)) 
@@ -84,6 +87,18 @@ for idx, row in df.iterrows():
             .field("MotorSpeedReq",row["MotorSpeedReq"]) \
             .time(timestamp,write_precision=WritePrecision.MS)
     )
+    
+    p8 = (
+        Point('IMU')
+            .field("AxFilt",row["AxFilt"]) \
+            .time(timestamp,write_precision=WritePrecision.MS)
+    )
+   
+    p9 = (
+        Point('IMU')
+            .field("AyFilt",row["AyFilt"]) \
+            .time(timestamp,write_precision=WritePrecision.MS)
+    )
    
     # Write data to influx
     if write_bool:
@@ -95,6 +110,8 @@ for idx, row in df.iterrows():
         write_api.write(bucket=bucket, org=org, record=p5)
         write_api.write(bucket=bucket, org=org, record=p6)
         write_api.write(bucket=bucket, org=org, record=p7)
+        write_api.write(bucket=bucket, org=org, record=p8)
+        write_api.write(bucket=bucket, org=org, record=p9)
         
         pct_complete = (idx / num_rows) * 100
         print(f"{pct_complete: .1f}% Complete")

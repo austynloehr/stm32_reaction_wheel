@@ -50,9 +50,9 @@ void App_Main(Config_Bus_t Config_Bus){
 	Last_CT_Bus = CT_Bus;
 
 	EnableBtn_bool = HI_Bus.HI_DiscreteInput_Bus.EnableBtn_bool;
-	RollAngle_deg = CT_Bus.VS_Bus.VS_Orientation_Bus.CompFiltOrientation.roll_deg;
 	dt = CT_Bus.VS_Bus.VS_ExecutionRate_Bus.dt;
 	SpeedRequest = CT_Bus.CT_Balance_Bus.MotorSpeedReq_rpm;
+	RollAngle_deg = CT_Bus.VS_Bus.VS_Orientation_Bus.RollAngle_deg;
 
 	HAL_Delay(1);
 }

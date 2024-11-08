@@ -10,161 +10,108 @@
 #include <math.h>
 
 /* Start Global Variables */
-static uint8_t resetGyroRoll_bool = 0;
-static uint8_t resetGyroPitch_bool = 0;
-static uint32_t resetAccelRollCount = 0;
-static uint32_t resetAccelPitchCount = 0;
-static uint32_t lastTick = 0;
-static float lastRollAng_deg = 0;
-static float lastPitchAng_deg = 0;
+
 /* Start Global Variables */
 
+/* Start local enum definitions */
+typedef struct KalmanFilterState {
+	arm_matrix_instance_f32 F;
+	arm_matrix_instance_f32 X;
+	arm_matrix_instance_f32 Q;
+	arm_matrix_instance_f32 P;
+	arm_matrix_instance_f32 R;
+	arm_matrix_instance_f32 H;
+	arm_matrix_instance_f32 y;
+	arm_matrix_instance_f32 K;
+} KalmanFilterState_t;
+/* End local enum definitions */
+
 /* Start Static Function Prototypes */
-//static int8_t signf(float x);
-static void ResetGyroIntegrators(float accelRoll_deg, float accelPitch_deg);
-static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData, VS_OrientationData_t FiltAccelOrientation);
-static VS_OrientationData_t CalcAccelAngle(MPU6050_AccelData_t MPU6050_AccelData);
-static VS_OrientationData_t AccelLowPassFilt(VS_OrientationData_t AccelOrientation);
-static VS_OrientationData_t ComplimentaryFilter(VS_OrientationData_t GyroOrientation, VS_OrientationData_t FiltAccelOrientation);
+static float CalcThetaAccel(float Ax, float Ay);
+static KalmanFilterState_t* KalmanInit(float dt);
+static void KalmanPredict(KalmanFilterState_t* pKf);
 /* End Static Function Prototypes */
 
 /* Start Global Function Definitions */
-VS_Orientation_Bus_t EstimateOrientation(IP_MPU6050_Bus_t IP_MPU6050_Bus){
+VS_Orientation_Bus_t EstimateOrientation(IP_MPU6050_Bus_t IP_MPU6050_Bus, float dt){
 	VS_Orientation_Bus_t VS_Orientation_Bus;
+	static bool OneShot = true;
 
-	VS_Orientation_Bus.AccelOrientation = CalcAccelAngle(IP_MPU6050_Bus.accel);
+	if (OneShot){
+		static KalmanFilterState_t* pKf = KalmanInit(dt);
+		OneShot = false;
+	}
 
-	ResetGyroIntegrators(VS_Orientation_Bus.AccelOrientation.roll_deg, VS_Orientation_Bus.AccelOrientation.pitch_deg);
-
-	VS_Orientation_Bus.FiltAccelOrientation = AccelLowPassFilt(VS_Orientation_Bus.AccelOrientation);
-
-	VS_Orientation_Bus.GyroOrientation = CalcGyroAngle(IP_MPU6050_Bus.gyro, VS_Orientation_Bus.FiltAccelOrientation);
-
-	VS_Orientation_Bus.CompFiltOrientation = ComplimentaryFilter(VS_Orientation_Bus.GyroOrientation, VS_Orientation_Bus.FiltAccelOrientation);
+	KalmanPredict(pKf);
+	float state = (pKf->X.pData)[0];
+	float ThetaAccel_deg = CalcThetaAccel(IP_MPU6050_Bus.AxFilt_mps2, IP_MPU6050_Bus.AyFilt_mps2);
+	VS_Orientation_Bus.RollAngle_deg = ThetaAccel_deg;
 
 	return VS_Orientation_Bus;
 }
 /* End Global Function Definitions */
 
 /* Start Static Function Definitions */
-static VS_OrientationData_t CalcAccelAngle(MPU6050_AccelData_t MPU6050_AccelData){
-	VS_OrientationData_t AccelOrientation;
+static float CalcThetaAccel(float Ax, float Ay){
+	// This function calculates roll angle (theta) from accelerometer measurements
 
-	float roll_rad = atan2f(MPU6050_AccelData.XOUT_ms2, MPU6050_AccelData.YOUT_ms2);
+	float theta_rad = atan2f(Ax, Ay);
+	float theta_deg = theta_rad * 180 / M_PI;
 
-	AccelOrientation.roll_deg = roll_rad * 180 / M_PI;
-	AccelOrientation.pitch_deg = 0;
-	AccelOrientation.yaw_deg = 0;  // No accurate way to calculate this
+	return theta_deg;
+}
+static KalmanFilterState_t* KalmanInit(float dt){
+	static KalmanFilterState_t kf;
+	KalmanFilterState_t* pKf = &kf;
 
-	return AccelOrientation;
+	float Q_std = 10;
+	float Wz_std = 8;
+	float Theta_std = 8;
+
+	float P_Theta = 2;
+	float P_ThetaDot = 10;
+	float P_ThetaDotDot = 10;
+
+
+	float F_data[9] = {1,		dt,		.5 * powf(dt,2),
+						0, 		1, 		dt,
+						0, 		1, 		1};
+	arm_mat_init_f32(&kf.F, (uint16_t) 3, (uint16_t) 3, (float32_t*) F_data);
+
+	float X_data[3] = {45,
+						0,
+						0};
+	arm_mat_init_f32(&kf.X, (uint16_t) 3, (uint16_t) 1, (float32_t*) X_data);
+
+	float Q_data[9] = {powf(dt,4)/4 * powf(Q_std,2), 	powf(dt,3)/2 * powf(Q_std,2), 	powf(dt,2)/2 * powf(Q_std,2),
+						powf(dt,3)/2 * powf(Q_std,2), 	powf(dt,2) * powf(Q_std,2), 		dt * powf(Q_std,2),
+						powf(dt,2)/2 * powf(Q_std,2), 		dt * powf(Q_std,2), 			1 * powf(Q_std,2)};
+	arm_mat_init_f32(&kf.Q, (uint16_t) 3, (uint16_t) 3, (float32_t*) Q_data);
+
+	float P_data[9] = {P_Theta, 		0, 				0,
+						0, 			P_ThetaDot, 		0,
+						0, 				0, 			P_ThetaDotDot};
+	arm_mat_init_f32(&kf.P, (uint16_t) 3, (uint16_t) 3, (float32_t*) P_data);
+
+	float R_data[4] = {powf(Theta_std,2), 		0,
+								0, 			powf(Wz_std,2)};
+	arm_mat_init_f32(&kf.R, (uint16_t) 2, (uint16_t) 2, (float32_t*) R_data);
+
+	float H_data[6] = {1, 	0, 	0,
+						0, 	1, 	0};
+	arm_mat_init_f32(&kf.H, (uint16_t) 2, (uint16_t) 3, (float32_t*) H_data);
+
+	float y_data[2] = {0, 0};
+	arm_mat_init_f32(&kf.y, (uint16_t) 2, (uint16_t) 1, (float32_t*) y_data);
+
+	float k_data[6] = {0,	0,
+						0, 	0,
+						0, 	0};
+	arm_mat_init_f32(&kf.K, (uint16_t) 3, (uint16_t) 2, (float32_t*) k_data);
+
+	return pKf;
 }
 
-static VS_OrientationData_t CalcGyroAngle(MPU6050_GyroData_t MPU6050_GyroData, VS_OrientationData_t FiltAccelOrientation){
-	VS_OrientationData_t GyroOrientation;
-	uint32_t currentTick = HAL_GetTick();
-	float dt = ((float) currentTick - (float) lastTick) / 1000;
-
-	// Integrator reset logic
-	if(resetGyroRoll_bool){
-		lastRollAng_deg = FiltAccelOrientation.roll_deg;
-		resetGyroRoll_bool = 0;
-	}
-
-	if(resetGyroPitch_bool){
-		lastPitchAng_deg = 0;
-		resetGyroPitch_bool = 0;
-	}
-
-	// Integrate angular velocities
-	GyroOrientation.roll_deg = lastRollAng_deg + MPU6050_GyroData.ZOUT_dps * dt;
-	GyroOrientation.pitch_deg = lastPitchAng_deg + MPU6050_GyroData.YOUT_dps * dt;
-	GyroOrientation.yaw_deg = 0;  // No accurate way to calculate this
-
-	// Store previous values
-	lastTick = currentTick;
-	lastRollAng_deg = GyroOrientation.roll_deg;
-	lastPitchAng_deg = GyroOrientation.pitch_deg;
-
-	return GyroOrientation;
+static void KalmanPredict(KalmanFilterState_t* pKf){
+	arm_mat_mult_f32(&(pKf->F), &(pKf->X), &(pKf->X));
 }
-
-static void ResetGyroIntegrators(float accelRoll_deg, float accelPitch_deg){
-	// Reset gyro integrators if accel values are near 45 for X consecutive cycles
-
-	float resetAccelTolerance_deg = 1.0;
-	float resetAccelRollAngle_deg = 45;
-	float resetAccelPitchAngle_deg = 0;// Angle of system when integrator can be reset
-	uint8_t resetAccelCntThreshold = 20;
-
-	float zeroAccelRollUpperThreshold = resetAccelRollAngle_deg + resetAccelTolerance_deg;
-	float zeroAccelRollLowerThreshold = resetAccelRollAngle_deg - resetAccelTolerance_deg;
-
-	float zeroAccelPitchUpperThreshold = resetAccelPitchAngle_deg + resetAccelTolerance_deg;
-	float zeroAccelPitchLowerThreshold = resetAccelPitchAngle_deg - resetAccelTolerance_deg;
-
-	if (fabsf(accelRoll_deg) < zeroAccelRollUpperThreshold && fabsf(accelRoll_deg) > zeroAccelRollLowerThreshold){
-		resetAccelRollCount++;
-	}else{
-		resetAccelRollCount = 0;
-	}
-
-	if (fabsf(accelPitch_deg) < zeroAccelPitchUpperThreshold && fabsf(accelPitch_deg) > zeroAccelPitchLowerThreshold){
-		resetAccelPitchCount++;
-	}else{
-		resetAccelPitchCount = 0;
-	}
-
-	if (resetAccelRollCount == resetAccelCntThreshold){
-		resetGyroRoll_bool = 1;
-		resetAccelRollCount = 0;
-	}else{
-		resetGyroRoll_bool = 0;
-	}
-
-	if (resetAccelPitchCount == resetAccelCntThreshold){
-		resetGyroPitch_bool = 1;
-		resetAccelPitchCount = 0;
-	}else{
-		resetGyroPitch_bool = 0;
-	}
-}
-
-static VS_OrientationData_t AccelLowPassFilt(VS_OrientationData_t AccelOrientation){
-	VS_OrientationData_t FiltAccelOrientation;
-
-	arm_biquad_cascade_df1_f32(&S_AccelRoll, &AccelOrientation.roll_deg, &FiltAccelOrientation.roll_deg, blockSize);
-	arm_biquad_cascade_df1_f32(&S_AccelPitch, &AccelOrientation.pitch_deg, &FiltAccelOrientation.pitch_deg, blockSize);
-
-	FiltAccelOrientation.yaw_deg = 0;
-
-	return FiltAccelOrientation;
-}
-
-static VS_OrientationData_t ComplimentaryFilter(VS_OrientationData_t GyroOrientation, VS_OrientationData_t FiltAccelOrientation){
-	VS_OrientationData_t CompFiltOrientation;
-
-	float alpha = .90;
-
-	CompFiltOrientation.roll_deg = GyroOrientation.roll_deg * alpha + FiltAccelOrientation.roll_deg * (1 - alpha);
-	CompFiltOrientation.pitch_deg = GyroOrientation.pitch_deg * alpha + FiltAccelOrientation.pitch_deg * (1 - alpha);
-	CompFiltOrientation.yaw_deg = 0;
-
-	return CompFiltOrientation;
-}
-
-//static int8_t signf(float x){
-//	int8_t sign;
-//
-//	if (x > 0){
-//		sign = 1;
-//	}
-//	else if (x < 0) {
-//		sign = -1;
-//	}
-//	else {
-//		sign = 0;
-//	}
-//
-//	return sign;
-//}
-/* End Static Function Definitions */

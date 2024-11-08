@@ -11,12 +11,9 @@
 #define IO_VESC_FcnCallDivider 10
 /* End Defines */
 
-/* Start Global Variables */
-uint32_t FcnCallCnt = 0;
-/* End Global Variables */
-
 /* Start global function definitions */
 void HO_VESC(CAN_HandleTypeDef *hcan, uint8_t *TxData){
+	static uint32_t FcnCallCnt = 0;
 
 	if (FcnCallCnt % IO_VESC_FcnCallDivider == 0){
 //		if (HAL_CAN_AddTxMessage(hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK){

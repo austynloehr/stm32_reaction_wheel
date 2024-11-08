@@ -19,11 +19,11 @@
 /* End Global Defines */
 
 /* Start Global Variables */
-extern arm_biquad_casd_df1_inst_f32 S_AccelRoll;
-extern arm_biquad_casd_df1_inst_f32 S_AccelPitch;
+extern arm_biquad_casd_df1_inst_f32 S_Ax;
+extern arm_biquad_casd_df1_inst_f32 S_Ay;
 extern arm_biquad_casd_df1_inst_f32 S_PIOutput;
-extern float FiltAccelRollState[IIR_STATE_LEN];
-extern float FiltAccelPitchState[IIR_STATE_LEN];
+extern float FiltAxState[IIR_STATE_LEN];
+extern float FiltAyState[IIR_STATE_LEN];
 extern float FiltPIOutputState[IIR_STATE_LEN];
 extern uint32_t blockSize;
 /* End Global Variables */
