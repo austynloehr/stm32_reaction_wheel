@@ -21,6 +21,10 @@ typedef struct LogPayload{
 	float wz_dps;
 	float axFilt_mps2;
 	float ayFilt_mps2;
+	float rollAngle_deg;
+	float rollRate_deg;
+	float rollAngleCov_deg;
+	float rollRateCov_deg;
 	int32_t MotorSpeedReq_rpm;
 	uint8_t StateReq_enum;
 	uint8_t CurrentState_enum;
@@ -63,6 +67,10 @@ static LogPacket_t MakeLogPacket(IP_MPU6050_Bus_t IP_MPU6050_Bus, VS_Orientation
 	payload.wz_dps = IP_MPU6050_Bus.gyro.ZOUT_dps;
 	payload.axFilt_mps2 = IP_MPU6050_Bus.AxFilt_mps2;
 	payload.ayFilt_mps2 = IP_MPU6050_Bus.AyFilt_mps2;
+	payload.rollAngle_deg = VS_Orientation_Bus.RollAngle_deg;
+	payload.rollRate_deg = VS_Orientation_Bus.RollRate_degps;
+	payload.rollAngleCov_deg = VS_Orientation_Bus.RollAngleCov_deg;
+	payload.rollRateCov_deg = VS_Orientation_Bus.RollRateCov_degps;
 	payload.StateReq_enum = VS_StateRequest_Bus.StateRequest_enum;
 	payload.CurrentState_enum = CT_PrimaryStateMachine_Bus.CurrentState_enum;
 	payload.MotorEnable_bool = CT_PrimaryStateMachine_Bus.MotorEnable_bool;
