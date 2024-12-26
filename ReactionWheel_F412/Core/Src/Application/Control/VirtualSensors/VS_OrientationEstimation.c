@@ -15,9 +15,9 @@
 #define WZ_STD 8
 #define THETA_STD 8
 
-#define P_THETA 2
-#define P_THETADOT 10
-#define P_THETADOTDOT 10
+#define P_THETA 7
+#define P_THETADOT 4
+#define P_THETADOTDOT 4
 
 /* Start local enum definitions */
 typedef struct KalmanFilterState {
@@ -85,7 +85,7 @@ static KalmanFilterState_t* KalmanInit(void){
 								0, 		1, 		DT_0,
 								0, 		0, 		1};
 
-	static float X_data[3] = {45,
+	static float X_data[3] = {0,
 								0,
 								0};
 

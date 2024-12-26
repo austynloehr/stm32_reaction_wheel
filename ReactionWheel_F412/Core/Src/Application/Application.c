@@ -14,6 +14,10 @@ bool EnableBtn_bool;
 float RollAngle_deg;
 float dt;
 int32_t SpeedRequest;
+PrimaryState CurrentState;
+int32_t dTerm;
+int32_t pTerm;
+int32_t iTerm;
 /* End Global Variables */
 
 /* Start global function definition */
@@ -53,6 +57,11 @@ void App_Main(Config_Bus_t Config_Bus){
 	dt = CT_Bus.VS_Bus.VS_ExecutionRate_Bus.dt;
 	SpeedRequest = CT_Bus.CT_Balance_Bus.MotorSpeedReq_rpm;
 	RollAngle_deg = CT_Bus.VS_Bus.VS_Orientation_Bus.RollAngle_deg;
+	CurrentState = CT_Bus.CT_PrimaryStateMachine_Bus.CurrentState_enum;
+	pTerm = CT_Bus.CT_Balance_Bus.pTerm_rpm;
+	iTerm = CT_Bus.CT_Balance_Bus.iTerm_rpm;
+	dTerm = CT_Bus.CT_Balance_Bus.dTerm_rpm;
+
 
 	HAL_Delay(1);
 }

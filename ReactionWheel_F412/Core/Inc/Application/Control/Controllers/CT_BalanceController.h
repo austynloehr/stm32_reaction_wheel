@@ -10,11 +10,13 @@
 
 #include "main.h"
 #include "SimulinkEnums.h"
-#include "Config_DSP.h"
 
 /* Start Struct definitions */
 typedef struct CT_Balance_Bus{
 	int32_t MotorSpeedReq_rpm;
+	int32_t pTerm_rpm;
+	int32_t iTerm_rpm;
+	int32_t dTerm_rpm;
 }CT_Balance_Bus_t;
 /* End Struct definitions */
 

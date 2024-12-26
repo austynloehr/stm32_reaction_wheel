@@ -23,9 +23,10 @@ typedef struct LogPayload{
 	float ayFilt_mps2;
 	float rollAngle_deg;
 	float rollRate_deg;
-	float rollAngleCov_deg;
-	float rollRateCov_deg;
 	int32_t MotorSpeedReq_rpm;
+	int32_t pTerm_rpm;
+	int32_t iTerm_rpm;
+	int32_t dTerm_rpm;
 	uint8_t StateReq_enum;
 	uint8_t CurrentState_enum;
 	uint8_t MotorEnable_bool;
@@ -69,12 +70,13 @@ static LogPacket_t MakeLogPacket(IP_MPU6050_Bus_t IP_MPU6050_Bus, VS_Orientation
 	payload.ayFilt_mps2 = IP_MPU6050_Bus.AyFilt_mps2;
 	payload.rollAngle_deg = VS_Orientation_Bus.RollAngle_deg;
 	payload.rollRate_deg = VS_Orientation_Bus.RollRate_degps;
-	payload.rollAngleCov_deg = VS_Orientation_Bus.RollAngleCov_deg;
-	payload.rollRateCov_deg = VS_Orientation_Bus.RollRateCov_degps;
 	payload.StateReq_enum = VS_StateRequest_Bus.StateRequest_enum;
 	payload.CurrentState_enum = CT_PrimaryStateMachine_Bus.CurrentState_enum;
 	payload.MotorEnable_bool = CT_PrimaryStateMachine_Bus.MotorEnable_bool;
 	payload.MotorSpeedReq_rpm = CT_Balance_Bus.MotorSpeedReq_rpm;
+	payload.pTerm_rpm = CT_Balance_Bus.pTerm_rpm;
+	payload.iTerm_rpm = CT_Balance_Bus.iTerm_rpm;
+	payload.dTerm_rpm = CT_Balance_Bus.dTerm_rpm;
 
 	LogPacket.pData = pPayload;
 	LogPacket.Size = sizeof(payload);

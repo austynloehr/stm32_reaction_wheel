@@ -29,9 +29,9 @@ client = InfluxDBClient(
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 # Struct format
-lengths = [4,4,4,4,4,4,4,4,4,4,4,1,1,1]
-format = 'IfffffffffiBBB'
-labels = ['t','Ax','Ay','Wz','AxFilt','AyFilt','RollAng','RollRate','RollAngCov','RollRateCov','MotorSpeedReq','StateReq','CurrentState','MotorEnable']
+lengths = [4,4,4,4,4,4,4,4,4,4,4,4,1,1,1]
+format = 'IfffffffiiiiBBB'
+labels = ['t','Ax','Ay','Wz','AxFilt','AyFilt','RollAng','RollRate','MotorSpeedReq','pTerm','iTerm','dTerm','StateReq','CurrentState','MotorEnable']
 
 # Convert struct
 df = convert_log(format, lengths, labels, path)
@@ -115,28 +115,34 @@ for idx, row in df.iterrows():
             .field("RollRate",row["RollRate"]) \
             .time(timestamp,write_precision=WritePrecision.MS)
     )
-
+    
     p12 = (
-        Point('KalmanFilter')
-            .field("RollAngCov",row["RollAngCov"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p13 = (
-        Point('KalmanFilter')
-            .field("RollRateCov",row["RollRateCov"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p14 = (
         Point('IMU')
             .field("AccelRollAng",theta_accel[idx]) \
             .time(timestamp,write_precision=WritePrecision.MS)
     )
     
-    p15 = (
+    p13 = (
         Point('IMU')
             .field("GyroRollAng",theta_gyro[idx]) \
+            .time(timestamp,write_precision=WritePrecision.MS)
+    )
+    
+    p14 = (
+        Point('Balance')
+            .field("PTerm",row["pTerm"]) \
+            .time(timestamp,write_precision=WritePrecision.MS)
+    )
+    
+    p15 = (
+        Point('Balance')
+            .field("ITerm",row["iTerm"]) \
+            .time(timestamp,write_precision=WritePrecision.MS)
+    )
+    
+    p16 = (
+        Point('Balance')
+            .field("DTerm",row["dTerm"]) \
             .time(timestamp,write_precision=WritePrecision.MS)
     )
    
@@ -158,6 +164,7 @@ for idx, row in df.iterrows():
         write_api.write(bucket=bucket, org=org, record=p13)
         write_api.write(bucket=bucket, org=org, record=p14)
         write_api.write(bucket=bucket, org=org, record=p15)
+        write_api.write(bucket=bucket, org=org, record=p16)
         
         pct_complete = (idx / num_rows) * 100
         print(f"{pct_complete: .1f}% Complete")
