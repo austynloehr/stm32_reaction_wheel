@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP NX3225SA-16.000M-STD-CRS-2
+D Crystal 16MHz +/-15ppm (Tol) +/-50ppm (Stability) 8pF FUND 120Ohm Automotive 4-Pin SMD
+K
+F 
+$ENDCMP
+#
+#End Doc Library

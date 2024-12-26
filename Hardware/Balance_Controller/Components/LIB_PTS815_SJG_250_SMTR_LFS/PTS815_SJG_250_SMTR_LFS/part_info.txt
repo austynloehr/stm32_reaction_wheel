@@ -1,0 +1,9 @@
+Manufacturer=C & K COMPONENTS
+PartNumber=PTS815 SJG 250 SMTR LFS
+PartCategory=Switch
+PackageCategory=Other
+PinCount=4
+Version=1.3
+Released=2020-04-29 09:57:05
+Downloaded=2024-01-03 16:55:59
+3D=Y

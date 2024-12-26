@@ -1,0 +1,13 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "NX3225SA-16_000M-STD-CRS-2")(type "KiCad")(uri "${KIPRJMOD}/Components/NX3225SA-16.000M-STD-CRS-2/KiCad/NX3225SA-16_000M-STD-CRS-2.kicad_sym")(options "")(descr ""))
+  (lib (name "RN4871-I/RM140")(type "KiCad")(uri "${KIPRJMOD}/Components/RN4871_I_RM140/KiCADv6/2024-01-01_19-56-57.kicad_sym")(options "")(descr ""))
+  (lib (name "MCP111T-195I_LB")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_MCP111T-195I_LB/MCP111T-195I_LB/KiCad/MCP111T-195I_LB.kicad_sym")(options "")(descr ""))
+  (lib (name "TPS2116DRLR")(type "KiCad")(uri "${KIPRJMOD}/Components/TPS2116DRLR/KiCad/TPS2116DRLR.kicad_sym")(options "")(descr ""))
+  (lib (name "PTS815_SJG_250_SMTR_LFS")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_PTS815_SJG_250_SMTR_LFS/PTS815_SJG_250_SMTR_LFS/KiCad/PTS815_SJG_250_SMTR_LFS.kicad_sym")(options "")(descr ""))
+  (lib (name "3568")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_3568/3568/KiCad/3568.kicad_sym")(options "")(descr ""))
+  (lib (name "SBM3060VDC-AU_R2_006A1")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_SBM3060VDC-AU_R2_006A1/SBM3060VDC-AU_R2_006A1/KiCad/SBM3060VDC-AU_R2_006A1.kicad_sym")(options "")(descr ""))
+  (lib (name "MPM3610GQV-P")(type "KiCad")(uri "${KIPRJMOD}/Components/ul_MPM3610GQV-P/KiCADv6/2024-01-08_02-19-40.kicad_sym")(options "")(descr ""))
+  (lib (name "ESDALC6V1W5")(type "KiCad")(uri "${KIPRJMOD}/Components/LIB_ESDALC6V1W5/KiCad/ESDALC6V1W5.kicad_sym")(options "")(descr ""))
+  (lib (name "VESD")(type "KiCad")(uri "${KIPRJMOD}/Components/VESD03A2-03G-G3-08/Library.kicad_sym")(options "")(descr ""))
+)
