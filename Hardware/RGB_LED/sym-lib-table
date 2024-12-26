@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "MPM3610GQV-P")(type "KiCad")(uri "${KIPRJMOD}/Components/MPM3610GQV-P/2024-01-08_02-22-56.kicad_sym")(options "")(descr ""))
+)
