@@ -9,17 +9,6 @@
 
 /* Start Global Variables */
 static CT_Bus_t Last_CT_Bus;
-
-bool EnableBtn_bool;
-float RollAngle_deg;
-float dt;
-int32_t MotorRequest;
-PrimaryState CurrentState;
-int32_t dTerm;
-int32_t pTerm;
-int32_t iTerm;
-int32_t MotorSpeedFdbk;
-int32_t MotorCurrentFdbk;
 /* End Global Variables */
 
 /* Start global function definition */
@@ -54,18 +43,6 @@ void App_Main(Config_Bus_t Config_Bus){
 	IO_HardwareOutputs(Config_Bus, OP_Bus);
 
 	Last_CT_Bus = CT_Bus;
-
-	EnableBtn_bool = HI_Bus.HI_DiscreteInput_Bus.EnableBtn_bool;
-	dt = CT_Bus.VS_Bus.VS_ExecutionRate_Bus.dt;
-	MotorRequest = CT_Bus.CT_Balance_Bus.MotorRequest_na;
-	RollAngle_deg = CT_Bus.VS_Bus.VS_Orientation_Bus.RollAngle_deg;
-	CurrentState = CT_Bus.CT_PrimaryStateMachine_Bus.CurrentState_enum;
-	pTerm = CT_Bus.CT_Balance_Bus.pTerm_mA;
-	iTerm = CT_Bus.CT_Balance_Bus.iTerm_mA;
-	dTerm = CT_Bus.CT_Balance_Bus.dTerm_mA;
-	MotorSpeedFdbk = HI_Bus.HI_VESC_Bus.MotorSpeed_rpm;
-	MotorCurrentFdbk = HI_Bus.HI_VESC_Bus.MotorCurrent_mA;
-
 
 	HAL_Delay(1);
 }

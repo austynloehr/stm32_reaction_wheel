@@ -19,14 +19,14 @@
 #define JUMP_UP_TIMEOUT 60
 
 // PID cals
+#define PID_PTERM 1000
 #define PID_ITERM 0
-#define PID_DTERM 200
+#define PID_DTERM 100
 #define PID_IMAX 0
 #define PID_RESET_VAL 0
 #define PID_ERROR_GAIN -1
-#define MOTOR_SPEED_GAIN 2.5
-#define SIZE_P_TBL 3
-#define SIZE_I_TBL 5
+#define MOTOR_SPEED_GAIN 2
+#define SIZE_SPEED_TBL 3
 
 // Control loop rate
 #define CT_BAL_FcnCallDivider 5  // Cycles
@@ -41,9 +41,10 @@ typedef struct PID_Input_Data{
 	float p;
 	float i;
 	float d;
+	bool dFiltEnable;
 	float iMin;
 	float iMax;
-	bool reset;
+	bool iReset;
 	float resetValue;
 	float dt;
 }PID_Input_Data_t;
@@ -72,8 +73,8 @@ CT_Balance_Bus_t CT_BalanceController(bool MotorEnable_bool, PrimaryState Curren
 	static bool OneShot_bool = true;
 
 	// Look up tables
-	static const float pTermTblIdx[SIZE_P_TBL] = {-1, 		0,			1};  // Roll angle (deg)
-	static const float pTermTblGain[SIZE_P_TBL] = {1000, 	1000, 		1000};  // P gain
+	static const float MtrSpeedTermTblIdx[SIZE_SPEED_TBL] = {-3, 0, 3};  // Roll angle (deg)
+	static const float MtrSpeedTermTblGain[SIZE_SPEED_TBL] = {2.5, 2.75, 2.5};  // Motor speed gain
 
 	bool JumpUpReset_bool;
 	PID_Output_Data_t PID_OutputData;
@@ -81,39 +82,39 @@ CT_Balance_Bus_t CT_BalanceController(bool MotorEnable_bool, PrimaryState Curren
 	int32_t MotorCurrentReq_mA;
 	int32_t MotorSpeedReq_rpm;
 	int32_t MotorSpeedControl_mA;
+	float MotorSpeedGain_na;
 
 	// Execute once
 	if (OneShot_bool){
 		// Initialize PI input instance values
 		PID_InputData.errorGain = PID_ERROR_GAIN;
 		PID_InputData.resetValue = PID_RESET_VAL;
-
-		PID_InputData.d = PID_DTERM;
+		PID_InputData.dFiltEnable = false;
+		PID_InputData.setPoint = 0;
+		PID_InputData.p = PID_PTERM;
 		PID_InputData.i = PID_ITERM;
-		PID_InputData.reset = false;
+		PID_InputData.d = PID_DTERM;
+		PID_InputData.iReset = false;
 		PID_InputData.iMin = -1 * PID_IMAX;
 		PID_InputData.iMax = PID_IMAX;
 		PID_InputData.resetValue = PID_RESET_VAL;
-		PID_InputData.setPoint = 0;
 
 		OneShot_bool = false;
 	}
 
-	// Execute every 5 cycles to make coherent with VESC input data
+	// Execute every 5 cycles to sync with VESC input data
 	if (FcnCallCnt % CT_BAL_FcnCallDivider == 0){
-
 
 		/* --------- PID CONTROL ---------  */
 		// Update PID inputs
-		PID_InputData.feedback = RollAng_deg;
-		PID_InputData.dt = dt * CT_BAL_FcnCallDivider;
-		PID_InputData.p = LookupTable1D(RollAng_deg, pTermTblIdx, pTermTblGain, SIZE_P_TBL);
+		PID_InputData.dt = dt * CT_BAL_FcnCallDivider;;
+		PID_InputData.feedback = RollAng_deg;;
 
 		// Control loop
-		MotorSpeedControl_mA = MOTOR_SPEED_GAIN * MotorSpeed_rpm;
+		MotorSpeedGain_na = LookupTable1D(RollAng_deg, MtrSpeedTermTblIdx, MtrSpeedTermTblGain, SIZE_SPEED_TBL);
+		MotorSpeedControl_mA = MotorSpeedGain_na * MotorSpeed_rpm;
 		PID_Resettable(&PID_InputData, &PID_OutputData);
 		MotorCurrentReq_mA = ((int32_t) floor(PID_OutputData.output)) + MotorSpeedControl_mA;
-
 
 		/* --------- JUMP UP CONTROL ---------  */
 		JumpUpReset_bool = !(CurrentState_enum == JumpUp);  // Hold process in reset until in JumpUp state
@@ -208,14 +209,21 @@ static int32_t JumpUpControl(bool Reset, float RollAng_deg){
 }
 
 static void PID_Resettable(PID_Input_Data_t *pInputData, PID_Output_Data_t *pOutputData){
+	// PID controller with integrator reset and derivative filter
 	float iVal;
+	float dVal;
+	float dValFilt;
 	static float lastFeedback = 0;
 	static float lastIVal = PID_RESET_VAL;
 	static bool iTermLimited = false;
+	float error;
+	float pTerm;
+	float iTerm;
+	float dTerm;
 
-	float error = pInputData->errorGain * (pInputData->setPoint - pInputData->feedback);
+	error = pInputData->errorGain * (pInputData->setPoint - pInputData->feedback);
 
-	float pTerm = pInputData->p * error;
+	pTerm = pInputData->p * error;
 
 	// Eulers method for integration
 	if (iTermLimited){
@@ -225,13 +233,13 @@ static void PID_Resettable(PID_Input_Data_t *pInputData, PID_Output_Data_t *pOut
 	}
 
 	// Reset integrator to reset value
-	if (pInputData->reset){
+	if (pInputData->iReset){
 		iVal= pInputData->resetValue;
 	}
 
 	lastIVal = iVal; // store for next integration step
 
-	float iTerm = pInputData->i * iVal;
+	iTerm = pInputData->i * iVal;
 	// Limit i term
 	if (iTerm < pInputData->iMin){
 		iTerm = pInputData->iMin;
@@ -243,9 +251,15 @@ static void PID_Resettable(PID_Input_Data_t *pInputData, PID_Output_Data_t *pOut
 		iTermLimited = false;
 	}
 
-	float dVal = (pInputData->feedback - lastFeedback) / pInputData->dt;
+	dVal = (pInputData->feedback - lastFeedback) / pInputData->dt;
 
-	float dTerm = dVal * pInputData->d;
+	arm_biquad_cascade_df1_f32(&S_PIDOutput, &dVal, &dValFilt, BLOCK_SIZE);
+
+	if (pInputData->dFiltEnable){
+		dVal = dValFilt;
+	}
+
+	dTerm = dVal * pInputData->d;
 
 	lastFeedback = pInputData->feedback;
 

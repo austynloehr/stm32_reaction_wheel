@@ -23,7 +23,7 @@ static bool StateMachineInit_bool = true;
 static RT_MODEL rtM_;
 static RT_MODEL *const rtMPtr = &rtM_; /* Real-time model */
 static DW rtDW;                        /* Observable states */
-static float StartBalanceThreshold_deg = 10;
+static float StartBalanceThreshold_deg = 20;
 static float StopBalanceThreshold_deg = 30;
 static PrimaryState CurrentState_enum;
 static bool MotorEnable_bool;

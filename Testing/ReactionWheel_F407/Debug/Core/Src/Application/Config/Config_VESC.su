@@ -1,2 +1,0 @@
-../Core/Src/Application/Config/Config_VESC.c:19:6:Config_VESC	64	static
-../Core/Src/Application/Config/Config_VESC.c:52:6:CAN_HAL_RxFifo0MsgPendingCallback	16	static

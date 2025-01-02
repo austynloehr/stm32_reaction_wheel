@@ -116,3 +116,7 @@ slprj/
 
 ReactionWheel_F412/Debug/
 *.pyc
+
+# Testing files
+Testing/**/
+Tools/**/

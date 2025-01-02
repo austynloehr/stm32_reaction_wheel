@@ -1,5 +1,0 @@
-../Core/Src/Application/Processing/PR_MPU6050.c:22:18:IP_MPU6050	112	static
-../Core/Src/Application/Processing/PR_MPU6050.c:37:28:MPU6050_CalcAccel	48	static
-../Core/Src/Application/Processing/PR_MPU6050.c:49:27:MPU6050_CalcGyro	48	static
-../Core/Src/Application/Processing/PR_MPU6050.c:61:14:clamp	40	static
-../Core/Src/Application/Processing/PR_MPU6050.c:89:25:MPU6050_IMUDataClamp	64	static
