@@ -33,7 +33,7 @@ def main():
 
     # Py2CCoeffArray('Resources/HpFirFIltCoef.txt', b=b1)
     # Py2CCoeffArray('Resources/LpFirFIltCoef.txt', b=b2)
-    Py2CCoeffArray('Resources/LpIirFIltCoef.txt', sos=sos1)
+    Py2CCoeffArray('Scripts/LpIirFIltCoef.txt', sos=sos1)
 
     print(sos1)
 

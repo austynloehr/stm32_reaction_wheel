@@ -90,7 +90,7 @@ CT_Balance_Bus_t CT_BalanceController(bool MotorEnable_bool, PrimaryState Curren
 		PID_InputData.errorGain = PID_ERROR_GAIN;
 		PID_InputData.resetValue = PID_RESET_VAL;
 		PID_InputData.dFiltEnable = false;
-		PID_InputData.setPoint = 0;
+		PID_InputData.setPoint = -0.55;
 		PID_InputData.p = PID_PTERM;
 		PID_InputData.i = PID_ITERM;
 		PID_InputData.d = PID_DTERM;
