@@ -110,9 +110,7 @@ Design/TestChassis/**/*.txt
 Hardware/**/*.ini
 
 # Simulink files
-PrimaryStateMachine_ert_rtw/
-StateRequest_ert_rtw/
-slprj/
+Simulink/*
 
 ReactionWheel_F412/Debug/
 *.pyc
