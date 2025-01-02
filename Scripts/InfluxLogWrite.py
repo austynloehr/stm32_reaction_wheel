@@ -14,7 +14,8 @@ if not os.path.isfile(path):
     raise FileNotFoundError
 
 write_bool = True
-measurement = "DataLogTest"
+check_sample_time = False
+
 bucket = "reaction_wheel"
 org = "dev"
 
@@ -43,8 +44,10 @@ categories = ['IMU','IMU','IMU','IMU','IMU',
 
 # Convert struct
 df = convert_log(format, lengths, labels, path)
-plt.plot(df.index, df['t'].diff())
-plt.show()
+
+if check_sample_time:
+    plt.plot(df.index, df['t'].diff())
+    plt.show()
 
 # theta_accel = CalcAccelAngle(df['AxFilt'], df['AyFilt'])
 # theta_gyro = CalcGyroAngle(df['t'],df['Wz'],theta_accel[0])
