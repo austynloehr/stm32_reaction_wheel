@@ -4,20 +4,20 @@ import matplotlib.pyplot as plt
 
 def main():
     # Time parameters
-    dt = .005
+    dt = .010
     fs = 1/dt
 
     # FIR filter parameters
     numtaps1 = 99
-    numtaps2 = 19
+    numtaps2 = 20
 
     # Generate filter coefficients
     #FIR filters
     b1 = signal.firwin(numtaps1, .5, fs=fs, window=('kaiser', 0), pass_zero='highpass')
-    b2 = signal.firwin(numtaps2, 2, fs=fs, window='hamming', pass_zero='lowpass')
+    b2 = signal.firwin(numtaps2, 20, fs=fs, window='hamming', pass_zero='lowpass')
    
     #IIR filters
-    sos1 = signal.butter(2, 7, btype='lowpass', output='sos', fs=fs)
+    sos1 = signal.butter(2, 20, btype='lowpass', output='sos', fs=fs)
     
     # Analyze response
     w1, h1 = signal.freqz(b1, fs=fs)
@@ -27,8 +27,8 @@ def main():
 
     # Plot response
     # plot_freq_response(w1, h1, Wc=.5, fs=fs)
-    # plot_freq_response(w2, h2, Wc=2, fs=fs)
-    plot_freq_response(w3, h3, Wc=7, fs=fs)
+    # plot_freq_response(w2, h2, Wc=20, fs=fs)
+    plot_freq_response(w3, h3, Wc=20, fs=fs)
 
 
     # Py2CCoeffArray('Resources/HpFirFIltCoef.txt', b=b1)

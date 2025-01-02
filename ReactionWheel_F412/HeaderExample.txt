@@ -1,0 +1,17 @@
+#include "main.h"
+
+/* Start Global Defines */
+
+/* End Global Defines */
+
+/* Start Global Variables */
+
+/* End Global Variables */
+
+/* Start Global Struct definitions */
+
+/* End Global Struct definitions */
+
+/* Start Function Prototypes */
+
+/* End Function Prototypes */

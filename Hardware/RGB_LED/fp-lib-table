@@ -1,5 +1,0 @@
-(fp_lib_table
-  (version 7)
-  (lib (name "MPM3610GQV-P")(type "KiCad")(uri "${KIPRJMOD}/Components/MPM3610GQV-P/footprints.pretty")(options "")(descr ""))
-  (lib (name "WirePad")(type "KiCad")(uri "${KIPRJMOD}/Components/WirePad/WirePad.pretty")(options "")(descr ""))
-)

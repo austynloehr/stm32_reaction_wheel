@@ -108,3 +108,13 @@ tempCodeRunnerFile*
 Design/TestChassis/**/*.txt
 *.zip
 Hardware/**/*.ini
+
+# Simulink files
+Simulink/*
+
+ReactionWheel_F412/Debug/
+*.pyc
+
+# Testing files
+Testing/**/
+Tools/**/

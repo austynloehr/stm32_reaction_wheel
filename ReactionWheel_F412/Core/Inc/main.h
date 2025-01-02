@@ -31,12 +31,19 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "arm_math.h"
+#include "stdbool.h"
+#include <stdint.h>
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+typedef struct Config_HAL_Bus{
+	I2C_HandleTypeDef *hi2c;
+	UART_HandleTypeDef huart2;
+	CAN_HandleTypeDef *hcan;
+}Config_HAL_Bus_t;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,6 +66,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define EnableBtn_Pin GPIO_PIN_4
+#define EnableBtn_GPIO_Port GPIOA
+#define GLED_Pin GPIO_PIN_7
+#define GLED_GPIO_Port GPIOA
+#define RLED_Pin GPIO_PIN_0
+#define RLED_GPIO_Port GPIOB
+#define PWM_LED_Pin GPIO_PIN_8
+#define PWM_LED_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
