@@ -13,31 +13,57 @@
 #define NUM_POLE_PAIRS NUM_POLES / 2
 #define MAX_SPEED_RPM 11000
 #define MAX_SPEED_ERPM MAX_SPEED_RPM * (NUM_POLES / 2)
+#define MAX_CURRENT_A 20000
 /* End defines */
 
-/* Start global variables */
-uint8_t SpeedReqPayload[4];
-/* End global variables */
-
 /* Start function prototypes */
-static void CANPackMotorSpeed(int32_t speed);
+static void CANPackMotorCmd(int32_t Command, uint8_t ReqPayload[]);
 static int8_t llsign(uint32_t x);
 /* End function prototypes */
 
 /* Start global function definitions */
-OP_VESC_Bus_t OP_VESC(int32_t MotorSpeed_rpm){
+OP_VESC_Bus_t OP_VESC(int32_t Request, MotorCtrlMode_enum_t ControlMode){
 	OP_VESC_Bus_t OP_VESC_Bus;
+	static int32_t Command;
+	static uint8_t ReqPayload[4];
 
-	int32_t MotorSpeed_erpm = MotorSpeed_rpm * (NUM_POLE_PAIRS);
+	// Request limiting based on control mode
+	switch(ControlMode){
+	case Speed:
+		int32_t MotorSpeed_erpm = Request * (NUM_POLE_PAIRS);
 
-	// Limit speed request
-	if(llabs(MotorSpeed_erpm) > MAX_SPEED_ERPM){
-		MotorSpeed_erpm = MAX_SPEED_ERPM * llsign(MotorSpeed_erpm);
+		// Limit speed request
+		if(llabs(MotorSpeed_erpm) > MAX_SPEED_ERPM){
+			MotorSpeed_erpm = MAX_SPEED_ERPM * llsign(MotorSpeed_erpm);
+		}
+
+		// Set command and update CAN ID for control mode
+		Command = MotorSpeed_erpm;
+		OP_VESC_Bus.CanID = 0x301;
+		break;
+
+	case Current:
+		int32_t MotorCurrent_mA = Request;
+
+		// Limit current request
+		if(llabs(MotorCurrent_mA) > MAX_CURRENT_A){
+			MotorCurrent_mA = MAX_CURRENT_A * llsign(MotorCurrent_mA);
+		}
+
+		// Set command and update CAN ID for control mode
+		Command = MotorCurrent_mA;
+		OP_VESC_Bus.CanID = 0x101;
+		break;
+
+	default:
+		Command = 0;
 	}
 
-	CANPackMotorSpeed(MotorSpeed_erpm);
+	// Pack CAN message
+	CANPackMotorCmd(Command, ReqPayload);
 
-	OP_VESC_Bus.pTxData = SpeedReqPayload;
+	// Store pointer to packed CAN message
+	OP_VESC_Bus.pTxData = ReqPayload;
 
 	return OP_VESC_Bus;
 }
@@ -45,11 +71,11 @@ OP_VESC_Bus_t OP_VESC(int32_t MotorSpeed_rpm){
 /* End global function definitions */
 
 /* Start static function definitions */
-static void CANPackMotorSpeed(int32_t speed){
-	SpeedReqPayload[0] = speed >> 24;
-	SpeedReqPayload[1] = (speed >> 16) & 0xFF;
-	SpeedReqPayload[2] = (speed >> 8) & 0xFF;
-	SpeedReqPayload[3] = speed & 0xFF;
+static void CANPackMotorCmd(int32_t Command, uint8_t* pReqPayload){
+	pReqPayload[0] = Command >> 24;
+	pReqPayload[1] = (Command >> 16) & 0xFF;
+	pReqPayload[2] = (Command >> 8) & 0xFF;
+	pReqPayload[3] = Command & 0xFF;
 }
 
 static int8_t llsign(uint32_t x){

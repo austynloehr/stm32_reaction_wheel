@@ -8,7 +8,7 @@
 
 /* Start Defines */
 #define UART_TIMEOUT 50 //MS
-#define HC05_FCN_CALL_DIV 5 //CYCLES
+#define HC05_FCN_CALL_DIV 7 //CYCLES
 /* End Defines */
 
 

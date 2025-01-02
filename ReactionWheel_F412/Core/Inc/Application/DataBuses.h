@@ -50,6 +50,7 @@ typedef struct Config_Bus{
 typedef struct HI_Bus{
 	HI_MPU6050_Bus_t HI_MPU6050_Bus;
 	HI_DiscreteInput_Bus_t HI_DiscreteInput_Bus;
+	HI_VESC_Bus_t HI_VESC_Bus;
 } HI_Bus_t;
 
 typedef struct IP_Bus{

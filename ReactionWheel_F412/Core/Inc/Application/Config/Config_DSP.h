@@ -21,10 +21,10 @@
 /* Start Global Variables */
 extern arm_biquad_casd_df1_inst_f32 S_Ax;
 extern arm_biquad_casd_df1_inst_f32 S_Ay;
-extern arm_biquad_casd_df1_inst_f32 S_PIOutput;
+extern arm_biquad_casd_df1_inst_f32 S_PIDOutput;
 extern float FiltAxState[IIR_STATE_LEN];
 extern float FiltAyState[IIR_STATE_LEN];
-extern float FiltPIOutputState[IIR_STATE_LEN];
+extern float FiltPIDOutputState[IIR_STATE_LEN];
 extern uint32_t blockSize;
 /* End Global Variables */
 

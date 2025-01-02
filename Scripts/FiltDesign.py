@@ -17,8 +17,8 @@ def main():
     b2 = signal.firwin(numtaps2, 20, fs=fs, window='hamming', pass_zero='lowpass')
    
     #IIR filters
-    sos1 = signal.butter(2, 20, btype='lowpass', output='sos', fs=fs)
-    b,a = signal.butter(2, 20, btype='lowpass', output='ba', fs=fs)
+    sos1 = signal.butter(2, 3, btype='lowpass', output='sos', fs=fs)
+    
     # Analyze response
     w1, h1 = signal.freqz(b1, fs=fs)
     w2, h2 = signal.freqz(b2, fs=fs)
@@ -27,8 +27,8 @@ def main():
 
     # Plot response
     # plot_freq_response(w1, h1, Wc=.5, fs=fs)
-    plot_freq_response(w2, h2, Wc=20, fs=fs)
-    plot_freq_response(w3, h3, Wc=20, fs=fs)
+    # plot_freq_response(w2, h2, Wc=20, fs=fs)
+    plot_freq_response(w3, h3, Wc=5, fs=fs)
 
 
     # Py2CCoeffArray('Resources/HpFirFIltCoef.txt', b=b1)

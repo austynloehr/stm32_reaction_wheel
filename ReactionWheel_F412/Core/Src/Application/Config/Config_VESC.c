@@ -42,7 +42,7 @@ void Config_VESC(CAN_HandleTypeDef *hcan){
 	HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
 
 	TxHeader.DLC = 4;
-	TxHeader.ExtId = 0x301;
+	TxHeader.ExtId = 0x101;
 	TxHeader.IDE = CAN_ID_EXT;
 	TxHeader.RTR = CAN_RTR_DATA;
 	TxHeader.StdId = 0;

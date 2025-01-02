@@ -29,143 +29,46 @@ client = InfluxDBClient(
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 # Struct format
-lengths = [4,4,4,4,4,4,4,4,4,4,4,4,1,1,1]
-format = 'IfffffffiiiiBBB'
-labels = ['t','Ax','Ay','Wz','AxFilt','AyFilt','RollAng','RollRate','MotorSpeedReq','pTerm','iTerm','dTerm','StateReq','CurrentState','MotorEnable']
+lengths = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,1,1,1,1]
+format = 'IfffffffiiiiiiiiBBBB'
+labels = ['t',
+          'Ax','Ay','Wz','AxFilt','AyFilt',
+          'RollAng','RollRate',
+          'MotorSpeed','MotorCurrent','MotorRequest','PIDTerm','MotorSpeedTerm','pTerm','iTerm','dTerm',
+          'MotoControlMode','StateReq','CurrentState','MotorEnable']
+categories = ['IMU','IMU','IMU','IMU','IMU',
+            'KalmanFilter','KalmanFilter',
+            'Balance','Balance','Balance','Balance','Balance','Balance','Balance','Balance',
+            'Status','Status','Status','Status']
 
 # Convert struct
 df = convert_log(format, lengths, labels, path)
 plt.plot(df.index, df['t'].diff())
 plt.show()
 
-theta_accel = CalcAccelAngle(df['AxFilt'], df['AyFilt'])
-theta_gyro = CalcGyroAngle(df['t'],df['Wz'],theta_accel[0])
-print(theta_accel[0])
+# theta_accel = CalcAccelAngle(df['AxFilt'], df['AyFilt'])
+# theta_gyro = CalcGyroAngle(df['t'],df['Wz'],theta_accel[0])
 
 # Get current time in ms
 t0 = round(time.time_ns() / int(1e6)) 
 
 num_rows = len(df.index)
-for idx, row in df.iterrows():
+for i, row in df.iterrows():
     timestamp  = t0 + int(row["t"])
-    # Create influx data points
-  
-    p1 = (
-        Point('IMU')
-            .field("Ax",row["Ax"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-   
-    p2 = (
-        Point('IMU')
-            .field("Ay",row["Ay"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-   
-    p3 = (
-        Point('IMU')
-            .field("Wz",row["Wz"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p4 = (
-        Point('Status')
-            .field("StateReq",row["StateReq"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p5 = (
-        Point('Status')
-            .field("CurrentState",row["CurrentState"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
+    for j, cat in enumerate(categories):
+        # Create influx data points
+        label = labels[j+1]  # Skip t
 
-    p6 = (
-        Point('Status')
-            .field("MotorEnable",row["MotorEnable"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p7 = (
-        Point('Balance')
-            .field("MotorSpeedReq",row["MotorSpeedReq"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p8 = (
-        Point('IMU')
-            .field("AxFilt",row["AxFilt"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-   
-    p9 = (
-        Point('IMU')
-            .field("AyFilt",row["AyFilt"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p10 = (
-        Point('KalmanFilter')
-            .field("RollAng",row["RollAng"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p11 = (
-        Point('KalmanFilter')
-            .field("RollRate",row["RollRate"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p12 = (
-        Point('IMU')
-            .field("AccelRollAng",theta_accel[idx]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p13 = (
-        Point('IMU')
-            .field("GyroRollAng",theta_gyro[idx]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p14 = (
-        Point('Balance')
-            .field("PTerm",row["pTerm"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p15 = (
-        Point('Balance')
-            .field("ITerm",row["iTerm"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-    
-    p16 = (
-        Point('Balance')
-            .field("DTerm",row["dTerm"]) \
-            .time(timestamp,write_precision=WritePrecision.MS)
-    )
-   
-    # Write data to influx
-    if write_bool:
-        print("Writing data to database...")
-        write_api.write(bucket=bucket, org=org, record=p1)
-        write_api.write(bucket=bucket, org=org, record=p2)
-        write_api.write(bucket=bucket, org=org, record=p3)
-        write_api.write(bucket=bucket, org=org, record=p4)
-        write_api.write(bucket=bucket, org=org, record=p5)
-        write_api.write(bucket=bucket, org=org, record=p6)
-        write_api.write(bucket=bucket, org=org, record=p7)
-        write_api.write(bucket=bucket, org=org, record=p8)
-        write_api.write(bucket=bucket, org=org, record=p9)
-        write_api.write(bucket=bucket, org=org, record=p10)
-        write_api.write(bucket=bucket, org=org, record=p11)
-        write_api.write(bucket=bucket, org=org, record=p12)
-        write_api.write(bucket=bucket, org=org, record=p13)
-        write_api.write(bucket=bucket, org=org, record=p14)
-        write_api.write(bucket=bucket, org=org, record=p15)
-        write_api.write(bucket=bucket, org=org, record=p16)
-        
-        pct_complete = (idx / num_rows) * 100
-        print(f"{pct_complete: .1f}% Complete")
-        
+        p = (
+            Point(cat)
+                .field(label,row[label]) \
+                .time(timestamp,write_precision=WritePrecision.MS)
+        )
+                
+        # Write data to influx
+        if write_bool:
+            print("Writing data to database...")
+            write_api.write(bucket=bucket, org=org, record=p)
+            
+            pct_complete = (i / num_rows) * 100
+            print(f"{pct_complete: .1f}% Complete")

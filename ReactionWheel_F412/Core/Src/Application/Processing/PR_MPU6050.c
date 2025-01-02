@@ -21,7 +21,7 @@ typedef struct IMUOffsetData{
 
 /* Start Global Variable Definition */
 const float g = 9.8066;
-static IMUOffsetData_t IMUOffsets = {-0.263885608,0.00692014489,0.0532098934, 0.495349556,-1.10231757,-0.103166953}; // Initial values
+static IMUOffsetData_t IMUOffsets = {-0.203655735,0.0263493527,0.189724252, 0.399456531,-1.28966808,-0.282766312}; // Initial values
 static IMUOffsetData_t *const pIMUOffsets = &IMUOffsets;
 /* End Global Variable Definition */
 
@@ -86,7 +86,7 @@ static void MPU6050_CalibrateOffsets(I2C_HandleTypeDef *hi2c, float accelSens, f
 
 	IMUOffsetData_t IMUOffsetData = {0,0,0,0,0,0};
 	IMUOffsetData_t *const pIMUOffsetData = &IMUOffsetData;
-	uint32_t numSamples = 10000;
+	uint32_t numSamples = 50000;
 	int8_t sign;
 
 	float sumAx = 0;

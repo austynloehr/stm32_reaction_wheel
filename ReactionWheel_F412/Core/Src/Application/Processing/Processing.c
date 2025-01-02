@@ -22,7 +22,7 @@ OP_Bus_t PR_OutputProcessing(CT_Bus_t CT_Bus){
 	OP_Bus_t OP_Bus;
 
 	OP_Bus.OP_HC05_Bus = OP_HC05(CT_Bus.CT_Log_Bus);
-	OP_Bus.OP_VESC_Bus = OP_VESC(CT_Bus.CT_Balance_Bus.MotorSpeedReq_rpm);
+	OP_Bus.OP_VESC_Bus = OP_VESC(CT_Bus.CT_Balance_Bus.MotorRequest_na, CT_Bus.CT_Balance_Bus.ControlMode);
 	OP_Bus.OP_DiscreteOutput_Bus = OP_DiscreteOutput(CT_Bus.CT_PrimaryStateMachine_Bus.GLEDStateReq_enum, CT_Bus.CT_PrimaryStateMachine_Bus.RLEDStateReq_enum);
 
 	return OP_Bus;
