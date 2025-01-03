@@ -8,19 +8,17 @@ This repo is used to store all development information for STM32 reaction wheel 
 - **Motor Controller:** VESC EDU
 - **CAN Transceiver:** NXP TJA1051/T3
 - **IMU:** MPU-6050
-- **BLE:** RN4871
+- **BLE:** HC-05
 
-## Software Architecture
-This project has been split up into several source files in an effort to abstract the core control logic from the specific hardware. The overall software archecture is described in the block diagrams below.
+## Project Structure
 
-### Application Block Diagram
-![Application Block Diagram](Resources/BlockDiagrams/STM32_Reaction_Wheel_Architecture-Application.drawio.png)
-
-### IO Block Diagram
-![IO Block Diagram](Resources/BlockDiagrams/STM32_Reaction_Wheel_Architecture-IO.drawio.png)
-
-### Processing Block Diagram
-![Processing Block Diagram](Resources/BlockDiagrams/STM32_Reaction_Wheel_Architecture-Processing.drawio.png)
-
-### Control Block Diagram
-![Control Block Diagram](Resources/BlockDiagrams/STM32_Reaction_Wheel_Architecture-Control.drawio.png)
+- Hardware: All hardware design files for this project
+    - Balance_Controller: All KiCAD design files  for controller PCB
+    - Reaction_Wheel: All NX CAD files for this project
+- Logs: Bluetooth data logs
+- ReactionWheel_F412: STM32CubeIDE project, contains all code for MCU
+    - Core: Core source code
+    - Drivers: STM32 HAL drivers
+    - Middlewares: External libraries
+- Resources: Markdowns and datasheets
+- Scripts: Scripts useful for design and data logging
