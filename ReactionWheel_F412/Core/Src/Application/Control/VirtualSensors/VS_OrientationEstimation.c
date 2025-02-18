@@ -15,7 +15,7 @@
 #define WZ_STD 8
 #define THETA_STD 8
 
-#define P_THETA 7
+#define P_THETA 45
 #define P_THETADOT 4
 #define P_THETADOTDOT 4
 
@@ -93,9 +93,9 @@ static KalmanFilterState_t* KalmanInit(void){
 						powf(DT_0,3)/2 * powf(Q_STD,2), 	powf(DT_0,2) * powf(Q_STD,2), 		DT_0 * powf(Q_STD,2),
 						powf(DT_0,2)/2 * powf(Q_STD,2), 		DT_0 * powf(Q_STD,2), 			1 * powf(Q_STD,2)};
 
-	static float P_data[9] = {P_THETA, 		0, 				0,
-						0, 			P_THETADOT, 		0,
-						0, 				0, 			P_THETADOTDOT};
+	static float P_data[9] = {powf(P_THETA,2), 		0, 				0,
+						0, 			powf(P_THETADOT,2), 		0,
+						0, 				0, 			powf(P_THETADOTDOT,2)};
 
 	static float R_data[4] = {powf(THETA_STD,2), 		0,
 								0, 			powf(WZ_STD,2)};
