@@ -1,0 +1,84 @@
+frames:
+  log_frame:
+    byteorder: "little"
+    payload:
+      - signal_name: "t"
+        datatype: "uint32"
+        pos: 0
+        length: 4
+      - signal_name: "Ax"
+        datatype: "float32"
+        pos: 4
+        length: 4
+      - signal_name: "Ay"
+        datatype: "float32"
+        pos: 8
+        length: 4
+      - signal_name: "Wz"
+        datatype: "float32"
+        pos: 12
+        length: 4
+      - signal_name: "AxFilt"
+        datatype: "float32"
+        pos: 16
+        length: 4
+      - signal_name: "AyFilt"
+        datatype: "float32"
+        pos: 20
+        length: 4
+      - signal_name: "RollAng"
+        datatype: "float32"
+        pos: 24
+        length: 4
+      - signal_name: "RollRate"
+        datatype: "float32"
+        pos: 28
+        length: 4
+      - signal_name: "MotorSpeed"
+        datatype: "int32"
+        pos: 32
+        length: 4
+      - signal_name: "MotorCurrent"
+        datatype: "int32"
+        pos: 36
+        length: 4
+      - signal_name: "MotorRequest"
+        datatype: "int32"
+        pos: 40
+        length: 4
+      - signal_name: "PIDTerm"
+        datatype: "int32"
+        pos: 44
+        length: 4
+      - signal_name: "MotorSpeedTerm"
+        datatype: "int32"
+        pos: 48
+        length: 4
+      - signal_name: "pTerm"
+        datatype: "int32"
+        pos: 52
+        length: 4
+      - signal_name: "iTerm"
+        datatype: "int32"
+        pos: 56
+        length: 4
+      - signal_name: "dTerm"
+        datatype: "int32"
+        pos: 60
+        length: 4
+      - signal_name: "MotorControlMode"
+        datatype: "uint8"
+        pos: 64
+        length: 1
+      - signal_name: "StateReq"
+        datatype: "uint8"
+        pos: 65
+        length: 1
+      - signal_name: "CurrentState"
+        datatype: "uint8"
+        pos: 66
+        length: 1
+      - signal_name: "MotorEnable"
+        datatype: "uint8"
+        pos: 67
+        length: 1
