@@ -11,7 +11,8 @@ REPO_DIR = os.path.dirname(SCRIPT_DIR)
 LOG_DIR = os.path.join(REPO_DIR, 'Logs')
 LOG_NAME = 'log' + time.strftime('_%Y%m%d_%H%M%S')
 LOG_PATH = os.path.join(LOG_DIR, LOG_NAME + '.parquet')
-BL_CONFIG_PATH = 'Tools/bl_frames.yaml'
+
+BL_CONFIG_PATH = os.path.join(REPO_DIR, 'ReactionWheel_F412/Core/Src/Application/Control/Controllers/CT_LoggingPayload.yaml')
 
 def main():
     global LOG_PATH
