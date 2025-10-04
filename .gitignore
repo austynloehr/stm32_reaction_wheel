@@ -118,5 +118,6 @@ ReactionWheel_F412/Debug/
 # Testing files
 Testing/**/
 
+Logs/
 venv/
 .DS_Store
