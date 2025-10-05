@@ -1,9 +1,11 @@
-import serial
 import os
-import argparse
 import sys
-import pandas as pd
 import time
+import serial
+import argparse
+import datetime
+import rerun as rr
+import pandas as pd
 from lib.bl_frame_handler import BLFrameHandler
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -15,16 +17,23 @@ LOG_PATH = os.path.join(LOG_DIR, LOG_NAME + '.parquet')
 BL_CONFIG_PATH = os.path.join(REPO_DIR, 'ReactionWheel_F412/Core/Src/Application/Control/Controllers/CT_LoggingPayload.yaml')
 
 def main():
+    '''Read serial data from HC-05 and optionally log to file and/or view live with Rerun.'''
+
     global LOG_PATH
     global BL_CONFIG_PATH
     
     parser = argparse.ArgumentParser(description='Read from HC-05 serial and log frames')
     parser.add_argument('--port', '-p', default='/dev/cu.HC-05')
     parser.add_argument('--baud', '-b', type=int, default=460800)
+    parser.add_argument('--log', '-l', action="store_true", help='Enable logging to file')
+    parser.add_argument('--view', '-v', action="store_true", help='Enable live viewing with Rerun')
     parser.add_argument('--log_path', '-o', type=str, default=LOG_PATH)
+
     args = parser.parse_args()
     port = args.port
     baud = args.baud
+    logging = args.log
+    viewing = args.view
     LOG_PATH = args.log_path
 
     # Initialize frame handler
@@ -42,6 +51,10 @@ def main():
     except Exception as e:
         print(f'Failed to open serial port {port}: {e}')
         sys.exit(2)
+
+    if viewing:
+        # Initialize Rerun
+        rr.init("Reaction_Wheel", spawn=True)
 
     # Begin reading and parsing data
     try:
@@ -66,19 +79,39 @@ def main():
                 if parsed:
                     cnt += 1
                     print(f'Frames Recieved: {cnt}', end='\r')
-                data_array.append(parsed)
+
+                    if viewing:
+                        # Log all signals to Rerun
+                        for key, value in parsed.items():
+                            if key == 't':
+                                continue
+                            rr.log(f"signal/{key}", rr.Scalars(value))
+
+                    if logging:
+                        # Append to data array for logging
+                        data_array.append(parsed)
+                        
     except KeyboardInterrupt:
         print('\n\nExiting…')
         print('May be prompted for sudo password to hang up bluetooth.')
     finally:
         ser.close()
 
-        print(f'\nCollected {len(data_array)} frames.')
-        df = pd.DataFrame(data_array)
-        df.to_parquet(LOG_PATH, index=True)
-        print(f'Wrote log to {LOG_PATH}')
+        if logging and data_array:
+            # Write recorded data to parquet file
+            print(f'\nCollected {len(data_array)} frames.')
+            df = pd.DataFrame(data_array)
+            df['t'] = df['t'] - df['t'][0]
+
+            # Add datetime column based on t
+            # Needed to get rerun compatible timestamps
+            start_time = datetime.datetime.now()
+            df["datetime"] = df["t"].apply(lambda ms: start_time + datetime.timedelta(milliseconds=ms))
+
+            df.to_parquet(LOG_PATH, index=True)
+            print(f'Wrote log to {LOG_PATH}')
         
-        # This tells macOS to hang up
+        # Hard hang up bluetooth, otherwise it may not reconnect
         os.system('sudo pkill -f bluetooth')
 
 if __name__ == '__main__':
