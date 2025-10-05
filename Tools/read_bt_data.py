@@ -45,12 +45,8 @@ def main():
     if log_frame is None:
         raise ValueError(f"log_frame definition not found in {BL_CONFIG_PATH}")
 
-    # Attempt to open serial port
-    try:
-        ser = serial.Serial(port, baud, timeout=1)
-    except Exception as e:
-        print(f'Failed to open serial port {port}: {e}')
-        sys.exit(2)
+    # Open serial port
+    ser = serial.Serial(port, baud, timeout=1)
 
     if viewing:
         # Initialize Rerun
