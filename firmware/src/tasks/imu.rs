@@ -22,7 +22,7 @@ pub async fn run(
 
         // Send IMU data to rx channel queue
         let msg = RxEvent::Imu(sample);
-        if let Err(_) = sender.try_send(msg) {
+        if sender.try_send(msg).is_err() {
             warn!("RxChannel full, dropping IMU sample");
         }
 
