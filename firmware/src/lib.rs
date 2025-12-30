@@ -2,10 +2,16 @@
 #![no_std]
 
 use defmt_rtt as _; // global logger
-
-// use embassy_stm32 as _; // memory layout
-
+use embassy_stm32 as _; // memory layout
 use panic_probe as _;
+
+pub mod behavior;
+pub mod channels;
+pub mod drivers;
+pub mod hardware;
+pub mod macros;
+pub mod tasks;
+pub mod types;
 
 // same panicking *behavior* as `panic-probe` but doesn't print a panic message
 // this prevents the panic message being printed *twice* when `defmt::panic` is invoked

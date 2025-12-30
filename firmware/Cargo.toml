@@ -40,6 +40,8 @@ embassy-futures = { version = "0.1.2" }
 embassy-embedded-hal = { version = "0.5.0", features = ["defmt"] }
 idsp = "0.15.0"
 nalgebra = { version = "0.33.0", default-features = false, features = ["libm"] }
+embedded-hal-async = "1.0.0"
+static_cell = "2.1.1"
 
 [dev-dependencies]
 defmt-test = "0.3"
