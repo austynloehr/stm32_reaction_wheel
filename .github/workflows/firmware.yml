@@ -1,0 +1,43 @@
+name: Firmware Build
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libudev-dev
+
+    # Automatically caches Cargo registry and build artifacts
+    - uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: firmware
+
+    - name: Setup Environment
+      run: |
+        cd firmware
+        chmod +x setup.sh
+        ./setup.sh
+
+    - name: Run Checks
+      run: |
+        cd firmware
+        cargo check
+
+    - name: Build Release
+      run: |
+        cd firmware
+        cargo build --release
