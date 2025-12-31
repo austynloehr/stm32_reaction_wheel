@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 common = { path = "../common" }
-defmt = "0.3"
+defmt = "1.0"

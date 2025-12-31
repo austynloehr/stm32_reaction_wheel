@@ -3,6 +3,7 @@
 //! This module provides a driver for the MPU6050 accelerometer and gyroscope.
 
 use common::types::*;
+use core::marker::PhantomData;
 
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
@@ -65,88 +66,111 @@ const DLPF_CFG: u8 = 0x00;
 // Gravity
 const G: f32 = 9.81;
 
-/// # MPU6050 Initialization
-///
-/// Wake up and configure MPU6050 for application.
-///
-/// # Arguments
-///
-/// * `i2c` - I2C device to use for communication
-///
-/// # Returns
-///
-/// * `Result<(), I::Error>` - Result of the initialization
-pub async fn init<I>(i2c: &mut I) -> Result<(), I::Error>
-where
-    I: embedded_hal_async::i2c::I2c,
-{
-    // Wake up (Clear sleep bit)
-    i2c.write(MPU6050_ADDR, &[PWR_MGMT1_REG, 0x00]).await?;
+// Typestate States
+pub struct Uninitialized;
+pub struct Initialized;
 
-    // Config Sample Rate Divider
-    i2c.write(MPU6050_ADDR, &[SMPRT_DIV_REG, SMPLRT_DIV])
-        .await?;
-
-    // Config DLPF
-    i2c.write(MPU6050_ADDR, &[DLPF_REG, DLPF_CFG]).await?;
-
-    // Config Accelerometer Range
-    i2c.write(MPU6050_ADDR, &[ACCEL_CONFIG_REG, (AFS_SEL as u8) << 3])
-        .await?;
-
-    // Config Gyroscope Range
-    i2c.write(MPU6050_ADDR, &[GYRO_CONFIG_REG, (FS_SEL as u8) << 3])
-        .await?;
-
-    Ok(())
+/// MPU6050 Driver Struct
+pub struct Mpu6050<I, State = Uninitialized> {
+    i2c: I,
+    _state: PhantomData<State>,
 }
 
-/// # MPU6050 Step
-///
-/// Read IMU data from MPU6050.
-///
-/// # Arguments
-///
-/// * `i2c` - I2C device to use for communication
-///
-/// # Returns
-///
-/// * `Result<ImuSample, I::Error>` - Result containing the IMU sample (accel and gyro data) or an error if the read fails.
-pub async fn step<I>(i2c: &mut I) -> Result<ImuSample, I::Error>
+impl<I> Mpu6050<I, Uninitialized>
 where
     I: embedded_hal_async::i2c::I2c,
 {
-    // Buffer for accel and gyro data
-    let mut accel_buf = [0u8; 6];
-    let mut gyro_buf = [0u8; 6];
+    /// Create a new MPU6050 driver instance
+    pub fn new(i2c: I) -> Self {
+        Self {
+            i2c,
+            _state: PhantomData,
+        }
+    }
 
-    // Read accel and gyro data
-    // Return error if read fails
-    i2c.write_read(MPU6050_ADDR, &[ACCEL_OUT_START_REG], &mut accel_buf)
-        .await?;
-    i2c.write_read(MPU6050_ADDR, &[GYRO_OUT_START_REG], &mut gyro_buf)
-        .await?;
+    /// # MPU6050 Initialization
+    ///
+    /// Wake up and configure MPU6050 for application.
+    /// consumes the uninitialized driver and returns an initialized one.
+    ///
+    /// # Returns
+    ///
+    /// * `Result<Mpu6050<I, Initialized>, I::Error>`
+    pub async fn init(mut self) -> Result<Mpu6050<I, Initialized>, I::Error> {
+        // Wake up (Clear sleep bit)
+        self.i2c.write(MPU6050_ADDR, &[PWR_MGMT1_REG, 0x00]).await?;
 
-    // Get conversion factors
-    let accel_scale = AFS_SEL.sensitivity();
-    let gyro_scale = FS_SEL.sensitivity();
+        // Config Sample Rate Divider
+        self.i2c
+            .write(MPU6050_ADDR, &[SMPRT_DIV_REG, SMPLRT_DIV])
+            .await?;
 
-    // Convert raw accel data to m/s^2
-    let accel_x = (i16::from_be_bytes([accel_buf[0], accel_buf[1]]) as f32) / accel_scale * G;
-    let accel_y = (i16::from_be_bytes([accel_buf[2], accel_buf[3]]) as f32) / accel_scale * G;
-    let accel_z = (i16::from_be_bytes([accel_buf[4], accel_buf[5]]) as f32) / accel_scale * G;
+        // Config DLPF
+        self.i2c.write(MPU6050_ADDR, &[DLPF_REG, DLPF_CFG]).await?;
 
-    let accel_vector = RawAccelVector::new(accel_x, accel_y, accel_z);
+        // Config Accelerometer Range
+        self.i2c
+            .write(MPU6050_ADDR, &[ACCEL_CONFIG_REG, (AFS_SEL as u8) << 3])
+            .await?;
 
-    // Convert raw gyro data to deg/s
-    let gyro_x = (i16::from_be_bytes([gyro_buf[0], gyro_buf[1]]) as f32) / gyro_scale;
-    let gyro_y = (i16::from_be_bytes([gyro_buf[2], gyro_buf[3]]) as f32) / gyro_scale;
-    let gyro_z = (i16::from_be_bytes([gyro_buf[4], gyro_buf[5]]) as f32) / gyro_scale;
+        // Config Gyroscope Range
+        self.i2c
+            .write(MPU6050_ADDR, &[GYRO_CONFIG_REG, (FS_SEL as u8) << 3])
+            .await?;
 
-    let gyro_vector = RawGyroVector::new(gyro_x, gyro_y, gyro_z);
+        Ok(Mpu6050 {
+            i2c: self.i2c,
+            _state: PhantomData,
+        })
+    }
+}
 
-    // Return IMU sample to task
-    Ok(ImuSample::new(accel_vector, gyro_vector))
+impl<I> Mpu6050<I, Initialized>
+where
+    I: embedded_hal_async::i2c::I2c,
+{
+    /// # MPU6050 Step
+    ///
+    /// Read IMU data from MPU6050.
+    ///
+    /// # Returns
+    ///
+    /// * `Result<ImuSample, I::Error>` - Result containing the IMU sample (accel and gyro data) or an error if the read fails.
+    pub async fn step(&mut self) -> Result<ImuSample, I::Error> {
+        // Buffer for accel and gyro data
+        let mut accel_buf = [0u8; 6];
+        let mut gyro_buf = [0u8; 6];
+
+        // Read accel and gyro data
+        // Return error if read fails
+        self.i2c
+            .write_read(MPU6050_ADDR, &[ACCEL_OUT_START_REG], &mut accel_buf)
+            .await?;
+        self.i2c
+            .write_read(MPU6050_ADDR, &[GYRO_OUT_START_REG], &mut gyro_buf)
+            .await?;
+
+        // Get conversion factors
+        let accel_scale = AFS_SEL.sensitivity();
+        let gyro_scale = FS_SEL.sensitivity();
+
+        // Convert raw accel data to m/s^2
+        let accel_x = (i16::from_be_bytes([accel_buf[0], accel_buf[1]]) as f32) / accel_scale * G;
+        let accel_y = (i16::from_be_bytes([accel_buf[2], accel_buf[3]]) as f32) / accel_scale * G;
+        let accel_z = (i16::from_be_bytes([accel_buf[4], accel_buf[5]]) as f32) / accel_scale * G;
+
+        let accel_vector = RawAccelVector::new(accel_x, accel_y, accel_z);
+
+        // Convert raw gyro data to deg/s
+        let gyro_x = (i16::from_be_bytes([gyro_buf[0], gyro_buf[1]]) as f32) / gyro_scale;
+        let gyro_y = (i16::from_be_bytes([gyro_buf[2], gyro_buf[3]]) as f32) / gyro_scale;
+        let gyro_z = (i16::from_be_bytes([gyro_buf[4], gyro_buf[5]]) as f32) / gyro_scale;
+
+        let gyro_vector = RawGyroVector::new(gyro_x, gyro_y, gyro_z);
+
+        // Return IMU sample to task
+        Ok(ImuSample::new(accel_vector, gyro_vector))
+    }
 }
 
 #[cfg(test)]
@@ -166,9 +190,10 @@ mod tests {
     }
 
     #[rstest]
-    fn test_init_success() {
+    fn test_imu_driver() {
         let mut mock = MockI2c::new();
 
+        // --- Init Expectations ---
         // 1. Wake up (PWR_MGMT1)
         mock.expect_transaction()
             .withf(|addr, ops| {
@@ -221,41 +246,26 @@ mod tests {
             .times(1)
             .returning(|_, _| Ok(()));
 
-        run_async(async {
-            init(&mut mock).await.unwrap();
-        });
-    }
-
-    #[rstest]
-    fn test_step_success() {
-        let mut mock = MockI2c::new();
-
-        // 1. Expect Read of Accelerometer Data
-        // We expect a Write (set register) then a Read (get data)
+        // --- Step Expectations ---
+        // 6. Read Accel
         mock.expect_transaction()
             .withf(|addr, ops| {
                 *addr == MPU6050_ADDR
                     && ops.len() == 2
-                    // First op: Write register address 0x3B
                     && matches!(&ops[0], Operation::Write(data) if data == &[ACCEL_OUT_START_REG])
-                    // Second op: Read 6 bytes
                     && matches!(&ops[1], Operation::Read(buf) if buf.len() == 6)
             })
             .times(1)
             .returning(|_, ops| {
-                // Inject data into read operation
                 if let Operation::Read(buf) = &mut ops[1] {
-                    // Simulate 1G on Z-axis.
-                    // Sensitivity G8 = 4096 LSB/g.
-                    // 1G = 4096 = 0x1000. Big Endian: [0x10, 0x00].
-                    // Data: X_H, X_L, Y_H, Y_L, Z_H, Z_L
+                    // Simulate 1G on Z-axis. 1G = 4096 (0x1000)
                     let data = [0, 0, 0, 0, 0x10, 0x00];
                     buf.copy_from_slice(&data);
                 }
                 Ok(())
             });
 
-        // 2. Expect Read of Gyroscope Data
+        // 7. Read Gyro
         mock.expect_transaction()
             .withf(|addr, ops| {
                 *addr == MPU6050_ADDR
@@ -266,14 +276,18 @@ mod tests {
             .times(1)
             .returning(|_, ops| {
                 if let Operation::Read(buf) = &mut ops[1] {
-                    // Simulate 0 deg/s on all axes
                     let data = [0; 6];
                     buf.copy_from_slice(&data);
                 }
                 Ok(())
             });
 
-        let sample = run_async(async { step(&mut mock).await.unwrap() });
+        // Run Test
+        let sample = run_async(async {
+            let imu = Mpu6050::new(mock);
+            let mut imu = imu.init().await.unwrap();
+            imu.step().await.unwrap()
+        });
 
         assert_relative_eq!(sample.accel().data().z, 9.81, epsilon = 0.1);
         assert_relative_eq!(sample.gyro().data().x, 0.0);

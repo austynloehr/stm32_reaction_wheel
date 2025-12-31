@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-defmt = "0.3"
+defmt = "1.0"
 nalgebra = { version = "0.33.0", default-features = false, features = ["libm"] }
 serde = { version = "1.0", default-features = false, features = ["derive"] }
+embedded-can = "0.4.1"

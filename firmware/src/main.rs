@@ -23,4 +23,12 @@ async fn main(_spawner: Spawner) {
             channels.input_channel.sender(),
         ))
         .unwrap();
+
+    // Run Motor Task
+    _spawner
+        .spawn(tasks::motor::run(
+            hardware_interfaces.motor,
+            channels.input_channel.sender(),
+        ))
+        .unwrap();
 }
