@@ -1,8 +1,6 @@
-use crate::{
-    drivers::mpu6050,
-    types::{RxEvent, SharedI2c},
-};
+use crate::types::{RxEvent, SharedI2c};
 use defmt::*;
+use drivers::mpu6050;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Sender};
 use embassy_time::{Duration, Timer};
 

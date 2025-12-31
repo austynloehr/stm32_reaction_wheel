@@ -45,6 +45,13 @@ jobs:
         cargo build --release
         cp target/thumbv7em-none-eabihf/release/firmware ../firmware.elf
 
+    - name: Run Tests
+      run: |
+        cd firmware/
+        # Dynamically determine the host target
+        HOST_TARGET=$(rustc -vV | sed -n 's|host: ||p')
+        cargo test -p drivers -p common -p behavior --target "$HOST_TARGET"
+
     - name: Upload Firmware
       uses: actions/upload-artifact@v4  
       with:

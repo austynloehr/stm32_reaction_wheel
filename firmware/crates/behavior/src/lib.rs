@@ -1,3 +1,5 @@
+#![no_std]
+
 pub mod balance_control;
 pub mod imu_calibration;
 pub mod request_arbitrator;

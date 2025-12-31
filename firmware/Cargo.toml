@@ -1,31 +1,20 @@
 [package]
-# TODO(1) fix `authors` and `name` if you didn't use `cargo-generate`
-authors = ["Austyn Loehr <austynloehr@outlook.com>"]
 name = "firmware"
+authors = ["Austyn Loehr <austynloehr@outlook.com>"]
 edition = "2024"
 version = "0.1.0"
 
-
-# To run all the tests via `cargo test` the tests need to be explicitly disabled for the binary targets
-# If you use a standard main.rs file the following is sufficient:
-# [[bin]]
-# name = "firmware"
-# test = false
-
-[[bin]]
-name = "firmware"
-path = "src/main.rs"
-test = false
-
-[lib]
-harness = false
-
-# needed for each integration test
-[[test]]
-name = "integration"
-harness = false
+[workspace]
+members = [
+    "crates/common",
+    "crates/drivers",
+    "crates/behavior",
+]
 
 [dependencies]
+drivers = { path = "crates/drivers" }
+behavior = { path = "crates/behavior" }
+common = { path = "crates/common" }
 cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.7"
 defmt = "1.0"
@@ -38,9 +27,6 @@ embassy-time = { version = "0.5.0", features = ["defmt", "defmt-timestamp-uptime
 embassy-sync = { version = "0.7.2", features = ["defmt"] }
 embassy-futures = { version = "0.1.2" }
 embassy-embedded-hal = { version = "0.5.0", features = ["defmt"] }
-idsp = "0.15.0"
-nalgebra = { version = "0.33.0", default-features = false, features = ["libm"] }
-embedded-hal-async = "1.0.0"
 static_cell = "2.1.1"
 
 [dev-dependencies]
