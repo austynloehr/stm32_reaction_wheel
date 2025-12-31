@@ -46,13 +46,13 @@ jobs:
         HOST_TARGET=$(rustc -vV | sed -n 's|host: ||p')
         cargo test -p drivers -p common -p behavior --target "$HOST_TARGET"
 
-    - name: Build Release
+    - name: Build
       run: |
         cd firmware
         cargo build --release
         cp target/thumbv7em-none-eabihf/release/firmware ../firmware.elf
 
-    - name: Upload Firmware
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v4  
       with:
         name: firmware
