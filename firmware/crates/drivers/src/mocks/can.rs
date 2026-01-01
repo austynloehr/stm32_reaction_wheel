@@ -16,7 +16,6 @@ pub struct TestFrame {
     pub data: [u8; 8],
     pub len: usize,
 }
-
 impl Frame for TestFrame {
     fn new(id: impl Into<Id>, data: &[u8]) -> Option<Self> {
         let mut bytes = [0u8; 8];

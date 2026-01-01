@@ -1,6 +1,6 @@
 use embedded_can::Frame;
 
-#[derive(Debug, Clone, Copy, defmt::Format)]
+#[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]
 pub struct MotorStatus {
     speed_rpm: i32,
     current_ma: i32,
