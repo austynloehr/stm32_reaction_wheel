@@ -21,4 +21,4 @@ This repo is used to store all development information for STM32 reaction wheel 
     - Drivers: STM32 HAL drivers
     - Middlewares: External libraries
 - Resources: Markdowns and datasheets
-- Scripts: Scripts useful for design and data logging.
+- Scripts: Scripts useful for design and data logging
