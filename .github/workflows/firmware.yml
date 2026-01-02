@@ -52,13 +52,15 @@ jobs:
       run: |
         cd firmware
         cargo build --release
-        cp target/thumbv7em-none-eabihf/release/firmware ../firmware.elf
+
+        # Zip elf with no folder structure
+        zip -j target/thumbv7em-none-eabihf/release/firmware.zip target/thumbv7em-none-eabihf/release/firmware
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v4  
+      uses: actions/upload-artifact@v4
       with:
         name: firmware
-        path: firmware.elf
+        path: firmware/target/thumbv7em-none-eabihf/release/firmware.zip
 
   release:
     runs-on: ubuntu-latest
@@ -71,8 +73,8 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: firmware
-        
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        files: firmware.elf
+        files: firmware.zip
