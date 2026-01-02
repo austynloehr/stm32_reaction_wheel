@@ -31,7 +31,7 @@ static_cell = "2.1.1"
 embedded-can = "0.4.1"
 
 [dev-dependencies]
-defmt-test = "0.3"
+defmt-test = "0.4.0"
 
 # cargo build/run
 [profile.dev]
