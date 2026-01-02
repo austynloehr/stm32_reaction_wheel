@@ -15,15 +15,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Branch
+      uses: actions/checkout@v4
 
     - name: Install System Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libudev-dev
+      uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: libudev-dev
+        version: 1.0
 
-    # Automatically caches Cargo registry and build artifacts
-    - uses: Swatinem/rust-cache@v2
+    - name: Restore Cargo Cache
+      uses: Swatinem/rust-cache@v2
       with:
         workspaces: firmware
 
