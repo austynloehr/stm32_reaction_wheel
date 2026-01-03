@@ -25,9 +25,7 @@ pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex
                 }
 
                 // Allow some self-healing
-                if error_count > 0 {
-                    error_count -= 1;
-                }
+                error_count = error_count.saturating_sub(1);
             }
             Err(_e) => {
                 // Allow some errors before panicking
