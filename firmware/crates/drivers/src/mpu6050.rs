@@ -129,14 +129,14 @@ impl<I> Mpu6050<I, Initialized>
 where
     I: embedded_hal_async::i2c::I2c,
 {
-    /// # MPU6050 Step
+    /// # MPU6050 Read
     ///
     /// Read IMU data from MPU6050.
     ///
     /// # Returns
     ///
     /// * `Result<ImuSample, I::Error>` - Result containing the IMU sample (accel and gyro data) or an error if the read fails.
-    pub async fn step(&mut self) -> Result<ImuSample, I::Error> {
+    pub async fn read(&mut self) -> Result<ImuSample, I::Error> {
         // Buffer for accel and gyro data
         let mut accel_buf = [0u8; 6];
         let mut gyro_buf = [0u8; 6];
@@ -286,7 +286,7 @@ mod tests {
         let sample = run_async(async {
             let imu = Mpu6050::new(mock);
             let mut imu = imu.init().await.unwrap();
-            imu.step().await.unwrap()
+            imu.read().await.unwrap()
         });
 
         assert_relative_eq!(sample.accel().data().z, 9.81, epsilon = 0.1);

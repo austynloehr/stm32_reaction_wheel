@@ -8,13 +8,15 @@ use firmware::{channels, hardware, tasks};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    info!("Hello World!");
+    info!("Starting Application...");
 
     // Initialize Hardware
     let hardware_interfaces = hardware::init();
+    info!("Hardware initialized!");
 
     // Initialize Channels
     let channels = channels::init();
+    info!("Channels initialized!");
 
     // Run IMU Task
     _spawner
@@ -31,4 +33,6 @@ async fn main(_spawner: Spawner) {
             channels.input_channel.sender(),
         ))
         .unwrap();
+
+    info!("All tasks started!");
 }

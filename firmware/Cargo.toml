@@ -5,11 +5,7 @@ edition = "2024"
 version = "0.1.0"
 
 [workspace]
-members = [
-    "crates/common",
-    "crates/drivers",
-    "crates/behavior",
-]
+members = ["crates/common", "crates/drivers", "crates/behavior"]
 
 [dependencies]
 drivers = { path = "crates/drivers" }
@@ -21,9 +17,25 @@ defmt = "1.0"
 defmt-rtt = "1.0"
 panic-probe = { version = "1.0", features = ["print-defmt"] }
 semihosting = "0.1.20"
-embassy-stm32 = { version = "0.4.0", features = ["defmt", "stm32f412cg", "unstable-pac", "memory-x", "time-driver-any", "exti", "chrono"] }
-embassy-executor = { version = "0.9.1", features = ["arch-cortex-m", "executor-thread", "defmt"] }
-embassy-time = { version = "0.5.0", features = ["defmt", "defmt-timestamp-uptime", "tick-hz-1_000_000"] }
+embassy-stm32 = { version = "0.4.0", features = [
+    "defmt",
+    "stm32f412cg",
+    "unstable-pac",
+    "memory-x",
+    "time-driver-any",
+    "exti",
+    "chrono",
+] }
+embassy-executor = { version = "0.9.1", features = [
+    "arch-cortex-m",
+    "executor-thread",
+    "defmt",
+] }
+embassy-time = { version = "0.5.0", features = [
+    "defmt",
+    "defmt-timestamp-uptime",
+    "tick-hz-1_000_000",
+] }
 embassy-sync = { version = "0.7.2", features = ["defmt"] }
 embassy-futures = { version = "0.1.2" }
 embassy-embedded-hal = { version = "0.5.0", features = ["defmt"] }
