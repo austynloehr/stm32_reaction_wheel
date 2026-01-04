@@ -1,5 +1,3 @@
-use embedded_can::Frame;
-
 #[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]
 pub struct MotorStatus {
     speed_rpm: i32,
@@ -33,8 +31,79 @@ pub enum RxEvent {
 
 #[derive(Debug, Clone, Copy, defmt::Format)]
 pub enum TxEvent {
-    Motor(u32),
+    Motor(MotorRequest),
     Logger(u32),
+}
+
+#[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]
+pub enum MotorCtrlMode {
+    Current,
+    Speed,
+}
+
+#[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]
+pub struct MotorRequest {
+    mode: MotorCtrlMode,
+    value: i32,
+}
+
+impl MotorRequest {
+    pub fn new(mode: MotorCtrlMode, value: i32) -> Self {
+        Self { mode, value }
+    }
+
+    pub fn mode(&self) -> MotorCtrlMode {
+        self.mode
+    }
+
+    pub fn value(&self) -> i32 {
+        self.value
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct CanFrame {
+    id: u32,
+    extended: bool,
+    data: [u8; 8],
+    dlc: u8,
+}
+
+impl CanFrame {
+    pub fn new(id: u32, extended: bool, data: [u8; 8], dlc: u8) -> Self {
+        Self {
+            id,
+            extended,
+            data,
+            dlc,
+        }
+    }
+
+    pub fn id(&self) -> u32 {
+        self.id
+    }
+
+    pub fn is_extended(&self) -> bool {
+        self.extended
+    }
+
+    pub fn data(&self) -> &[u8] {
+        &self.data[..self.dlc as usize]
+    }
+
+    pub fn dlc(&self) -> u8 {
+        self.dlc
+    }
+}
+
+impl defmt::Format for CanFrame {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "CanFrame {{ id: 0x{=u32:x}, data: {=[u8]:x} }}",
+            self.id,
+            &self.data[..self.dlc as usize],
+        )
+    }
 }
 
 crate::define_3d_mux!(
@@ -72,17 +141,4 @@ impl ImuSample {
     pub fn gyro(&self) -> RawGyroVector {
         self.gyro
     }
-}
-
-/// Async CAN trait (needed because there is no standard one in embedded-hal-async yet)
-#[allow(async_fn_in_trait)]
-pub trait AsyncCanHal {
-    type Error: core::fmt::Debug;
-    type Frame: Frame;
-
-    /// Transmit a frame asynchronously
-    async fn write(&mut self, frame: &Self::Frame) -> Result<(), Self::Error>;
-
-    /// Receive a frame asynchronously
-    async fn read(&mut self) -> Result<Self::Frame, Self::Error>;
 }

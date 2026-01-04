@@ -20,8 +20,8 @@ pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex
                 debug!("IMU: {} {}", sample.accel(), sample.gyro());
 
                 // Send IMU data to rx channel queue
-                if let Err(_e) = sender.try_send(RxEvent::Imu(sample)) {
-                    debug!("RxChannel Full");
+                if let Err(e) = sender.try_send(RxEvent::Imu(sample)) {
+                    debug!("{:?}", e);
                 }
 
                 // Allow some self-healing

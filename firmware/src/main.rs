@@ -4,7 +4,7 @@
 use defmt::*;
 use embassy_executor::Spawner;
 use firmware as _; // Link panic handler and other global setup from lib.rs
-use firmware::{channels, hardware, tasks};
+use firmware::{channels, hardware, signals, tasks};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
@@ -15,8 +15,12 @@ async fn main(_spawner: Spawner) {
     info!("Hardware initialized!");
 
     // Initialize Channels
-    let channels = channels::init();
+    let channels = channels::TaskChannels::take().unwrap();
     info!("Channels initialized!");
+
+    // Initialize Signals
+    let signals = signals::TaskSignals::take().unwrap();
+    info!("Signals initialized!");
 
     // Run IMU Task
     _spawner
@@ -26,11 +30,22 @@ async fn main(_spawner: Spawner) {
         ))
         .unwrap();
 
-    // Run Motor Task
+    // Run CAN Task
+    _spawner
+        .spawn(tasks::can::run(
+            hardware_interfaces.can,
+            signals.vesc_status_tx,
+            channels.can_tx_channel.receiver(),
+        ))
+        .unwrap();
+
+    // Run motor task
     _spawner
         .spawn(tasks::motor::run(
-            hardware_interfaces.motor,
             channels.input_channel.sender(),
+            channels.can_tx_channel.sender(),
+            signals.vesc_status_rx,
+            signals.motor_request_rx,
         ))
         .unwrap();
 

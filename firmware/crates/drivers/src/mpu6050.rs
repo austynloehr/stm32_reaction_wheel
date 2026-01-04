@@ -189,11 +189,7 @@ mod tests {
         futures::executor::block_on(f)
     }
 
-    #[rstest]
-    fn test_imu_driver() {
-        let mut mock = MockI2c::new();
-
-        // --- Init Expectations ---
+    fn configure_init_expectations(mock: &mut MockI2c) {
         // 1. Wake up (PWR_MGMT1)
         mock.expect_transaction()
             .withf(|addr, ops| {
@@ -245,9 +241,56 @@ mod tests {
             })
             .times(1)
             .returning(|_, _| Ok(()));
+    }
 
-        // --- Step Expectations ---
+    #[rstest]
+    fn test_init() {
+        let mut mock = MockI2c::new();
+        configure_init_expectations(&mut mock);
+
+        run_async(async {
+            let imu = Mpu6050::new(mock);
+            imu.init().await.unwrap();
+        });
+    }
+
+    #[rstest]
+    #[case::zeros(
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        (0.0, 0.0, 0.0),
+        (0.0, 0.0, 0.0)
+    )]
+    #[case::one_g_z([0, 0, 0, 0, 0x10, 0x00], [0; 6], (0.0, 0.0, 9.81), (0.0, 0.0, 0.0))]
+    #[case::neg_one_g_z([0, 0, 0, 0, 0xF0, 0x00], [0; 6], (0.0, 0.0, -9.81), (0.0, 0.0, 0.0))]
+    #[case::one_g_y([0, 0, 0x10, 0x00, 0, 0], [0; 6], (0.0, 9.81, 0.0), (0.0, 0.0, 0.0))]
+    #[case::neg_one_g_y([0, 0, 0xF0, 0x00, 0, 0], [0; 6], (0.0, -9.81, 0.0), (0.0, 0.0, 0.0))]
+    #[case::one_g_x([0x10, 0x00, 0, 0, 0, 0], [0; 6], (9.81, 0.0, 0.0), (0.0, 0.0, 0.0))]
+    #[case::neg_one_g_x([0xF0, 0x00, 0, 0, 0, 0], [0; 6], (-9.81, 0.0, 0.0), (0.0, 0.0, 0.0))]
+    #[case::max_positive(
+        [0x7F, 0xFF, 0x7F, 0xFF, 0x7F, 0xFF],
+        [0x7F, 0xFF, 0x7F, 0xFF, 0x7F, 0xFF],
+        (78.48, 78.48, 78.48),
+        (1997.98, 1997.98, 1997.98)
+    )]
+    #[case::max_negative(
+        [0x80, 0x00, 0x80, 0x00, 0x80, 0x00],
+        [0x80, 0x00, 0x80, 0x00, 0x80, 0x00],
+        (-78.48, -78.48, -78.48),
+        (-1998.05, -1998.05, -1998.05)
+    )]
+    fn test_read(
+        #[case] accel_bytes: [u8; 6],
+        #[case] gyro_bytes: [u8; 6],
+        #[case] expected_accel: (f32, f32, f32),
+        #[case] expected_gyro: (f32, f32, f32),
+    ) {
+        let mut mock = MockI2c::new();
+        configure_init_expectations(&mut mock);
+
         // 6. Read Accel
+        // We must clone the bytes because the closure needs to own them for valid lifetime in 'returning'
+        let accel_bytes_clone = accel_bytes;
         mock.expect_transaction()
             .withf(|addr, ops| {
                 *addr == MPU6050_ADDR
@@ -256,16 +299,15 @@ mod tests {
                     && matches!(&ops[1], Operation::Read(buf) if buf.len() == 6)
             })
             .times(1)
-            .returning(|_, ops| {
+            .returning(move |_, ops| {
                 if let Operation::Read(buf) = &mut ops[1] {
-                    // Simulate 1G on Z-axis. 1G = 4096 (0x1000)
-                    let data = [0, 0, 0, 0, 0x10, 0x00];
-                    buf.copy_from_slice(&data);
+                    buf.copy_from_slice(&accel_bytes_clone);
                 }
                 Ok(())
             });
 
         // 7. Read Gyro
+        let gyro_bytes_clone = gyro_bytes;
         mock.expect_transaction()
             .withf(|addr, ops| {
                 *addr == MPU6050_ADDR
@@ -274,10 +316,9 @@ mod tests {
                     && matches!(&ops[1], Operation::Read(buf) if buf.len() == 6)
             })
             .times(1)
-            .returning(|_, ops| {
+            .returning(move |_, ops| {
                 if let Operation::Read(buf) = &mut ops[1] {
-                    let data = [0; 6];
-                    buf.copy_from_slice(&data);
+                    buf.copy_from_slice(&gyro_bytes_clone);
                 }
                 Ok(())
             });
@@ -289,7 +330,12 @@ mod tests {
             imu.read().await.unwrap()
         });
 
-        assert_relative_eq!(sample.accel().data().z, 9.81, epsilon = 0.1);
-        assert_relative_eq!(sample.gyro().data().x, 0.0);
+        assert_relative_eq!(sample.accel().data().x, expected_accel.0, epsilon = 0.1);
+        assert_relative_eq!(sample.accel().data().y, expected_accel.1, epsilon = 0.1);
+        assert_relative_eq!(sample.accel().data().z, expected_accel.2, epsilon = 0.1);
+
+        assert_relative_eq!(sample.gyro().data().x, expected_gyro.0, epsilon = 0.1);
+        assert_relative_eq!(sample.gyro().data().y, expected_gyro.1, epsilon = 0.1);
+        assert_relative_eq!(sample.gyro().data().z, expected_gyro.2, epsilon = 0.1);
     }
 }

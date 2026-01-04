@@ -1,200 +1,177 @@
-use common::types::AsyncCanHal;
-use embedded_can::{ExtendedId, Frame, Id};
+use common::types::{CanFrame, MotorCtrlMode, MotorStatus};
+#[cfg(not(test))]
+use defmt::*;
 
-use common::types::MotorStatus;
+#[cfg(test)]
+use log::error;
 
-#[derive(Debug, Clone, Copy)]
-pub enum VescMode {
-    Current,
-    Speed,
+#[derive(Debug, Copy, Clone)]
+pub struct Vesc {}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+#[cfg_attr(not(test), derive(defmt::Format))]
+pub enum VescError {
+    InvalidDataLength,
 }
 
-/// VESC Driver Struct
-pub struct Vesc<C> {
-    can: C,
+impl Default for Vesc {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
-const MAX_CURRENT_MA: i32 = 20000;
-const MAX_SPEED_RPM: i32 = 11000;
-const NUM_POLES: i32 = 14;
-const MAX_SPEED_ERPM: i32 = MAX_SPEED_RPM * (NUM_POLES / 2);
+impl Vesc {
+    pub const MAX_CURRENT_MA: i32 = 20000;
+    pub const MAX_SPEED_RPM: i32 = 11000;
+    pub const NUM_POLES: i32 = 14;
+    pub const MAX_SPEED_ERPM: i32 = (Self::MAX_SPEED_RPM) * (Self::NUM_POLES / 2);
+    pub const SPEED_CMD_ID: u32 = 0x301;
+    pub const CURRENT_CMD_ID: u32 = 0x101;
 
-impl<C> Vesc<C>
-where
-    C: AsyncCanHal,
-{
-    /// Create a new VESC driver instance
-    pub fn new(can: C) -> Self {
-        Self { can }
+    pub fn new() -> Self {
+        Self {}
     }
 
-    /// Attempt to read a VESC status message, loops until a valid message is received
-    pub async fn read_status(&mut self) -> Result<MotorStatus, C::Error> {
-        loop {
-            let frame = self.can.read().await?;
+    /// Unpack a VESC status message
+    pub fn unpack_status(self, frame: CanFrame) -> Result<MotorStatus, VescError> {
+        let data = frame.data();
 
-            let id = frame.id();
-            let data = frame.data();
-
-            if id == Id::Extended(ExtendedId::new(0x901).unwrap()) {
-                if data.len() < 6 {
-                    continue;
-                }
-                // Parse speed (big-endian)
-                let speed_erpm = i32::from_be_bytes([data[0], data[1], data[2], data[3]]);
-
-                // Parse current (big-endian)
-                let current_da = i16::from_be_bytes([data[4], data[5]]) as i32;
-                let current_ma = current_da * 100;
-
-                // Convert erpm to rpm
-                let speed_rpm = speed_erpm / (NUM_POLES / 2);
-
-                return Ok(MotorStatus::new(speed_rpm, current_ma));
-            }
+        if data.len() < 6 {
+            error!("Attemped to unpack VESC status message with invalid data length");
+            return Err(VescError::InvalidDataLength);
         }
+
+        // Parse speed (big-endian)
+        let speed_erpm = i32::from_be_bytes([data[0], data[1], data[2], data[3]]);
+        let speed_rpm = speed_erpm / (Self::NUM_POLES / 2);
+
+        // Parse current (big-endian)
+        let current_da = i16::from_be_bytes([data[4], data[5]]) as i32;
+        let current_ma = current_da * 100;
+
+        Ok(MotorStatus::new(speed_rpm, current_ma))
     }
 
-    /// Send a VESC command
-    pub async fn send_command(&mut self, mode: VescMode, request: i32) -> Result<(), C::Error> {
-        let (can_id, command) = match mode {
-            VescMode::Current => {
-                let id = Id::Extended(ExtendedId::new(0x101).unwrap());
-                let cmd = request.clamp(-MAX_CURRENT_MA, MAX_CURRENT_MA);
+    pub fn create_command_frame(self, mode: MotorCtrlMode, request: i32) -> CanFrame {
+        // Get the ID and limit command based on the mode
+        let (id, command) = match mode {
+            MotorCtrlMode::Current => {
+                let id = Self::CURRENT_CMD_ID;
+                let cmd = request.clamp(-Self::MAX_CURRENT_MA, Self::MAX_CURRENT_MA);
                 (id, cmd)
             }
-            VescMode::Speed => {
-                let id = Id::Extended(ExtendedId::new(0x301).unwrap());
-                let erpm = request * (NUM_POLES / 2);
-                let cmd = erpm.clamp(-MAX_SPEED_ERPM, MAX_SPEED_ERPM);
+            MotorCtrlMode::Speed => {
+                let id = Self::SPEED_CMD_ID;
+                let erpm = request * (Self::NUM_POLES / 2);
+                let cmd = erpm.clamp(-Self::MAX_SPEED_ERPM, Self::MAX_SPEED_ERPM);
                 (id, cmd)
             }
         };
 
         // Convert command to bytes (big-endian)
-        let payload = command.to_be_bytes();
+        let mut data = [0u8; 8];
+        data[..4].copy_from_slice(&command.to_be_bytes());
 
-        // Try to create a frame and send it
-        if let Some(frame) = C::Frame::new(can_id, &payload) {
-            self.can.write(&frame).await?;
-        }
-        Ok(())
+        CanFrame::new(id, true, data, 4)
+    }
+
+    pub fn create_fail_safe_frame(self) -> CanFrame {
+        CanFrame::new(Self::CURRENT_CMD_ID, true, [0u8; 8], 4)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::mocks::can::{MockCan, TestFrame};
-    use embedded_can::{ExtendedId, Id};
-    use mockall::predicate::*;
+    use super::{CanFrame, MotorCtrlMode, MotorStatus, Vesc, VescError};
+
     use rstest::*;
 
-    /// Helper function to run async functions without runtime
-    fn run_async<F, T>(f: F) -> T
-    where
-        F: std::future::Future<Output = T>,
-    {
-        futures::executor::block_on(f)
-    }
-
-    /// Helper function to create a test command frame
-    fn create_test_frame(mode: VescMode, request: i32) -> TestFrame {
-        match mode {
-            VescMode::Current => {
-                let id = Id::Extended(ExtendedId::new(0x101).unwrap());
-                let cmd: i32 = request.clamp(-MAX_CURRENT_MA, MAX_CURRENT_MA);
-                let payload: [u8; 4] = cmd.to_be_bytes();
-                TestFrame::new(id, &payload).unwrap()
-            }
-            VescMode::Speed => {
-                let id = Id::Extended(ExtendedId::new(0x301).unwrap());
-                let erpm: i32 = request * (NUM_POLES / 2);
-                let cmd: i32 = erpm.clamp(-MAX_SPEED_ERPM, MAX_SPEED_ERPM);
-                let payload: [u8; 4] = cmd.to_be_bytes();
-                TestFrame::new(id, &payload).unwrap()
-            }
-        }
-    }
-
-    /// Test that read_status properly parses a VESC status message
     #[rstest]
-    fn test_read_status() {
-        let mut mock = MockCan::new();
+    #[case::zeros(0, 0)]
+    #[case::positive(100, 100)]
+    #[case::negative(-100, -100)]
+    #[case::max_values(Vesc::MAX_SPEED_RPM, Vesc::MAX_CURRENT_MA)]
+    #[case::min_values(-Vesc::MAX_SPEED_RPM, -Vesc::MAX_CURRENT_MA)]
+    fn test_unpack_status(#[case] speed_rpm: i32, #[case] current_ma: i32) {
+        let vesc = Vesc::new();
 
-        // Create test data
-        let speed_erpm: i32 = 14000;
-        let current_da: i16 = 150;
-        let mut payload: [u8; 6] = [0u8; 6];
-        let speed_bytes: [u8; 4] = speed_erpm.to_be_bytes();
-        let current_bytes: [u8; 2] = current_da.to_be_bytes();
-        payload[0..4].copy_from_slice(&speed_bytes);
-        payload[4..6].copy_from_slice(&current_bytes);
+        // Construct frame with test data
+        let mut data = [0u8; 8];
+        let speed_erpm = speed_rpm * (Vesc::NUM_POLES / 2);
+        let current_da = (current_ma / 100) as i16;
 
-        let frame =
-            TestFrame::new(Id::Extended(ExtendedId::new(0x901).unwrap()), &payload).unwrap();
+        data[..4].copy_from_slice(&speed_erpm.to_be_bytes());
+        data[4..6].copy_from_slice(&current_da.to_be_bytes());
 
-        // Set read expectation and inject return frame
-        mock.expect_read().times(1).return_const(Ok(frame));
+        let frame = CanFrame::new(0x901, true, data, 8);
 
-        // Call read_status
-        let mut vesc = Vesc::new(mock);
-        let status = run_async(async { vesc.read_status().await });
+        // Unpack frame
+        let status = vesc.unpack_status(frame);
 
-        // Check result
-        let expected_speed: i32 = speed_erpm / (NUM_POLES / 2);
-        let expected_current: i32 = current_da as i32 * 100;
-        assert_eq!(
-            status,
-            Ok(MotorStatus::new(expected_speed, expected_current))
-        );
+        // Assert unpacked values match expected test data
+        assert_eq!(status, Ok(MotorStatus::new(speed_rpm, current_ma)));
     }
 
-    /// Test that send_command pack the request correctly and send to proper can ID
     #[rstest]
-    #[case::current_mode(VescMode::Current, 1500)]
-    #[case::speed_mode(VescMode::Speed, 2000)]
-    fn test_send_command(#[case] mode: VescMode, #[case] request: i32) {
-        let mut mock = MockCan::new();
-
-        let expected_frame = create_test_frame(mode, request);
-
-        // Set write expectation and inject return frame
-        mock.expect_write()
-            .with(eq(expected_frame))
-            .times(1)
-            .return_const(Ok(()));
-
-        // Call send_command
-        let mut vesc = Vesc::new(mock);
-        let result = run_async(async { vesc.send_command(mode, request).await });
-
-        // Check result
-        assert_eq!(result, Ok(()));
+    fn test_unpack_status_invalid_len() {
+        let vesc = Vesc::new();
+        // Create frame with DLC = 5 (less than 6)
+        let frame = CanFrame::new(0x901, true, [0u8; 8], 5);
+        let status = vesc.unpack_status(frame);
+        assert_eq!(status, Err(VescError::InvalidDataLength));
     }
 
-    /// Test that send_command clamps the request to the maximum values
     #[rstest]
-    #[case::max_current(VescMode::Current, MAX_CURRENT_MA + 100, MAX_CURRENT_MA)]
-    #[case::min_current(VescMode::Current, -MAX_CURRENT_MA - 100, -MAX_CURRENT_MA)]
-    #[case::max_speed(VescMode::Speed, MAX_SPEED_ERPM + 100, MAX_SPEED_ERPM)]
-    #[case::min_speed(VescMode::Speed, -MAX_SPEED_ERPM - 100, -MAX_SPEED_ERPM)]
-    fn test_command_limits(#[case] mode: VescMode, #[case] request: i32, #[case] expected: i32) {
-        let mut mock = MockCan::new();
+    #[case::current(MotorCtrlMode::Current, 100, Vesc::CURRENT_CMD_ID)]
+    #[case::speed(MotorCtrlMode::Speed, 1000, Vesc::SPEED_CMD_ID)]
+    fn test_create_command_frame(
+        #[case] mode: MotorCtrlMode,
+        #[case] val: i32,
+        #[case] expected_id: u32,
+    ) {
+        let vesc = Vesc::new();
+        let frame = vesc.create_command_frame(mode, val);
+        assert_eq!(frame.id(), expected_id);
 
-        let expected_frame = create_test_frame(mode, expected);
+        let expected_cmd = match mode {
+            MotorCtrlMode::Current => val,
+            MotorCtrlMode::Speed => val * (Vesc::NUM_POLES / 2),
+        };
 
-        // Set write expectation and inject return frame
-        mock.expect_write()
-            .with(eq(expected_frame))
-            .times(1)
-            .return_const(Ok(()));
+        let mut expected = [0u8; 8];
+        expected[..4].copy_from_slice(&expected_cmd.to_be_bytes());
+        assert_eq!(frame.data(), &expected[..4]);
+    }
 
-        // Call send_command
-        let mut vesc = Vesc::new(mock);
-        let result = run_async(async { vesc.send_command(mode, request).await });
+    #[rstest]
+    fn test_create_fail_safe_frame() {
+        let vesc = Vesc::new();
+        let frame = vesc.create_fail_safe_frame();
+        assert_eq!(frame.id(), 0x101);
+        assert_eq!(frame.data(), &[0u8, 0u8, 0u8, 0u8]);
+    }
 
-        // Check result
-        assert_eq!(result, Ok(()));
+    #[rstest]
+    #[case::max_current(MotorCtrlMode::Current, Vesc::MAX_CURRENT_MA + 100, Vesc::MAX_CURRENT_MA)]
+    #[case::min_current(MotorCtrlMode::Current, -Vesc::MAX_CURRENT_MA - 100, -Vesc::MAX_CURRENT_MA)]
+    #[case::max_speed(MotorCtrlMode::Speed, Vesc::MAX_SPEED_RPM + 100, Vesc::MAX_SPEED_RPM)]
+    #[case::min_speed(MotorCtrlMode::Speed, -(Vesc::MAX_SPEED_RPM + 100), -Vesc::MAX_SPEED_RPM)]
+    fn test_command_limits(
+        #[case] mode: MotorCtrlMode,
+        #[case] request: i32,
+        #[case] expected_val: i32,
+    ) {
+        let vesc = Vesc::new();
+        let frame = vesc.create_command_frame(mode, request);
+
+        let (expected_cmd, expected_id) = match mode {
+            MotorCtrlMode::Current => (expected_val, Vesc::CURRENT_CMD_ID),
+            MotorCtrlMode::Speed => (expected_val * (Vesc::NUM_POLES / 2), Vesc::SPEED_CMD_ID),
+        };
+
+        let mut expected_data = [0u8; 8];
+        expected_data[..4].copy_from_slice(&expected_cmd.to_be_bytes());
+        assert_eq!(frame.data(), &expected_data[..4]);
+        assert_eq!(frame.id(), expected_id);
     }
 }
