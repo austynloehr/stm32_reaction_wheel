@@ -6,7 +6,7 @@ use embassy_futures::join::join3;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::channel::Sender;
 use embassy_sync::mutex::Mutex;
-use embassy_time::{Duration, Instant, Timer};
+use embassy_time::{Duration, Instant, Ticker};
 
 #[embassy_executor::task]
 pub async fn run(
@@ -43,7 +43,7 @@ pub async fn run(
     let motor_request_loop = async {
         // 1. Wait until we receive a motor request
         // 2. Create a command frame
-        // 3. Store the command frame in the last_cmd_frame using a mutex
+        // 3. Store the command frame and timestamp in last_cmd_frame using a mutex
         loop {
             let request = motor_request_rx.wait().await;
             let cmd_frame = vesc.create_command_frame(request.mode(), request.value());
@@ -61,7 +61,10 @@ pub async fn run(
         // 3a. If the last_cmd_frame is valid, send it to the can_tx_channel
         // 3b. If the last_cmd_frame is not valid, send a fail-safe frame to the can_tx_channel
         // 4. If sending fails, log the error
+        let mut ticker = Ticker::every(CMD_TX_INTERVAL);
         loop {
+            ticker.next().await;
+
             // Scope the lock so we don't hold it during the sleep
             let frame_to_send = {
                 let guard = last_cmd_frame.lock().await;
@@ -83,7 +86,6 @@ pub async fn run(
                     Err(e) => debug!("{:?}", e),
                 }
             }
-            Timer::after(CMD_TX_INTERVAL).await;
         }
     };
 

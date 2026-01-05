@@ -1,4 +1,5 @@
 use crate::types::{CanFrame, SignalSender};
+use core::sync::atomic::{AtomicBool, Ordering};
 use defmt::*;
 use embassy_futures::join::join;
 use embassy_stm32::can::enums::BusError;
@@ -6,6 +7,7 @@ use embassy_stm32::can::frame::Header;
 use embassy_stm32::can::{Can, CanRx, CanTx, Frame};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::channel::Receiver;
+use embassy_time::{Duration, Timer};
 use embedded_can::{ExtendedId, Id, StandardId};
 
 const VESC_STATUS_ID: u32 = 0x901;
@@ -28,17 +30,37 @@ pub async fn run(
 
     let (mut tx, mut rx) = can.split();
 
+    let bus_ok = AtomicBool::new(false);
+    let mut valid_rx_cnt: u8 = 0;
+
     let rx_loop = async {
         loop {
-            if let Err(e) = receive(&mut rx, &vesc_status_tx).await {
-                defmt::error!("CAN Rx Error: {:?}", e);
+            match receive(&mut rx, &vesc_status_tx).await {
+                Ok(_) => {
+                    // Wait for 10 valid frames before declaring the bus as OK
+                    if !bus_ok.load(Ordering::Relaxed) {
+                        valid_rx_cnt += 1;
+                        if valid_rx_cnt >= 10 {
+                            info!("CAN Bus OK, enabling transmit");
+                            bus_ok.store(true, Ordering::Relaxed);
+                            can_tx_channel.clear(); // Drop any messages we may have received before the bus was OK
+                        }
+                    }
+                }
+                Err(e) => error!("CAN Rx Error: {:?}", e),
             }
         }
     };
 
     let tx_loop = async {
         loop {
-            write(&mut tx, &can_tx_channel).await;
+            // Wait for the bus to be OK before sending frames
+            // Other devices on bus may have startup delay to ACK frames
+            if bus_ok.load(Ordering::Relaxed) {
+                write(&mut tx, &can_tx_channel).await;
+            } else {
+                Timer::after(Duration::from_millis(10)).await; // Wait and try again
+            }
         }
     };
 
@@ -67,7 +89,7 @@ async fn receive(
                 Id::Standard(id) => (id.as_raw() as u32, false),
                 Id::Extended(id) => (id.as_raw(), true),
             };
-            debug!("CAN RX Raw: ID={:x} Data={:?}", id_val, frame.data());
+            debug!("CAN Rx: ID={:x} Data={:?}", id_val, frame.data());
 
             if id_val == VESC_STATUS_ID {
                 let frame: CanFrame = CanFrame::new(id_val, is_extended, data_buf, dlc);
@@ -80,7 +102,6 @@ async fn receive(
     }
 }
 
-/// Write all frames in the CAN Tx channel to the bus
 /// Write all frames in the CAN Tx channel to the bus
 async fn write(
     tx: &mut CanTx<'static>,
@@ -98,5 +119,6 @@ async fn write(
     let header = Header::new(id, frame.data().len() as u8, false);
     let frame: Frame = Frame::new(header, data).unwrap();
 
+    debug!("CAN Tx: {:?}", frame);
     tx.write(&frame).await;
 }

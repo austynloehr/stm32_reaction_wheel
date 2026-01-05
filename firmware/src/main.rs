@@ -49,5 +49,21 @@ async fn main(_spawner: Spawner) {
         ))
         .unwrap();
 
+    // Run control task
+    _spawner
+        .spawn(tasks::control::run(
+            channels.input_channel.receiver(),
+            channels.output_channel.sender(),
+        ))
+        .unwrap();
+
+    // Run coms router task
+    _spawner
+        .spawn(tasks::coms_router::run(
+            channels.output_channel.receiver(),
+            signals.motor_request_tx,
+        ))
+        .unwrap();
+
     info!("All tasks started!");
 }

@@ -2,18 +2,28 @@ use crate::types::{RxEvent, SharedI2c};
 use defmt::*;
 use drivers::mpu6050;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Sender};
-use embassy_time::{Duration, Timer};
+use embassy_time::{Duration, Ticker, Timer};
 
 #[embassy_executor::task]
 pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex, RxEvent, 128>) {
     const MAX_ERROR_COUNT: u8 = 3;
-    const SAMPLE_RATE: u32 = 10; // ms
+    const SAMPLE_RATE: Duration = Duration::from_millis(10);
 
-    let mut imu = mpu6050::Mpu6050::new(i2c).init().await.unwrap();
+    // IMU needs time to init on startup
+    Timer::after(Duration::from_millis(1000)).await;
+    let mut imu = match mpu6050::Mpu6050::new(i2c).init().await {
+        Ok(imu) => imu,
+        Err(e) => {
+            defmt::panic!("MPU6050 Init Error: {:?}", e);
+        }
+    };
     info!("MPU6050 Initialized!");
 
     let mut error_count: u8 = 0;
+    let mut ticker = Ticker::every(SAMPLE_RATE);
     loop {
+        ticker.next().await;
+
         // Read IMU data
         match imu.read().await {
             Ok(sample) => {
@@ -36,6 +46,5 @@ pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex
                 }
             }
         }
-        Timer::after(Duration::from_millis(SAMPLE_RATE as u64)).await;
     }
 }
