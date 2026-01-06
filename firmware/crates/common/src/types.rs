@@ -33,6 +33,21 @@ pub enum RxEvent {
 pub enum TxEvent {
     Motor(MotorRequest),
     Logger(u32),
+    GreenLed(LedState),
+    RedLed(LedState),
+}
+
+#[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]
+pub enum LedState {
+    On,
+    Off,
+    Blink,
+}
+
+#[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]
+pub enum ButtonState {
+    Pressed,
+    Released,
 }
 
 #[derive(Debug, Clone, Copy, defmt::Format, PartialEq)]

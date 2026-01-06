@@ -3,7 +3,7 @@ use common::types::{CanFrame, MotorRequest, RxEvent};
 use defmt::*;
 use drivers::vesc::Vesc;
 use embassy_futures::join::join3;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
+use embassy_sync::blocking_mutex::raw::{CriticalSectionRawMutex, NoopRawMutex};
 use embassy_sync::channel::Sender;
 use embassy_sync::mutex::Mutex;
 use embassy_time::{Duration, Instant, Ticker};
@@ -20,8 +20,7 @@ pub async fn run(
     let vesc = Vesc::new();
 
     let fail_safe_frame = vesc.create_fail_safe_frame();
-    let last_cmd_frame: Mutex<CriticalSectionRawMutex, Option<(CanFrame, Instant)>> =
-        Mutex::new(None);
+    let last_cmd_frame: Mutex<NoopRawMutex, Option<(CanFrame, Instant)>> = Mutex::new(None);
 
     let can_rx_loop = async {
         // 1. Wait until we receive a status message on CAN

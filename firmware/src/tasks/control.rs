@@ -1,6 +1,6 @@
-use common::types::{MotorCtrlMode, MotorRequest, RxEvent, TxEvent};
+use common::types::{LedState, MotorCtrlMode, MotorRequest, RxEvent, TxEvent};
 use defmt::*;
-use embassy_futures::join::join;
+use embassy_futures::join::join3;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::channel::{Receiver, Sender};
 use embassy_time::{Duration, Instant, Ticker};
@@ -57,11 +57,11 @@ pub async fn run(
         loop {
             ticker.next().await;
             // Send command
-            let request = TxEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
-            match tx_channel.try_send(request) {
-                Ok(_) => {}
-                Err(e) => warn!("{:?}", e),
-            }
+            let _request = TxEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
+            // match tx_channel.try_send(request) {
+            //     Ok(_) => {}
+            //     Err(e) => warn!("{:?}", e),
+            // }
 
             // Update speed
             speed += step;
@@ -75,5 +75,20 @@ pub async fn run(
         }
     };
 
-    join(rx_loop, tx_loop).await;
+    let led_ctrl_loop = async {
+        let mut ticker = Ticker::every(Duration::from_millis(1000));
+        loop {
+            match tx_channel.try_send(TxEvent::GreenLed(LedState::Blink)) {
+                Ok(_) => {}
+                Err(e) => warn!("{:?}", e),
+            }
+            match tx_channel.try_send(TxEvent::RedLed(LedState::Blink)) {
+                Ok(_) => {}
+                Err(e) => warn!("{:?}", e),
+            }
+            ticker.next().await;
+        }
+    };
+
+    join3(rx_loop, tx_loop, led_ctrl_loop).await;
 }

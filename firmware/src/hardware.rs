@@ -15,6 +15,7 @@ use embassy_embedded_hal::shared_bus::asynch::i2c::I2cDevice;
 use embassy_stm32::bind_interrupts;
 use embassy_stm32::can::filter::Mask32;
 use embassy_stm32::can::{self, Can, Fifo};
+use embassy_stm32::gpio::{Input, Level, Output, Pull, Speed};
 use embassy_stm32::i2c::{self, I2c};
 use embassy_stm32::peripherals;
 use embassy_stm32::rcc::{
@@ -41,6 +42,9 @@ bind_interrupts!(struct Irqs {
 pub struct SystemHardware {
     pub imu: SharedI2c,
     pub can: Can<'static>,
+    pub green_led: Output<'static>,
+    pub red_led: Output<'static>,
+    pub enable_button: Input<'static>,
 }
 
 /// # Initialize Hardware
@@ -83,7 +87,7 @@ pub fn init() -> SystemHardware {
     let i2c_bus = I2C_BUS.init(Mutex::new(i2c));
 
     // Create device instances
-    let imu_i2c = I2cDevice::new(i2c_bus);
+    let imu = I2cDevice::new(i2c_bus);
 
     // --- CAN Initialization ---
     let mut can = Can::new(p.CAN1, p.PA11, p.PA12, Irqs);
@@ -92,5 +96,16 @@ pub fn init() -> SystemHardware {
     can.set_bitrate(500_000);
     can.set_automatic_wakeup(true);
 
-    SystemHardware { imu: imu_i2c, can }
+    // GPIO Initialization
+    let green_led = Output::new(p.PA7, Level::Low, Speed::Low);
+    let red_led = Output::new(p.PB0, Level::Low, Speed::Low);
+    let enable_button = Input::new(p.PA4, Pull::None);
+
+    SystemHardware {
+        imu,
+        can,
+        green_led,
+        red_led,
+        enable_button,
+    }
 }

@@ -62,6 +62,18 @@ async fn main(_spawner: Spawner) {
         .spawn(tasks::coms_router::run(
             channels.output_channel.receiver(),
             signals.motor_request_tx,
+            signals.green_led_tx,
+            signals.red_led_tx,
+        ))
+        .unwrap();
+
+    // Run LED task
+    _spawner
+        .spawn(tasks::leds::run(
+            hardware_interfaces.green_led,
+            hardware_interfaces.red_led,
+            signals.green_led_rx,
+            signals.red_led_rx,
         ))
         .unwrap();
 
