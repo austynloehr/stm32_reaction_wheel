@@ -1,4 +1,4 @@
-use common::types::{CanFrame, MotorCtrlMode, MotorStatus};
+use common::types::{MotorCtrlMode, MotorStatus};
 #[cfg(not(test))]
 use defmt::*;
 
@@ -32,10 +32,8 @@ impl Vesc {
         Self {}
     }
 
-    /// Unpack a VESC status message
-    pub fn unpack_status(self, frame: CanFrame) -> Result<MotorStatus, VescError> {
-        let data = frame.data();
-
+    /// Unpack a VESC status message from raw CAN data
+    pub fn unpack_status(&self, data: &[u8]) -> Result<MotorStatus, VescError> {
         if data.len() < 6 {
             error!("Attemped to unpack VESC status message with invalid data length");
             return Err(VescError::InvalidDataLength);
@@ -52,7 +50,9 @@ impl Vesc {
         Ok(MotorStatus::new(speed_rpm, current_ma))
     }
 
-    pub fn create_command_frame(self, mode: MotorCtrlMode, request: i32) -> CanFrame {
+    /// Create command data for a VESC command
+    /// Returns (CAN ID, data bytes, data length)
+    pub fn create_command(&self, mode: MotorCtrlMode, request: i32) -> (u32, [u8; 8], usize) {
         // Get the ID and limit command based on the mode
         let (id, command) = match mode {
             MotorCtrlMode::Current => {
@@ -72,18 +72,19 @@ impl Vesc {
         let mut data = [0u8; 8];
         data[..4].copy_from_slice(&command.to_be_bytes());
 
-        CanFrame::new(id, true, data, 4)
+        (id, data, 4)
     }
 
-    pub fn create_fail_safe_frame(self) -> CanFrame {
-        CanFrame::new(Self::CURRENT_CMD_ID, true, [0u8; 8], 4)
+    /// Create fail-safe command data
+    /// Returns (CAN ID, data bytes, data length)
+    pub fn create_fail_safe(&self) -> (u32, [u8; 8], usize) {
+        (Self::CURRENT_CMD_ID, [0u8; 8], 4)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{CanFrame, MotorCtrlMode, MotorStatus, Vesc, VescError};
-
+    use super::{MotorCtrlMode, MotorStatus, Vesc, VescError};
     use rstest::*;
 
     #[rstest]
@@ -103,10 +104,8 @@ mod tests {
         data[..4].copy_from_slice(&speed_erpm.to_be_bytes());
         data[4..6].copy_from_slice(&current_da.to_be_bytes());
 
-        let frame = CanFrame::new(0x901, true, data, 8);
-
         // Unpack frame
-        let status = vesc.unpack_status(frame);
+        let status = vesc.unpack_status(&data);
 
         // Assert unpacked values match expected test data
         assert_eq!(status, Ok(MotorStatus::new(speed_rpm, current_ma)));
@@ -115,40 +114,43 @@ mod tests {
     #[rstest]
     fn test_unpack_status_invalid_len() {
         let vesc = Vesc::new();
-        // Create frame with DLC = 5 (less than 6)
-        let frame = CanFrame::new(0x901, true, [0u8; 8], 5);
-        let status = vesc.unpack_status(frame);
+        // Create frame with only 5 bytes (less than 6)
+        let data = [0u8; 5];
+        let status = vesc.unpack_status(&data);
         assert_eq!(status, Err(VescError::InvalidDataLength));
     }
 
     #[rstest]
     #[case::current(MotorCtrlMode::Current, 100, Vesc::CURRENT_CMD_ID)]
     #[case::speed(MotorCtrlMode::Speed, 1000, Vesc::SPEED_CMD_ID)]
-    fn test_create_command_frame(
+    fn test_create_command(
         #[case] mode: MotorCtrlMode,
         #[case] val: i32,
         #[case] expected_id: u32,
     ) {
         let vesc = Vesc::new();
-        let frame = vesc.create_command_frame(mode, val);
-        assert_eq!(frame.id(), expected_id);
+        let (id, data, len) = vesc.create_command(mode, val);
+
+        assert_eq!(id, expected_id);
+        assert_eq!(len, 4);
 
         let expected_cmd = match mode {
             MotorCtrlMode::Current => val,
             MotorCtrlMode::Speed => val * (Vesc::NUM_POLES / 2),
         };
 
-        let mut expected = [0u8; 8];
-        expected[..4].copy_from_slice(&expected_cmd.to_be_bytes());
-        assert_eq!(frame.data(), &expected[..4]);
+        let expected_bytes = expected_cmd.to_be_bytes();
+        assert_eq!(&data[..len], &expected_bytes);
     }
 
     #[rstest]
-    fn test_create_fail_safe_frame() {
+    fn test_create_fail_safe() {
         let vesc = Vesc::new();
-        let frame = vesc.create_fail_safe_frame();
-        assert_eq!(frame.id(), 0x101);
-        assert_eq!(frame.data(), &[0u8, 0u8, 0u8, 0u8]);
+        let (id, data, len) = vesc.create_fail_safe();
+
+        assert_eq!(id, 0x101);
+        assert_eq!(len, 4);
+        assert_eq!(&data[..len], &[0u8, 0u8, 0u8, 0u8]);
     }
 
     #[rstest]
@@ -162,16 +164,15 @@ mod tests {
         #[case] expected_val: i32,
     ) {
         let vesc = Vesc::new();
-        let frame = vesc.create_command_frame(mode, request);
+        let (id, data, len) = vesc.create_command(mode, request);
 
         let (expected_cmd, expected_id) = match mode {
             MotorCtrlMode::Current => (expected_val, Vesc::CURRENT_CMD_ID),
             MotorCtrlMode::Speed => (expected_val * (Vesc::NUM_POLES / 2), Vesc::SPEED_CMD_ID),
         };
 
-        let mut expected_data = [0u8; 8];
-        expected_data[..4].copy_from_slice(&expected_cmd.to_be_bytes());
-        assert_eq!(frame.data(), &expected_data[..4]);
-        assert_eq!(frame.id(), expected_id);
+        let expected_bytes = expected_cmd.to_be_bytes();
+        assert_eq!(&data[..len], &expected_bytes);
+        assert_eq!(id, expected_id);
     }
 }

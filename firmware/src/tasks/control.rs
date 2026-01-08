@@ -46,6 +46,9 @@ pub async fn run(
                     }
                     imu_last = Instant::now();
                 }
+                RxEvent::Button(_state) => {
+                    // Button events not handled yet
+                }
             }
         }
     };
@@ -78,11 +81,11 @@ pub async fn run(
     let led_ctrl_loop = async {
         let mut ticker = Ticker::every(Duration::from_millis(1000));
         loop {
-            match tx_channel.try_send(TxEvent::GreenLed(LedState::Blink)) {
+            match tx_channel.try_send(TxEvent::GreenLed(LedState::On)) {
                 Ok(_) => {}
                 Err(e) => warn!("{:?}", e),
             }
-            match tx_channel.try_send(TxEvent::RedLed(LedState::Blink)) {
+            match tx_channel.try_send(TxEvent::RedLed(LedState::Off)) {
                 Ok(_) => {}
                 Err(e) => warn!("{:?}", e),
             }

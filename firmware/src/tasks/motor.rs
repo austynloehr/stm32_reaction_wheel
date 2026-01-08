@@ -1,8 +1,9 @@
 use crate::types::SignalReceiver;
-use common::types::{CanFrame, MotorRequest, RxEvent};
+use common::types::{MotorRequest, RxEvent};
 use defmt::*;
 use drivers::vesc::Vesc;
 use embassy_futures::join::join3;
+use embassy_stm32::can::Frame;
 use embassy_sync::blocking_mutex::raw::{CriticalSectionRawMutex, NoopRawMutex};
 use embassy_sync::channel::Sender;
 use embassy_sync::mutex::Mutex;
@@ -11,16 +12,20 @@ use embassy_time::{Duration, Instant, Ticker};
 #[embassy_executor::task]
 pub async fn run(
     rx_channel: Sender<'static, CriticalSectionRawMutex, RxEvent, 128>,
-    can_tx_channel: Sender<'static, CriticalSectionRawMutex, CanFrame, 128>,
-    vesc_status_rx: SignalReceiver<CanFrame>,
+    can_tx_channel: Sender<'static, CriticalSectionRawMutex, Frame, 128>,
+    vesc_status_rx: SignalReceiver<Frame>,
     motor_request_rx: SignalReceiver<MotorRequest>,
 ) {
     const CMD_TX_INTERVAL: Duration = Duration::from_millis(10);
     const CAN_TIMEOUT: Duration = Duration::from_millis(1000);
     let vesc = Vesc::new();
 
-    let fail_safe_frame = vesc.create_fail_safe_frame();
-    let last_cmd_frame: Mutex<NoopRawMutex, Option<(CanFrame, Instant)>> = Mutex::new(None);
+    // Pre-create fail safe frame
+    let (fail_safe_id, fail_safe_data, fail_safe_len) = vesc.create_fail_safe();
+    let fail_safe_frame =
+        Frame::new_extended(fail_safe_id, &fail_safe_data[..fail_safe_len]).unwrap();
+
+    let last_cmd_frame: Mutex<NoopRawMutex, Option<(Frame, Instant)>> = Mutex::new(None);
 
     let can_rx_loop = async {
         // 1. Wait until we receive a status message on CAN
@@ -30,7 +35,7 @@ pub async fn run(
         loop {
             let frame = vesc_status_rx.wait().await;
             debug!("Received VESC status message: {:?}", frame);
-            if let Ok(status_msg) = vesc.unpack_status(frame) {
+            if let Ok(status_msg) = vesc.unpack_status(frame.data()) {
                 match rx_channel.try_send(RxEvent::Motor(status_msg)) {
                     Ok(_) => {}
                     Err(e) => debug!("{:?}", e),
@@ -45,7 +50,8 @@ pub async fn run(
         // 3. Store the command frame and timestamp in last_cmd_frame using a mutex
         loop {
             let request = motor_request_rx.wait().await;
-            let cmd_frame = vesc.create_command_frame(request.mode(), request.value());
+            let (id, data, len) = vesc.create_command(request.mode(), request.value());
+            let cmd_frame = Frame::new_extended(id, &data[..len]).unwrap();
             {
                 let mut guard = last_cmd_frame.lock().await;
                 *guard = Some((cmd_frame, Instant::now()));

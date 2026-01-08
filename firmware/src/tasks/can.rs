@@ -1,14 +1,12 @@
-use crate::types::{CanFrame, SignalSender};
+use crate::types::SignalSender;
 use core::sync::atomic::{AtomicBool, Ordering};
 use defmt::*;
 use embassy_futures::join::join;
 use embassy_stm32::can::enums::BusError;
-use embassy_stm32::can::frame::Header;
 use embassy_stm32::can::{Can, CanRx, CanTx, Frame};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::channel::Receiver;
 use embassy_time::{Duration, Timer};
-use embedded_can::{ExtendedId, Id, StandardId};
 
 const VESC_STATUS_ID: u32 = 0x901;
 
@@ -23,8 +21,8 @@ const VESC_STATUS_ID: u32 = 0x901;
 #[embassy_executor::task]
 pub async fn run(
     mut can: Can<'static>,
-    vesc_status_tx: SignalSender<CanFrame>,
-    can_tx_channel: Receiver<'static, CriticalSectionRawMutex, CanFrame, 128>,
+    vesc_status_tx: SignalSender<Frame>,
+    can_tx_channel: Receiver<'static, CriticalSectionRawMutex, Frame, 128>,
 ) {
     can.enable().await;
 
@@ -72,27 +70,20 @@ pub async fn run(
 /// If the frame is a vesc status frame, forward it to the vesc_status_tx signal.
 async fn receive(
     rx: &mut CanRx<'static>,
-    vesc_status_tx: &SignalSender<CanFrame>,
+    vesc_status_tx: &SignalSender<Frame>,
 ) -> Result<(), BusError> {
     match rx.read().await {
         Ok(envelope) => {
             let frame: Frame = envelope.frame;
-            let data_slice = frame.data();
-            let dlc = data_slice.len() as u8;
 
-            // Rx data is a slice, we need to copy it into a fixed-size array
-            let mut data_buf = [0u8; 8];
-            data_buf[..data_slice.len()].copy_from_slice(data_slice);
-
-            // Rx ID is an enum, we need to extract the value
-            let (id_val, is_extended) = match frame.id() {
-                Id::Standard(id) => (id.as_raw() as u32, false),
-                Id::Extended(id) => (id.as_raw(), true),
+            // Extract ID from the frame
+            let id_val = match frame.id() {
+                embedded_can::Id::Standard(id) => id.as_raw() as u32,
+                embedded_can::Id::Extended(id) => id.as_raw(),
             };
             debug!("CAN Rx: ID={:x} Data={:?}", id_val, frame.data());
 
             if id_val == VESC_STATUS_ID {
-                let frame: CanFrame = CanFrame::new(id_val, is_extended, data_buf, dlc);
                 vesc_status_tx.signal(frame);
             }
 
@@ -105,19 +96,9 @@ async fn receive(
 /// Write all frames in the CAN Tx channel to the bus
 async fn write(
     tx: &mut CanTx<'static>,
-    can_tx_channel: &Receiver<'static, CriticalSectionRawMutex, CanFrame, 128>,
+    can_tx_channel: &Receiver<'static, CriticalSectionRawMutex, Frame, 128>,
 ) {
-    let frame: CanFrame = can_tx_channel.receive().await;
-
-    // Convert ourCanFrame to embassy can frame
-    let id = if frame.is_extended() {
-        Id::Extended(ExtendedId::new(frame.id()).unwrap())
-    } else {
-        Id::Standard(StandardId::new(frame.id() as u16).unwrap())
-    };
-    let data: &[u8] = frame.data();
-    let header = Header::new(id, frame.data().len() as u8, false);
-    let frame: Frame = Frame::new(header, data).unwrap();
+    let frame: Frame = can_tx_channel.receive().await;
 
     debug!("CAN Tx: {:?}", frame);
     tx.write(&frame).await;

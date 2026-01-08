@@ -2,8 +2,9 @@
 //!
 //! This module holds a singleton of system channels that can be used to communicate between tasks.
 
-use crate::types::{CanFrame, RxEvent, TxEvent};
+use crate::types::{RxEvent, TxEvent};
 use core::sync::atomic::{AtomicBool, Ordering};
+use embassy_stm32::can::Frame;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::channel::Channel;
 use static_cell::StaticCell;
@@ -16,7 +17,7 @@ static CHANNELS_TAKEN: AtomicBool = AtomicBool::new(false);
 pub struct TaskChannels {
     pub input_channel: &'static Channel<CriticalSectionRawMutex, RxEvent, 128>,
     pub output_channel: &'static Channel<CriticalSectionRawMutex, TxEvent, 128>,
-    pub can_tx_channel: &'static Channel<CriticalSectionRawMutex, CanFrame, 128>,
+    pub can_tx_channel: &'static Channel<CriticalSectionRawMutex, Frame, 128>,
 }
 
 impl TaskChannels {
@@ -37,7 +38,7 @@ impl TaskChannels {
             StaticCell::new();
         let output_channel = OUTPUT_CHANNEL.init(Channel::new());
 
-        static CAN_TX_CHANNEL: StaticCell<Channel<CriticalSectionRawMutex, CanFrame, 128>> =
+        static CAN_TX_CHANNEL: StaticCell<Channel<CriticalSectionRawMutex, Frame, 128>> =
             StaticCell::new();
         let can_tx_channel = CAN_TX_CHANNEL.init(Channel::new());
 

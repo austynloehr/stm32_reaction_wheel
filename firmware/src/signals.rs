@@ -2,8 +2,9 @@
 //!
 //! This module provides a singleton of system signals that can be used to communicate between tasks.
 
-use crate::types::{CanFrame, LedState, MotorRequest, SignalReceiver, SignalSender};
+use crate::types::{LedState, MotorRequest, SignalReceiver, SignalSender};
 use core::sync::atomic::{AtomicBool, Ordering};
+use embassy_stm32::can::Frame;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::signal::Signal;
 
@@ -12,8 +13,8 @@ static SIGNALS_TAKEN: AtomicBool = AtomicBool::new(false);
 pub struct TaskSignals {
     pub motor_request_tx: SignalSender<MotorRequest>,
     pub motor_request_rx: SignalReceiver<MotorRequest>,
-    pub vesc_status_tx: SignalSender<CanFrame>,
-    pub vesc_status_rx: SignalReceiver<CanFrame>,
+    pub vesc_status_tx: SignalSender<Frame>,
+    pub vesc_status_rx: SignalReceiver<Frame>,
     pub green_led_tx: SignalSender<LedState>,
     pub green_led_rx: SignalReceiver<LedState>,
     pub red_led_tx: SignalSender<LedState>,
@@ -31,7 +32,7 @@ impl TaskSignals {
 
         // Create base signals to share with tasks
         static MOTOR_REQUEST: Signal<CriticalSectionRawMutex, MotorRequest> = Signal::new();
-        static VESC_STATUS: Signal<CriticalSectionRawMutex, CanFrame> = Signal::new();
+        static VESC_STATUS: Signal<CriticalSectionRawMutex, Frame> = Signal::new();
         static GREEN_LED: Signal<CriticalSectionRawMutex, LedState> = Signal::new();
         static RED_LED: Signal<CriticalSectionRawMutex, LedState> = Signal::new();
 
