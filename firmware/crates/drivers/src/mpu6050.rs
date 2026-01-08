@@ -5,6 +5,18 @@
 use common::types::*;
 use core::marker::PhantomData;
 
+/// MPU6050 driver errors
+#[derive(Debug, Clone, Copy, defmt::Format)]
+pub enum Mpu6050Error<I2cError> {
+    WakeupFailed(I2cError),
+    SampleRateConfigFailed(I2cError),
+    DlpfConfigFailed(I2cError),
+    AccelConfigFailed(I2cError),
+    GyroConfigFailed(I2cError),
+    AccelReadFailed(I2cError),
+    GyroReadFailed(I2cError),
+}
+
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
 #[allow(dead_code)]
@@ -95,28 +107,37 @@ where
     ///
     /// # Returns
     ///
-    /// * `Result<Mpu6050<I, Initialized>, I::Error>`
-    pub async fn init(mut self) -> Result<Mpu6050<I, Initialized>, I::Error> {
+    /// * `Result<Mpu6050<I, Initialized>, Mpu6050Error<I::Error>>`
+    pub async fn init(mut self) -> Result<Mpu6050<I, Initialized>, Mpu6050Error<I::Error>> {
         // Wake up (Clear sleep bit)
-        self.i2c.write(MPU6050_ADDR, &[PWR_MGMT1_REG, 0x00]).await?;
+        self.i2c
+            .write(MPU6050_ADDR, &[PWR_MGMT1_REG, 0x00])
+            .await
+            .map_err(Mpu6050Error::WakeupFailed)?;
 
         // Config Sample Rate Divider
         self.i2c
             .write(MPU6050_ADDR, &[SMPRT_DIV_REG, SMPLRT_DIV])
-            .await?;
+            .await
+            .map_err(Mpu6050Error::SampleRateConfigFailed)?;
 
         // Config DLPF
-        self.i2c.write(MPU6050_ADDR, &[DLPF_REG, DLPF_CFG]).await?;
+        self.i2c
+            .write(MPU6050_ADDR, &[DLPF_REG, DLPF_CFG])
+            .await
+            .map_err(Mpu6050Error::DlpfConfigFailed)?;
 
         // Config Accelerometer Range
         self.i2c
             .write(MPU6050_ADDR, &[ACCEL_CONFIG_REG, (AFS_SEL as u8) << 3])
-            .await?;
+            .await
+            .map_err(Mpu6050Error::AccelConfigFailed)?;
 
         // Config Gyroscope Range
         self.i2c
             .write(MPU6050_ADDR, &[GYRO_CONFIG_REG, (FS_SEL as u8) << 3])
-            .await?;
+            .await
+            .map_err(Mpu6050Error::GyroConfigFailed)?;
 
         Ok(Mpu6050 {
             i2c: self.i2c,
@@ -135,8 +156,8 @@ where
     ///
     /// # Returns
     ///
-    /// * `Result<ImuSample, I::Error>` - Result containing the IMU sample (accel and gyro data) or an error if the read fails.
-    pub async fn read(&mut self) -> Result<ImuSample, I::Error> {
+    /// * Result containing the IMU sample (accel and gyro data) or an error if the read fails.
+    pub async fn read(&mut self) -> Result<ImuSample, Mpu6050Error<I::Error>> {
         // Buffer for accel and gyro data
         let mut accel_buf = [0u8; 6];
         let mut gyro_buf = [0u8; 6];
@@ -145,10 +166,12 @@ where
         // Return error if read fails
         self.i2c
             .write_read(MPU6050_ADDR, &[ACCEL_OUT_START_REG], &mut accel_buf)
-            .await?;
+            .await
+            .map_err(Mpu6050Error::AccelReadFailed)?;
         self.i2c
             .write_read(MPU6050_ADDR, &[GYRO_OUT_START_REG], &mut gyro_buf)
-            .await?;
+            .await
+            .map_err(Mpu6050Error::GyroReadFailed)?;
 
         // Get conversion factors
         let accel_scale = AFS_SEL.sensitivity();

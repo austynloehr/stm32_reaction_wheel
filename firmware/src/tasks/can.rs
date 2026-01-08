@@ -29,23 +29,69 @@ pub async fn run(
     let (mut tx, mut rx) = can.split();
 
     let bus_ok = AtomicBool::new(false);
-    let mut valid_rx_cnt: u8 = 0;
+    let mut consecutive_rx_valid: u8 = 0;
+    let mut consecutive_rx_errors: u8 = 0;
+    const MAX_CONSECUTIVE_ERRORS: u8 = 50;
 
     let rx_loop = async {
         loop {
             match receive(&mut rx, &vesc_status_tx).await {
                 Ok(_) => {
-                    // Wait for 10 valid frames before declaring the bus as OK
-                    if !bus_ok.load(Ordering::Relaxed) {
-                        valid_rx_cnt += 1;
-                        if valid_rx_cnt >= 10 {
+                    // Reset error counter on successful receive
+                    consecutive_rx_errors = 0;
+
+                    // Wait for 10 consecutive valid frames before declaring the bus as OK
+                    if !bus_ok.load(Ordering::Acquire) {
+                        consecutive_rx_valid += 1;
+                        if consecutive_rx_valid >= 10 {
                             info!("CAN Bus OK, enabling transmit");
-                            bus_ok.store(true, Ordering::Relaxed);
+                            bus_ok.store(true, Ordering::Release);
                             can_tx_channel.clear(); // Drop any messages we may have received before the bus was OK
+                            consecutive_rx_valid = 0; // Reset for next recovery cycle
                         }
                     }
                 }
-                Err(e) => error!("CAN Rx Error: {:?}", e),
+                Err(e) => {
+                    consecutive_rx_errors += 1;
+
+                    // Reset valid counter - we need consecutive good messages
+                    consecutive_rx_valid = 0;
+
+                    // If bus was previously OK, reset it after errors accumulate
+                    if consecutive_rx_errors >= 5 && bus_ok.load(Ordering::Acquire) {
+                        warn!("CAN Bus experiencing errors, disabling transmit");
+                        bus_ok.store(false, Ordering::Release);
+                    }
+
+                    error!(
+                        "CAN Rx Error: {:?} (consecutive: {})",
+                        e, consecutive_rx_errors
+                    );
+
+                    // If we hit max consecutive errors, enter recovery mode
+                    if consecutive_rx_errors >= MAX_CONSECUTIVE_ERRORS {
+                        error!(
+                            "CAN bus failure: {} consecutive errors. Entering recovery mode...",
+                            consecutive_rx_errors
+                        );
+
+                        // Disable bus
+                        bus_ok.store(false, Ordering::Release);
+
+                        // Wait 10 seconds for bus to stabilize
+                        Timer::after(Duration::from_secs(10)).await;
+
+                        // Reset counters and try again
+                        consecutive_rx_errors = 0;
+                        consecutive_rx_valid = 0;
+
+                        info!("CAN recovery complete, attempting to resume receive operations");
+                        continue;
+                    }
+
+                    // Add small delay on error to avoid hammering the bus
+                    Timer::after(Duration::from_millis(10)).await;
+                }
             }
         }
     };
@@ -54,7 +100,7 @@ pub async fn run(
         loop {
             // Wait for the bus to be OK before sending frames
             // Other devices on bus may have startup delay to ACK frames
-            if bus_ok.load(Ordering::Relaxed) {
+            if bus_ok.load(Ordering::Acquire) {
                 write(&mut tx, &can_tx_channel).await;
             } else {
                 Timer::after(Duration::from_millis(10)).await; // Wait and try again

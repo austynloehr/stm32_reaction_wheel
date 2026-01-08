@@ -16,8 +16,12 @@ pub async fn run(
     green_led_rx: SignalReceiver<LedState>,
     red_led_rx: SignalReceiver<LedState>,
 ) {
-    let mut green_led = Led::new(green_led_pin, true, false);
-    let mut red_led = Led::new(red_led_pin, true, false);
+    let mut green_led = Led::new(green_led_pin, true, false).unwrap_or_else(|e| {
+        defmt::panic!("Failed to initialize green LED: {:?}", e);
+    });
+    let mut red_led = Led::new(red_led_pin, true, false).unwrap_or_else(|e| {
+        defmt::panic!("Failed to initialize red LED: {:?}", e);
+    });
 
     let green_led_state: Mutex<NoopRawMutex, LedState> = Mutex::new(LedState::Off);
     let red_led_state: Mutex<NoopRawMutex, LedState> = Mutex::new(LedState::Off);

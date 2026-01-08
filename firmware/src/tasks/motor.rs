@@ -22,8 +22,13 @@ pub async fn run(
 
     // Pre-create fail safe frame
     let (fail_safe_id, fail_safe_data, fail_safe_len) = vesc.create_fail_safe();
-    let fail_safe_frame =
-        Frame::new_extended(fail_safe_id, &fail_safe_data[..fail_safe_len]).unwrap();
+    let fail_safe_frame = match Frame::new_extended(fail_safe_id, &fail_safe_data[..fail_safe_len])
+    {
+        Ok(frame) => frame,
+        Err(e) => {
+            defmt::panic!("Failed to create fail safe frame: {:?}", e);
+        }
+    };
 
     let last_cmd_frame: Mutex<NoopRawMutex, Option<(Frame, Instant)>> = Mutex::new(None);
 
@@ -51,7 +56,13 @@ pub async fn run(
         loop {
             let request = motor_request_rx.wait().await;
             let (id, data, len) = vesc.create_command(request.mode(), request.value());
-            let cmd_frame = Frame::new_extended(id, &data[..len]).unwrap();
+            let cmd_frame = match Frame::new_extended(id, &data[..len]) {
+                Ok(frame) => frame,
+                Err(e) => {
+                    defmt::error!("Failed to create command frame: {:?}", e);
+                    fail_safe_frame
+                }
+            };
             {
                 let mut guard = last_cmd_frame.lock().await;
                 *guard = Some((cmd_frame, Instant::now()));

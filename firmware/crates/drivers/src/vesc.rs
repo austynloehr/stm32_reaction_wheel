@@ -8,8 +8,7 @@ use log::error;
 #[derive(Debug, Copy, Clone)]
 pub struct Vesc {}
 
-#[derive(Debug, Copy, Clone, PartialEq)]
-#[cfg_attr(not(test), derive(defmt::Format))]
+#[derive(Debug, Copy, Clone, PartialEq, defmt::Format)]
 pub enum VescError {
     InvalidDataLength,
 }

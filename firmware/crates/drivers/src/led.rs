@@ -17,25 +17,28 @@ impl<P: OutputPin> Led<P> {
     /// * `pin` - The GPIO pin implementation (must implement `OutputPin`)
     /// * `active_high` - `true` if setting the pin high turns the LED on
     /// * `initial_state` - The initial state of the LED (`true` for ON, `false` for OFF)
-    pub fn new(mut pin: P, active_high: bool, initial_state: bool) -> Self {
+    ///
+    /// # Errors
+    /// Returns an error if setting the initial pin state fails
+    pub fn new(mut pin: P, active_high: bool, initial_state: bool) -> Result<Self, P::Error> {
         // Apply initial state immediately
-        let _ = if initial_state {
+        if initial_state {
             if active_high {
-                pin.set_high()
+                pin.set_high()?;
             } else {
-                pin.set_low()
+                pin.set_low()?;
             }
         } else if active_high {
-            pin.set_low()
+            pin.set_low()?;
         } else {
-            pin.set_high()
-        };
+            pin.set_high()?;
+        }
 
-        Self {
+        Ok(Self {
             pin,
             active_high,
             state: initial_state,
-        }
+        })
     }
 
     /// Turn the LED on
