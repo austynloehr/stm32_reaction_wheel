@@ -77,5 +77,13 @@ async fn main(_spawner: Spawner) {
         ))
         .unwrap();
 
+    // Run button task
+    _spawner
+        .spawn(tasks::button::run(
+            channels.input_channel.sender(),
+            hardware_interfaces.enable_btn,
+        ))
+        .unwrap();
+
     info!("All tasks started!");
 }

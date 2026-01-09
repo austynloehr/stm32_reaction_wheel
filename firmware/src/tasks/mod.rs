@@ -1,3 +1,4 @@
+pub mod button;
 pub mod can;
 pub mod coms_router;
 pub mod control;

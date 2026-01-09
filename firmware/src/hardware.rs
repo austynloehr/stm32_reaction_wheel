@@ -15,7 +15,8 @@ use embassy_embedded_hal::shared_bus::asynch::i2c::I2cDevice;
 use embassy_stm32::bind_interrupts;
 use embassy_stm32::can::filter::Mask32;
 use embassy_stm32::can::{self, Can, Fifo};
-use embassy_stm32::gpio::{Input, Level, Output, Pull, Speed};
+use embassy_stm32::exti::ExtiInput;
+use embassy_stm32::gpio::{Level, Output, Pull, Speed};
 use embassy_stm32::i2c::{self, I2c};
 use embassy_stm32::peripherals;
 use embassy_stm32::rcc::{
@@ -44,7 +45,7 @@ pub struct SystemHardware {
     pub can: Can<'static>,
     pub green_led: Output<'static>,
     pub red_led: Output<'static>,
-    pub enable_button: Input<'static>,
+    pub enable_btn: ExtiInput<'static>,
 }
 
 /// # Initialize Hardware
@@ -99,13 +100,13 @@ pub fn init() -> SystemHardware {
     // GPIO Initialization
     let green_led = Output::new(p.PA7, Level::Low, Speed::Low);
     let red_led = Output::new(p.PB0, Level::Low, Speed::Low);
-    let enable_button = Input::new(p.PA4, Pull::None);
+    let enable_btn = ExtiInput::new(p.PA4, p.EXTI4, Pull::None);
 
     SystemHardware {
         imu,
         can,
         green_led,
         red_led,
-        enable_button,
+        enable_btn,
     }
 }

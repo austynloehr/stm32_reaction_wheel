@@ -48,8 +48,8 @@ pub async fn run(
                     }
                     imu_last = Instant::now();
                 }
-                RxEvent::Button(_state) => {
-                    // Button events not handled yet
+                RxEvent::Button(state) => {
+                    debug!("Enable button: {}", state);
                 }
             }
         }
@@ -62,7 +62,7 @@ pub async fn run(
 
         loop {
             ticker.next().await;
-            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 10, 500);
+            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 20, 500);
             // Send command
             let _request = TxEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
             // match tx_channel.try_send(request) {
