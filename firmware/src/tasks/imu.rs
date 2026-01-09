@@ -1,3 +1,4 @@
+use crate::monitor_task_rate;
 use crate::types::{RxEvent, SharedI2c};
 use defmt::*;
 use drivers::mpu6050;
@@ -8,6 +9,7 @@ use embassy_time::{Duration, Ticker, Timer};
 pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex, RxEvent, 128>) {
     const MAX_ERROR_COUNT: u8 = 3;
     const SAMPLE_RATE: Duration = Duration::from_millis(10);
+    const TASK_RATE_TOLERANCE: u8 = 10;
 
     // IMU needs time to init on startup
     Timer::after(Duration::from_millis(1000)).await;
@@ -23,6 +25,9 @@ pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex
     let mut ticker = Ticker::every(SAMPLE_RATE);
     loop {
         ticker.next().await;
+
+        // Check task execution rate
+        monitor_task_rate!(imu_monitor, SAMPLE_RATE.as_millis(), TASK_RATE_TOLERANCE);
 
         // Read IMU data
         match imu.read().await {

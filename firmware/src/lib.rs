@@ -7,6 +7,7 @@ use panic_probe as _;
 
 pub mod channels;
 pub mod hardware;
+pub mod macros;
 pub mod signals;
 pub mod tasks;
 pub mod types;

@@ -1,3 +1,4 @@
+use crate::monitor_task_rate;
 use common::types::{LedState, MotorCtrlMode, MotorRequest, RxEvent, TxEvent};
 use defmt::*;
 use embassy_futures::join::join3;
@@ -11,6 +12,7 @@ pub async fn run(
     tx_channel: Sender<'static, CriticalSectionRawMutex, TxEvent, 128>,
 ) {
     const TASK_RATE: Duration = Duration::from_millis(1);
+
     let rx_loop = async {
         let mut motor_last = Instant::now();
         let mut imu_last = Instant::now();
@@ -57,8 +59,10 @@ pub async fn run(
         let mut speed: f32 = 0.0;
         let mut step: f32 = 5.0;
         let mut ticker = Ticker::every(TASK_RATE);
+
         loop {
             ticker.next().await;
+            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 20);
             // Send command
             let _request = TxEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
             // match tx_channel.try_send(request) {
@@ -70,10 +74,10 @@ pub async fn run(
             speed += step;
             if speed >= 1500.0 {
                 speed = 1500.0;
-                step = -5.0;
+                step = -0.5;
             } else if speed <= -1500.0 {
                 speed = -1500.0;
-                step = 5.0;
+                step = 0.5;
             }
         }
     };

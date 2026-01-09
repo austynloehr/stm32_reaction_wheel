@@ -41,6 +41,7 @@ embassy-futures = { version = "0.1.2" }
 embassy-embedded-hal = { version = "0.5.0", features = ["defmt"] }
 static_cell = "2.1.1"
 embedded-can = "0.4.1"
+paste = "1.0"
 
 [dev-dependencies]
 defmt-test = "0.4.0"
