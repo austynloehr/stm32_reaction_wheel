@@ -62,7 +62,7 @@ pub async fn run(
 
         loop {
             ticker.next().await;
-            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 20);
+            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 10, 500);
             // Send command
             let _request = TxEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
             // match tx_channel.try_send(request) {

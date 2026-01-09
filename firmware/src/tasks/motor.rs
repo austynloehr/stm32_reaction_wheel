@@ -1,3 +1,4 @@
+use crate::monitor_task_rate;
 use crate::types::SignalReceiver;
 use common::types::{MotorRequest, RxEvent};
 use defmt::*;
@@ -39,6 +40,8 @@ pub async fn run(
         // 4. If unpacking fails, log the error
         loop {
             let frame = vesc_status_rx.wait().await;
+
+            monitor_task_rate!(motor_rx_monitor, 10, 10);
             debug!("Received VESC status message: {:?}", frame);
             if let Ok(status_msg) = vesc.unpack_status(frame.data()) {
                 match rx_channel.try_send(RxEvent::Motor(status_msg)) {
