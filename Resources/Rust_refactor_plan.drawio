@@ -1,0 +1,129 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3" pages="2">
+  <diagram name="InterfaceAbstraction" id="R5z6fwgLTMFIcjk5e4LY">
+    <mxGraphModel dx="1216" dy="786" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-6" value="Embassy STM32 HAL" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="840" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-7" value="Control Task (1ms)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="840" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-37" value="I2C Rx Task (5ms)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="200" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-38" value="I2C Tx Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="560" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-39" value="CAN Rx Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="320" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-40" value="CAN Tx Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="680" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-41" value="UART Tx Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="800" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-42" value="GPIO Rx Task (50ms)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-43" value="GPIO Tx Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="440" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-46" value="Tx Router Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="440" y="260" width="480" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-48" value="RX_QUEUE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-49" value="GPIO_TX" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="440" y="300" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-50" value="I2C_TX" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="560" y="300" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-51" value="CAN_TX" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="680" y="300" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-52" value="UART_TX" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="800" y="300" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-29" value="TX_QUEUE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="440" y="240" width="480" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-53" value="RX_QUEUE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="160" y="440" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-54" value="Queue that stores all input message frames Ex. GPIO(Pin, State), I2C(ID, Addr, Payload), CAN(ID, Payload).&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Messages meant to be popped/parsed from single consumer.&amp;nbsp;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="480" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-55" value="TX_QUEUE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="580" y="440" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xjCYuKz1SkYvxfkXlrVa-56" value="Queue that stores a all output message frames Ex. GPIO(Pin, Cmd), CAN(ID, Payload), I2C(ID, Addr, Payload), UART(Payload).&lt;br&gt;&lt;br&gt;Router parses all messages and routes to respective interface in order received.&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="480" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="esC1NlHmKVwSYpMvLX88-1" value="MPU6050 Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="440" y="640" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="esC1NlHmKVwSYpMvLX88-2" value="VESC Task" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="600" y="640" width="120" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="I0aMp_pOc7p0WduhJsgu" name="Startup">
+    <mxGraphModel dx="1216" dy="786" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="vuifJkBurdITxEvYn_Da-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="vuifJkBurdITxEvYn_Da-21" target="vuifJkBurdITxEvYn_Da-35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-21" value="Initialization" style="swimlane;fontStyle=4;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;rounded=1;absoluteArcSize=1;arcSize=50;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="200" y="160" width="140" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-24" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="60" width="140" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-34" value="GPIO Config" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=1;whiteSpace=wrap;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="68" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-33" value="I2C Config" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=1;whiteSpace=wrap;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="108" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-32" value="UART Config" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=1;whiteSpace=wrap;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="148" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-31" value="CAN Config" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=1;whiteSpace=wrap;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="188" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-29" value="IMU Config" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=1;whiteSpace=wrap;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="228" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-26" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="268" width="140" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-27" value="Exit:&lt;br&gt;After 5s timeout" style="fillColor=none;strokeColor=none;align=left;verticalAlign=middle;spacingLeft=5;whiteSpace=wrap;html=1;" vertex="1" parent="vuifJkBurdITxEvYn_Da-21">
+          <mxGeometry y="276" width="140" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-35" value="Run" style="swimlane;fontStyle=4;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;rounded=1;absoluteArcSize=1;arcSize=50;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="410" y="250" width="140" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-36" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="vuifJkBurdITxEvYn_Da-35">
+          <mxGeometry y="60" width="140" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-30" value="&lt;div&gt;All SWC&lt;/div&gt;swc.step()" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=1;whiteSpace=wrap;" vertex="1" parent="vuifJkBurdITxEvYn_Da-35">
+          <mxGeometry y="68" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-43" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="vuifJkBurdITxEvYn_Da-35">
+          <mxGeometry y="108" width="140" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="vuifJkBurdITxEvYn_Da-44" value="Exit:&lt;br&gt;Reset" style="fillColor=none;strokeColor=none;align=left;verticalAlign=middle;spacingLeft=5;whiteSpace=wrap;html=1;" vertex="1" parent="vuifJkBurdITxEvYn_Da-35">
+          <mxGeometry y="116" width="140" height="44" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

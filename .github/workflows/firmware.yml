@@ -1,0 +1,77 @@
+name: Firmware Validation
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Branch
+      uses: actions/checkout@v4
+
+    - name: Install System Dependencies
+      uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: libudev-dev
+        version: 1.0
+
+    - name: Restore Cargo Cache
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: firmware
+
+    - name: Setup Environment
+      run: |
+        cd firmware
+        chmod +x setup.sh
+        ./setup.sh
+
+    - name: Run Checks
+      run: |
+        cd firmware
+        cargo clippy -- -D warnings
+        cargo check
+
+    - name: Run Tests
+      run: |
+        cd firmware/
+        # Dynamically determine the host target
+        HOST_TARGET=$(rustc -vV | sed -n 's|host: ||p')
+        cargo test -p drivers -p common -p behavior --target "$HOST_TARGET"
+
+    - name: Build
+      run: |
+        cd firmware
+        cargo build --release
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: firmware
+        path: firmware/target/thumbv7em-none-eabihf/release/firmware
+
+  release:
+    runs-on: ubuntu-latest
+    needs: test-and-build
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+    - name: Download Firmware
+      uses: actions/download-artifact@v4
+      with:
+        name: firmware
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: firmware

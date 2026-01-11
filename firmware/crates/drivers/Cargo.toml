@@ -1,0 +1,18 @@
+[package]
+name = "drivers"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+common = { path = "../common" }
+defmt = "1.0"
+embedded-can = "0.4.1"
+embedded-hal-async = "1.0.0"
+embedded-hal = { version = "1.0.0", features = ["defmt-03"] }
+
+[dev-dependencies]
+mockall = "0.14.0"
+futures = "0.3"
+rstest = "0.26.1"
+approx = "0.5.1"
+log = "0.4.29"
