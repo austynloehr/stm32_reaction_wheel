@@ -10,80 +10,71 @@ use firmware::{channels, hardware, signals, tasks};
 async fn main(_spawner: Spawner) {
     info!("Starting Application...");
 
-    // Initialize Hardware
-    let hardware_interfaces = hardware::init();
-    info!("Hardware initialized!");
+    // Initialize Hardware Interfaces
+    let h = hardware::init();
+    info!("Hardware initialized");
 
     // Initialize Channels
-    let channels = channels::TaskChannels::take().unwrap();
-    info!("Channels initialized!");
+    let c = channels::TaskChannels::take().unwrap();
+    info!("Channels initialized");
 
     // Initialize Signals
-    let signals = signals::TaskSignals::take().unwrap();
-    info!("Signals initialized!");
+    let s = signals::TaskSignals::take().unwrap();
+    info!("Signals initialized");
 
-    // Run IMU Task
-    _spawner
-        .spawn(tasks::imu::run(
-            hardware_interfaces.imu,
-            channels.input_channel.sender(),
-        ))
-        .unwrap();
-
-    // Run CAN Task
+    // Start CAN task
     _spawner
         .spawn(tasks::can::run(
-            hardware_interfaces.can,
-            signals.vesc_status_tx,
-            channels.can_tx_channel.receiver(),
+            h.can,
+            s.vesc_status.sender,
+            c.can_tx.receiver(),
         ))
         .unwrap();
 
-    // Run motor task
-    _spawner
-        .spawn(tasks::motor::run(
-            channels.input_channel.sender(),
-            channels.can_tx_channel.sender(),
-            signals.vesc_status_rx,
-            signals.motor_request_rx,
-        ))
-        .unwrap();
-
-    // Run control task
-    _spawner
-        .spawn(tasks::control::run(
-            channels.input_channel.receiver(),
-            channels.output_channel.sender(),
-        ))
-        .unwrap();
-
-    // Run coms router task
-    _spawner
-        .spawn(tasks::coms_router::run(
-            channels.output_channel.receiver(),
-            signals.motor_request_tx,
-            signals.green_led_tx,
-            signals.red_led_tx,
-        ))
-        .unwrap();
-
-    // Run LED task
+    // Start LED task
     _spawner
         .spawn(tasks::leds::run(
-            hardware_interfaces.green_led,
-            hardware_interfaces.red_led,
-            signals.green_led_rx,
-            signals.red_led_rx,
+            h.green_led,
+            h.red_led,
+            s.green_led.receiver,
+            s.red_led.receiver,
         ))
         .unwrap();
 
-    // Run button task
+    // Start button task
     _spawner
-        .spawn(tasks::button::run(
-            channels.input_channel.sender(),
-            hardware_interfaces.enable_btn,
+        .spawn(tasks::button::run(c.inputs.sender(), h.enable_btn))
+        .unwrap();
+
+    // Start motor task
+    _spawner
+        .spawn(tasks::motor::run(
+            c.inputs.sender(),
+            c.can_tx.sender(),
+            s.vesc_status.receiver,
+            s.motor_request.receiver,
         ))
         .unwrap();
 
-    info!("All tasks started!");
+    // Start IMU Task
+    _spawner
+        .spawn(tasks::imu::run(h.imu, c.inputs.sender()))
+        .unwrap();
+
+    // Start coms router task
+    _spawner
+        .spawn(tasks::coms_router::run(
+            c.outputs.receiver(),
+            s.motor_request.sender,
+            s.green_led.sender,
+            s.red_led.sender,
+        ))
+        .unwrap();
+
+    // Start control task
+    _spawner
+        .spawn(tasks::control::run(c.inputs.receiver(), c.outputs.sender()))
+        .unwrap();
+
+    info!("All tasks started");
 }

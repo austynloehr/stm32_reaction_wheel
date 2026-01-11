@@ -13,8 +13,8 @@ use embassy_time::{Duration, Ticker};
 pub async fn run(
     green_led_pin: Output<'static>,
     red_led_pin: Output<'static>,
-    green_led_rx: SignalReceiver<LedState>,
-    red_led_rx: SignalReceiver<LedState>,
+    green_led_receiver: SignalReceiver<LedState>,
+    red_led_receiver: SignalReceiver<LedState>,
 ) {
     let mut green_led = Led::new(green_led_pin, true, false).unwrap_or_else(|e| {
         defmt::panic!("Failed to initialize green LED: {:?}", e);
@@ -28,7 +28,7 @@ pub async fn run(
 
     let request_loop = async {
         loop {
-            match select(green_led_rx.wait(), red_led_rx.wait()).await {
+            match select(green_led_receiver.wait(), red_led_receiver.wait()).await {
                 Either::First(request) => {
                     let mut state = green_led_state.lock().await;
                     *state = request;

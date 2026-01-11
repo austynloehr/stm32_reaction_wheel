@@ -110,14 +110,14 @@ pub enum ButtonState {
 // Event Types
 
 #[derive(Debug, Clone, Copy, defmt::Format)]
-pub enum RxEvent {
+pub enum InputEvent {
     Imu(ImuSample),
     Motor(MotorStatus),
     Button(ButtonState),
 }
 
 #[derive(Debug, Clone, Copy, defmt::Format)]
-pub enum TxEvent {
+pub enum OutputEvent {
     Motor(MotorRequest),
     Logger(u32),
     GreenLed(LedState),

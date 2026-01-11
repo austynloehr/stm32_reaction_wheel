@@ -21,7 +21,7 @@ const VESC_STATUS_ID: u32 = 0x901;
 #[embassy_executor::task]
 pub async fn run(
     mut can: Can<'static>,
-    vesc_status_tx: SignalSender<Frame>,
+    vesc_status_sender: SignalSender<Frame>,
     can_tx_channel: Receiver<'static, CriticalSectionRawMutex, Frame, 128>,
 ) {
     can.enable().await;
@@ -35,7 +35,8 @@ pub async fn run(
 
     let rx_loop = async {
         loop {
-            match receive(&mut rx, &vesc_status_tx).await {
+            let enable_signaling = bus_ok.load(Ordering::Acquire);
+            match receive(&mut rx, &vesc_status_sender, enable_signaling).await {
                 Ok(_) => {
                     // Reset error counter on successful receive
                     consecutive_rx_errors = 0;
@@ -44,7 +45,7 @@ pub async fn run(
                     if !bus_ok.load(Ordering::Acquire) {
                         consecutive_rx_valid += 1;
                         if consecutive_rx_valid >= 10 {
-                            info!("CAN Bus OK, enabling transmit");
+                            info!("CAN healthcheck passed");
                             bus_ok.store(true, Ordering::Release);
                             can_tx_channel.clear(); // Drop any messages we may have received before the bus was OK
                             consecutive_rx_valid = 0; // Reset for next recovery cycle
@@ -117,6 +118,7 @@ pub async fn run(
 async fn receive(
     rx: &mut CanRx<'static>,
     vesc_status_tx: &SignalSender<Frame>,
+    enable_signaling: bool,
 ) -> Result<(), BusError> {
     match rx.read().await {
         Ok(envelope) => {
@@ -129,7 +131,7 @@ async fn receive(
             };
             debug!("CAN Rx: ID={:x} Data={:?}", id_val, frame.data());
 
-            if id_val == VESC_STATUS_ID {
+            if enable_signaling && id_val == VESC_STATUS_ID {
                 vesc_status_tx.signal(frame);
             }
 

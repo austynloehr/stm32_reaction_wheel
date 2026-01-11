@@ -1,6 +1,6 @@
 use crate::monitor_task_rate;
 use crate::types::SignalReceiver;
-use common::types::{MotorRequest, RxEvent};
+use common::types::{InputEvent, MotorRequest};
 use defmt::*;
 use drivers::vesc::Vesc;
 use embassy_futures::join::join3;
@@ -12,10 +12,10 @@ use embassy_time::{Duration, Instant, Ticker};
 
 #[embassy_executor::task]
 pub async fn run(
-    rx_channel: Sender<'static, CriticalSectionRawMutex, RxEvent, 128>,
-    can_tx_channel: Sender<'static, CriticalSectionRawMutex, Frame, 128>,
-    vesc_status_rx: SignalReceiver<Frame>,
-    motor_request_rx: SignalReceiver<MotorRequest>,
+    input_sender: Sender<'static, CriticalSectionRawMutex, InputEvent, 128>,
+    can_tx_sender: Sender<'static, CriticalSectionRawMutex, Frame, 128>,
+    vesc_status_receiver: SignalReceiver<Frame>,
+    motor_request_receiver: SignalReceiver<MotorRequest>,
 ) {
     const CMD_TX_INTERVAL: Duration = Duration::from_millis(10);
     const CAN_TIMEOUT: Duration = Duration::from_millis(1000);
@@ -39,12 +39,12 @@ pub async fn run(
         // 3. Send the status message to the rx_channel
         // 4. If unpacking fails, log the error
         loop {
-            let frame = vesc_status_rx.wait().await;
+            let frame = vesc_status_receiver.wait().await;
 
             monitor_task_rate!(motor_rx_monitor, 10, 10);
             debug!("Received VESC status message: {:?}", frame);
             if let Ok(status_msg) = vesc.unpack_status(frame.data()) {
-                match rx_channel.try_send(RxEvent::Motor(status_msg)) {
+                match input_sender.try_send(InputEvent::Motor(status_msg)) {
                     Ok(_) => {}
                     Err(e) => debug!("{:?}", e),
                 }
@@ -57,7 +57,7 @@ pub async fn run(
         // 2. Create a command frame
         // 3. Store the command frame and timestamp in last_cmd_frame using a mutex
         loop {
-            let request = motor_request_rx.wait().await;
+            let request = motor_request_receiver.wait().await;
             let (id, data, len) = vesc.create_command(request.mode(), request.value());
             let cmd_frame = match Frame::new_extended(id, &data[..len]) {
                 Ok(frame) => frame,
@@ -84,7 +84,6 @@ pub async fn run(
         loop {
             ticker.next().await;
 
-            // Scope the lock so we don't hold it during the sleep
             let frame_to_send = {
                 let guard = last_cmd_frame.lock().await;
                 match *guard {
@@ -100,7 +99,7 @@ pub async fn run(
             };
 
             if let Some(frame) = frame_to_send {
-                match can_tx_channel.try_send(frame) {
+                match can_tx_sender.try_send(frame) {
                     Ok(_) => {}
                     Err(e) => debug!("{:?}", e),
                 }

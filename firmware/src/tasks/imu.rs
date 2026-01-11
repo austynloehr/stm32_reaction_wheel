@@ -1,12 +1,15 @@
 use crate::monitor_task_rate;
-use crate::types::{RxEvent, SharedI2c};
+use crate::types::{InputEvent, SharedI2c};
 use defmt::*;
 use drivers::mpu6050;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Sender};
 use embassy_time::{Duration, Ticker, Timer};
 
 #[embassy_executor::task]
-pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex, RxEvent, 128>) {
+pub async fn run(
+    i2c: SharedI2c,
+    sender: Sender<'static, CriticalSectionRawMutex, InputEvent, 128>,
+) {
     const MAX_ERROR_COUNT: u8 = 3;
     const SAMPLE_RATE: Duration = Duration::from_millis(10);
     const TASK_RATE_TOLERANCE: u8 = 10;
@@ -19,7 +22,7 @@ pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex
             defmt::panic!("IMU Init Error: {:?}", e);
         }
     };
-    info!("IMU Initialized!");
+    info!("IMU initialized");
 
     let mut error_count: u8 = 0;
     let mut ticker = Ticker::every(SAMPLE_RATE);
@@ -35,7 +38,7 @@ pub async fn run(i2c: SharedI2c, sender: Sender<'static, CriticalSectionRawMutex
                 debug!("IMU: {} {}", sample.accel(), sample.gyro());
 
                 // Send IMU data to rx channel queue
-                if let Err(e) = sender.try_send(RxEvent::Imu(sample)) {
+                if let Err(e) = sender.try_send(InputEvent::Imu(sample)) {
                     debug!("{:?}", e);
                 }
 

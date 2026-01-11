@@ -1,5 +1,6 @@
 use crate::monitor_task_rate;
-use common::types::{LedState, MotorCtrlMode, MotorRequest, RxEvent, TxEvent};
+use common::types::{InputEvent, LedState, MotorCtrlMode, MotorRequest, OutputEvent};
+use core::sync::atomic::{AtomicBool, Ordering};
 use defmt::*;
 use embassy_futures::join::join3;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
@@ -8,23 +9,25 @@ use embassy_time::{Duration, Instant, Ticker};
 
 #[embassy_executor::task]
 pub async fn run(
-    rx_channel: Receiver<'static, CriticalSectionRawMutex, RxEvent, 128>,
-    tx_channel: Sender<'static, CriticalSectionRawMutex, TxEvent, 128>,
+    input_channel: Receiver<'static, CriticalSectionRawMutex, InputEvent, 128>,
+    output_channel: Sender<'static, CriticalSectionRawMutex, OutputEvent, 128>,
 ) {
     const TASK_RATE: Duration = Duration::from_millis(1);
+
+    let startup_complete = AtomicBool::new(false);
 
     let rx_loop = async {
         let mut motor_last = Instant::now();
         let mut imu_last = Instant::now();
-        let mut imu_start: bool = false;
-        let mut motor_start: bool = false;
+        let mut imu_startup_complete: bool = false;
+        let mut motor_startup_complete: bool = false;
 
         loop {
-            let event = rx_channel.receive().await;
+            let event = input_channel.receive().await;
             match event {
-                RxEvent::Motor(_status) => {
-                    if !motor_start {
-                        motor_start = true;
+                InputEvent::Motor(_status) => {
+                    if !motor_startup_complete {
+                        motor_startup_complete = true;
                     } else {
                         let now = Instant::now();
                         let dt = now.duration_since(motor_last);
@@ -35,9 +38,9 @@ pub async fn run(
                     }
                     motor_last = Instant::now();
                 }
-                RxEvent::Imu(_status) => {
-                    if !imu_start {
-                        imu_start = true;
+                InputEvent::Imu(_status) => {
+                    if !imu_startup_complete {
+                        imu_startup_complete = true;
                     } else {
                         let now = Instant::now();
                         let dt = now.duration_since(imu_last);
@@ -48,9 +51,17 @@ pub async fn run(
                     }
                     imu_last = Instant::now();
                 }
-                RxEvent::Button(state) => {
+                InputEvent::Button(state) => {
                     debug!("Enable button: {}", state);
                 }
+            }
+
+            if !startup_complete.load(Ordering::Acquire)
+                && motor_startup_complete
+                && imu_startup_complete
+            {
+                info!("Startup complete");
+                startup_complete.store(true, Ordering::Release);
             }
         }
     };
@@ -62,9 +73,10 @@ pub async fn run(
 
         loop {
             ticker.next().await;
-            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 20, 500);
+            monitor_task_rate!(control_monitor, TASK_RATE.as_millis(), 20, 1000);
             // Send command
-            let _request = TxEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
+            let _request =
+                OutputEvent::Motor(MotorRequest::new(MotorCtrlMode::Speed, speed as i32));
             // match tx_channel.try_send(request) {
             //     Ok(_) => {}
             //     Err(e) => warn!("{:?}", e),
@@ -85,13 +97,24 @@ pub async fn run(
     let led_ctrl_loop = async {
         let mut ticker = Ticker::every(Duration::from_millis(1000));
         loop {
-            match tx_channel.try_send(TxEvent::GreenLed(LedState::On)) {
-                Ok(_) => {}
-                Err(e) => warn!("{:?}", e),
-            }
-            match tx_channel.try_send(TxEvent::RedLed(LedState::Off)) {
-                Ok(_) => {}
-                Err(e) => warn!("{:?}", e),
+            if startup_complete.load(Ordering::Acquire) {
+                match output_channel.try_send(OutputEvent::GreenLed(LedState::On)) {
+                    Ok(_) => {}
+                    Err(e) => warn!("{:?}", e),
+                }
+                match output_channel.try_send(OutputEvent::RedLed(LedState::Off)) {
+                    Ok(_) => {}
+                    Err(e) => warn!("{:?}", e),
+                }
+            } else {
+                match output_channel.try_send(OutputEvent::GreenLed(LedState::Off)) {
+                    Ok(_) => {}
+                    Err(e) => warn!("{:?}", e),
+                }
+                match output_channel.try_send(OutputEvent::RedLed(LedState::On)) {
+                    Ok(_) => {}
+                    Err(e) => warn!("{:?}", e),
+                }
             }
             ticker.next().await;
         }

@@ -11,14 +11,25 @@ use embassy_sync::signal::Signal;
 static SIGNALS_TAKEN: AtomicBool = AtomicBool::new(false);
 
 pub struct TaskSignals {
-    pub motor_request_tx: SignalSender<MotorRequest>,
-    pub motor_request_rx: SignalReceiver<MotorRequest>,
-    pub vesc_status_tx: SignalSender<Frame>,
-    pub vesc_status_rx: SignalReceiver<Frame>,
-    pub green_led_tx: SignalSender<LedState>,
-    pub green_led_rx: SignalReceiver<LedState>,
-    pub red_led_tx: SignalSender<LedState>,
-    pub red_led_rx: SignalReceiver<LedState>,
+    pub motor_request: SignalPair<MotorRequest>,
+    pub vesc_status: SignalPair<Frame>,
+    pub green_led: SignalPair<LedState>,
+    pub red_led: SignalPair<LedState>,
+}
+
+// Wrap a signal into a pair with sender and receiver
+pub struct SignalPair<T: Send + 'static> {
+    pub sender: SignalSender<T>,
+    pub receiver: SignalReceiver<T>,
+}
+
+impl<T: Send + 'static> SignalPair<T> {
+    pub fn new(signal: &'static Signal<CriticalSectionRawMutex, T>) -> Self {
+        Self {
+            sender: SignalSender::new(signal),
+            receiver: SignalReceiver::new(signal),
+        }
+    }
 }
 
 impl TaskSignals {
@@ -36,16 +47,12 @@ impl TaskSignals {
         static GREEN_LED: Signal<CriticalSectionRawMutex, LedState> = Signal::new();
         static RED_LED: Signal<CriticalSectionRawMutex, LedState> = Signal::new();
 
-        // Create senders and receivers
+        // Create signal pairs
         Some(Self {
-            motor_request_tx: SignalSender::new(&MOTOR_REQUEST),
-            motor_request_rx: SignalReceiver::new(&MOTOR_REQUEST),
-            vesc_status_tx: SignalSender::new(&VESC_STATUS),
-            vesc_status_rx: SignalReceiver::new(&VESC_STATUS),
-            green_led_tx: SignalSender::new(&GREEN_LED),
-            green_led_rx: SignalReceiver::new(&GREEN_LED),
-            red_led_tx: SignalSender::new(&RED_LED),
-            red_led_rx: SignalReceiver::new(&RED_LED),
+            motor_request: SignalPair::new(&MOTOR_REQUEST),
+            vesc_status: SignalPair::new(&VESC_STATUS),
+            green_led: SignalPair::new(&GREEN_LED),
+            red_led: SignalPair::new(&RED_LED),
         })
     }
 }

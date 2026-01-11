@@ -1,4 +1,4 @@
-use common::types::{ButtonState, RxEvent};
+use common::types::{ButtonState, InputEvent};
 use defmt::*;
 use embassy_futures::join::join;
 use embassy_stm32::exti::ExtiInput;
@@ -9,7 +9,7 @@ use embassy_time::{Duration, Ticker, Timer};
 
 #[embassy_executor::task]
 pub async fn run(
-    rx_channel: Sender<'static, CriticalSectionRawMutex, RxEvent, 128>,
+    sender: Sender<'static, CriticalSectionRawMutex, InputEvent, 128>,
     mut enable_btn: ExtiInput<'static>,
 ) {
     const DEBOUNCE_TIME: Duration = Duration::from_millis(10);
@@ -43,7 +43,7 @@ pub async fn run(
         loop {
             ticker.next().await;
             let state = button_state.lock().await;
-            rx_channel.send(RxEvent::Button(*state)).await;
+            sender.send(InputEvent::Button(*state)).await;
         }
     };
 
